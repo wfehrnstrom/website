@@ -1,0 +1,38 @@
+.location-switch {
+  font-weight: 800;
+  font-size: 1rem;
+  --arrow-size: 1.2rem;
+  --item-margin: 0.25rem;
+  margin-top: 5vh;
+}
+
+.option {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.option > * {
+  margin-right: var(--item-margin);
+}
+
+.next {
+  margin-left: calc(var(--item-margin) + var(--arrow-size));
+}
+
+.previous > .arrow {
+  transform: rotate(180deg);
+}
+
+.arrow {
+  width: var(--arrow-size);
+  transition: transform 0.2s ease-in-out;
+}
+
+.previous > .arrow:hover {
+  transform: translateX(-5px) rotate(180deg);
+}
+
+.next > .arrow:hover {
+  transform: translateX(5px);
+}

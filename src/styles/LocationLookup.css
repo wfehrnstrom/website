@@ -1,0 +1,32 @@
+.location-lookup {
+  --circle_diam: 1rem;
+  --circle_right_margin: 10px;
+}
+
+.header{
+  font-size: 1rem;
+  font-weight: 900;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.circle {
+  height: var(--circle_diam);
+  width: var(--circle_diam);
+  border-radius: var(--circle_diam);
+  background-color: var(--primary_color);
+  margin-right: var(--circle_right_margin);
+}
+
+.content {
+  margin-left: calc(var(--circle_diam) + var(--circle_right_margin));
+}
+
+.date {
+  font-weight: 200;
+}
+
+.coords {
+  font-weight: 600;
+}

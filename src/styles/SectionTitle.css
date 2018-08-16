@@ -1,0 +1,10 @@
+.section-title {
+  font-family: 'Aileron', Verdana;
+  font-weight: 900;
+  --fontsize: 3rem;
+  font-size: var(--fontsize);
+}
+
+.section-title-text {
+  height: var(--fontsize);
+}

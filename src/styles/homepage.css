@@ -1,0 +1,161 @@
+.content-wrapper {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 90vw;
+  height: 70vh;
+  margin: auto;
+}
+
+.page-wrapper{
+  height: 100%;
+  width: 100%;
+  z-index: -1;
+}
+
+.homepage-left {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  width: 45%;
+  height: 50%;
+}
+
+.explore {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.logo {
+  width: 100%;
+}
+
+.explore-button {
+  margin-top: 2rem;
+}
+
+.homepage-right {
+  display: flex;
+  flex-direction: row;
+  width: 45%;
+  align-items: center;
+  justify-content: flex-start;
+  margin-left: 7vw;
+}
+
+.homepage-left-content {
+  height: 30vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.homepage-right-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: flex-start;
+  width: 100%;
+  height: 70vh;
+}
+
+@media only screen and (min-width: 1001px){
+  .homepage-right-content > .explore {
+    visibility: hidden;
+  }
+
+  .content-wrapper {
+    margin-top: 5vh;
+  }
+}
+
+@media only screen and (max-width: 1000px){
+  .content-wrapper {
+    width: 100vw;
+    height: 89vw;
+    margin-left, margin-right, margin-top: 0;
+  }
+
+  .homepage-left {
+    visibility: hidden;
+    display: none;
+    margin: 0;
+  }
+
+  .homepage-right {
+    width: 100%;
+    margin: 0;
+  }
+
+  .homepage-right-content {
+    height: 100%;
+  }
+
+  .homepage-right-content > .explore{
+    visibility: visible;
+    position:absolute;
+    left: 10vw;
+    width: 70vw;
+  }
+
+  .logo-right {
+    visibility: visible;
+    width: 70vw;
+  }
+}
+
+@media only screen and (max-width:1000px) and (min-width: 501px){
+
+  .content-wrapper {
+    height: 89vh;
+  }
+
+  .homepage-right {
+    height: 89vh;
+    align-items: flex-start;
+  }
+
+  .homepage-right-content > .explore {
+    top: 70vh;
+  }
+}
+
+@media only screen and (max-width:500px){
+  .logo {
+    width: 50%;
+  }
+
+  /* .homepage-right-content > .explore {
+    visibility: hidden;
+    width: 0;
+  } */
+
+  .content-wrapper {
+    margin-top: 0;
+    height: 100vh;
+  }
+
+  .homepage-right {
+    height: 100vh;
+  }
+
+  .homepage-right-content > .explore {
+    top: 80vh;
+    align-items: flex-start;
+  }
+
+  .homepage-right-content > .explore > .primary-button {
+    align-self: flex-start;
+  }
+
+  .home-nav {
+    position: absolute;
+    color: white;
+  }
+}
