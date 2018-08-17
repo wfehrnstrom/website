@@ -20,6 +20,23 @@ class PhotoGrid extends React.Component {
     let rowHeight = this.props.rowHeight ? this.props.rowHeight : '30vh'
     this.state = {
       rowHeight: rowHeight,
+      shouldAnimate: true,
+      prevImages: null,
+    }
+  }
+
+  static getDerivedStateFromProps(props, state){
+    // initial render
+    if(props.images !== state.prevImages){
+      return {
+        shouldAnimate: true,
+        prevImages: props.images,
+      }
+    }
+    else if(props.images === state.prevImages){
+      return {
+        shouldAnimate: false
+      }
     }
   }
 
@@ -45,13 +62,7 @@ class PhotoGrid extends React.Component {
     }
     for(let photoIndex = photoNum; photoIndex < lastIndex; photoIndex++){
       let image = this.props.images[photoIndex]
-      let imgComponent
-      if(!this.state.resized){
-        imgComponent = <Image src={image.src} desc={image.desc} date={image.date} style={{width: '100%', height: '100%'}}/>
-      }
-      else{
-        imgComponent = <Image noSlideBox src={image.src} desc={image.desc} date={image.date} style={{width: '100%', height: '100%'}}/>
-      }
+      let imgComponent = <Image animatable={this.state.shouldAnimate} hoverable={true} src={image.src} desc={image.desc} date={image.date} style={{width: '100%', height: '100%'}}/>
       row.push(
         <Col key = {photoIndex} xs={IMG_COUNTS["MOBILE"]} sm={IMG_COUNTS["TABLET"]} md={IMG_COUNTS["TABLET"]} lg={IMG_COUNTS["DESKTOP"]} xl={IMG_COUNTS["DESKTOP"]}>
           {imgComponent}

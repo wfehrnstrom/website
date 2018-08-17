@@ -5,222 +5,331 @@ import Modal from '@material-ui/core/Modal'
 import memoize from 'memoize-one'
 import {approximatelyEqual} from '../../constants/helpers'
 
-/**
- * Image - image wrapper that adds custom transition in and out and modal view with image description
- * and auxiliary information on hover
- * @prop transitionIn - transition that brings image into view.  This will also be used as the transition
- * out if none is specified.  Valid transitions are specified by material ui docs
- * @prop transitionOut - transition that removes the image
- * @prop noSlideBox - if set, this flag indicates that no div will initially cover the image and slide away to reveal, as
- * it usually does
- * @prop src - the src image to use.  This should be an imported image, not a string
- * @prop desc - the description of the image
- * @prop date - the date the image was taken
- * @extends React
- */
+const COVER_TIME_SCALE = 250
+const HOVER_TIME_SCALE = 250 * 1.5
+
 class Image extends React.Component {
   constructor(props){
     super(props)
-    this.imageContainerRef = React.createRef()
-    this.expandCoverDiv = this.expandCoverDiv.bind(this)
-    this.shrinkCoverDiv = this.shrinkCoverDiv.bind(this)
-    this.showInfo = this.showInfo.bind(this)
-    this.hideInfo = this.hideInfo.bind(this)
+    this.containerRef = React.createRef()
+    this.hoverIn = this.hoverIn.bind(this)
+    this.hoverOut = this.hoverOut.bind(this)
+    this.animationIn = this.animationIn.bind(this)
+    this.animationOut = this.animationOut.bind(this)
+    this.triggerAnimation = this.triggerAnimation.bind(this)
     this.openModal = this.openModal.bind(this)
     this.closeModal = this.closeModal.bind(this)
+    this.expandCover = this.expandCover.bind(this)
+    this.shrinkCover = this.shrinkCover.bind(this)
+    this.hoverMode = this.hoverMode.bind(this)
+    this.coverMode = this.coverMode.bind(this)
+    this.noTransitionMode = this.noTransitionMode.bind(this)
+    this.onResize = this.onResize.bind(this)
+    this.expandTimer = null
+    this.shrinkTimer = null
     this.state = {
       open: false,
     }
-    this.resizeImage = this.resizeImage.bind(this)
   }
 
   componentDidMount(){
-    let container = this.imageContainerRef.current
-    let image = container.querySelector('.image')
-    let coverDiv = container.querySelector('.image-transition-div')
-    image.style.transition = ''
-    coverDiv.style.transition = ''
-    let {offsetWidth, offsetHeight} = container
-    let aspectRatio = offsetHeight / offsetWidth
-    let propToAnimate = (aspectRatio > 1) ? 'height' : 'width'
-    let propToTrack = (aspectRatio > 1) ? 'offsetHeight' : 'offsetWidth'
-    let transitionDuration = (aspectRatio > 1) ? (offsetHeight/200) : (offsetWidth/300)
-    let hoverTransitionDuration = transitionDuration / 1.5
-    let transitionString = `${propToAnimate} ${transitionDuration}s ease-in-out 0s`
-    let hoverTransition = `${propToAnimate} ${hoverTransitionDuration}s ease-in-out 0s`
+    this.container = this.containerRef.current
+    this.image = this.container.querySelector('.image')
+    this.imageCover = this.container.querySelector('.image-transition-div')
+    this.aspectRatio = this.container.offsetHeight / this.container.offsetWidth
+    let propToAnimate = (this.aspectRatio > 1) ? 'height' : 'width'
+    let propToTrack = (this.aspectRatio > 1) ? 'offsetHeight' : 'offsetWidth'
+    window.addEventListener('resize', this.onResize)
     this.setState({
-      aspectRatio: container.offsetHeight / container.offsetWidth,
       propToAnimate: propToAnimate,
       propToTrack: propToTrack,
-      visibilityTransition: transitionString,
-      hoverTransition: hoverTransition,
-      transitionDuration: transitionDuration,
-      image: image,
-      coverDiv: coverDiv,
-      transitionType: TRANSITION_TYPE["NONE"],
-    }, function(){
-      window.addEventListener('resize', this.resizeImage)
-      if(!this.props.noSlideBox){
-        this.initDivIn()
-        this.transitionIn()
-      }
-      else{
-        this.shrinkCoverDiv()
-        window.setTimeout(() => {
-          this.setTransitionToHover()
-        }, this.state.transitionDuration * 10)
-      }
-    }.bind(this))
+    }, this.triggerAnimation)
   }
 
-  componentWillUnmount(){
-    window.removeEventListener('resize', this.resizeImage)
-  }
-
-  static getDerivedStateFromProps(props, state){
-    if(state.prevSrc !== props.src){
-      if(state.prevSrc === null){
-        return {
-          prevSrc: props.src
-        }
-      }
-      return {
-        prevSrc: props.src,
-        newSrc: true,
-      }
+  triggerAnimation(){
+    if(this.is(this.props.animatable)){
+      this.zeroComponent()
+      this.animationIn()
     }
-    return null
+    else{
+      this.zeroComponent()
+      this.expandImage(parseInt(this.container[this.state.propToTrack]))
+      this.hoverMode()
+    }
   }
 
   componentDidUpdate(prevProps){
-    if(prevProps.src !== this.props.src){
-      this.setTransitionToNull()
-      this.initDivIn()
-      window.setTimeout(this.animateContainer, 300)
+    // if we receive a new image in this Image component
+    //   1. cancel all previously running timers
+    //   2. start our intro animation
+    if(prevProps.src !== this.props.src && this.is(this.props.animatable)){
+      this.noTransitionMode()
+      this.cancelAllTimers()
+      this.triggerAnimation()
     }
   }
 
-  setTransitionToCover(){
-    this.setState({transitionType: TRANSITION_TYPE["COVER"]})
-    this.state.coverDiv.style.backgroundColor = COVER_COLOR
-    this.state.image.style.transition = this.state.visibilityTransition
-    this.state.coverDiv.style.transition = this.state.visibilityTransition
-    let text = this.imageContainerRef.current.querySelectorAll('.text')
-    text.forEach(function(textObj){
-      textObj.style.transition = 'opacity 0.6s ease-in-out'
-    })
+  componentWillUnmount(){
+    this.cancelAllCallbacks()
   }
 
-  setTransitionToHover(){
-    if(this.imageContainerRef.current){
-      this.setState({transitionType: TRANSITION_TYPE["HOVER"]})
-      this.state.coverDiv.style.backgroundColor = HOVER_COLOR
-      this.state.image.style.transition = this.state.hoverTransition
-      this.state.coverDiv.style.transition = this.state.hoverTransition
-      let text = this.imageContainerRef.current.querySelectorAll('.text')
-      text.forEach(function(textObj){
-        textObj.style.transition = 'opacity 0.6s ease-in-out'
-      })
+  cancelAllCallbacks(){
+    this.cancelAllTimers()
+    window.removeEventListener('resize', this.onResize)
+  }
+
+  cancelAllTimers(){
+    if(this.expandTimer){
+      window.clearTimeout(this.expandTimer)
+    }
+    if(this.shrinkTimer){
+      window.clearTimeout(this.shrinkTimer)
     }
   }
 
-  setTransitionToNull(){
-    if(this.imageContainerRef.current){
-      this.setState({transitionType: TRANSITION_TYPE["NONE"]}, function(){
-        this.initDivIn()
-        this.transitionIn()
-      }.bind(this))
-      this.state.image.style.transition = ''
-      this.state.coverDiv.style.transition = ''
-      let text = this.imageContainerRef.current.querySelectorAll('.text')
-      text.forEach(function(textObj){
-        textObj.style.transition = ''
-      })
-    }
-  }
-
-  expandCoverDiv(){
-    this.state.coverDiv.style[this.state.propToAnimate] = `${this.imageContainerRef.current[this.state.propToTrack]}px`
-  }
-
-  initDivIn(){
-    this.state.image.style[this.state.propToAnimate] = 0
-    this.state.coverDiv.style[this.state.propToAnimate] = 0
-  }
-
-  /**
-   * animateContainerExpand - the difference between this and expand div is that this
-   * function also expands the image itself and the cover div.  if the image
-   * width or height is non-zero, then this function does nothing.
-   */
-  animateContainer(){
-    if(this.imageContainerRef && this.imageContainerRef.current){
-      this.setTransitionToCover()
-      window.setTimeout(this.shrinkCoverDiv, this.state.transitionDuration * 1000)
-      window.setTimeout(this.setTransitionToHover.bind(this), 2000 * (this.state.transitionDuration))
-      if(approximatelyEqual(parseFloat(this.state.coverDiv.style[this.state.propToAnimate]), 0) && approximatelyEqual(parseFloat(this.state.image.style[this.state.propToAnimate]), 0)){
-        this.state.image.style[this.state.propToAnimate] = `${this.imageContainerRef.current[this.state.propToTrack]}px`
-        this.state.coverDiv.style[this.state.propToAnimate] = `${this.imageContainerRef.current[this.state.propToTrack]}px`
+  onResize(){
+    if(this.container){
+      // calculate aspect ratio
+      this.aspectRatio = this.container.offsetHeight / this.container.offsetWidth
+      // set propToAnimate and propToTrack as needed
+      if(this.aspectRatio > 1 && this.state.propToAnimate !== 'height'){
+        this.setState({
+          propToAnimate: 'height',
+          propToTrack: 'offsetHeight'
+        })
+      }
+      if(this.aspectRatio <= 1 && this.state.propToAnimate !== 'width'){
+        this.setState({
+          propToAnimate: 'width',
+          propToTrack: 'offsetWidth'
+        })
+      }
+      if(this.image && this.imageCover){
+        this.image.style.width = `${this.container.offsetWidth}px`
+        this.image.style.height = `${this.container.offsetHeight}px`
+        if(this.state.propToAnimate === 'width'){
+          this.imageCover.style.height = `${this.container.offsetHeight}px`
+        }
+        else{
+          this.imageCover.style.width = `${this.container.offsetWidth}px`
+        }
       }
     }
   }
 
-  resizeImage(){
-    if(this.imageContainerRef.current){
-      this.state.image.style.width = `${this.imageContainerRef.current.offsetWidth}px`
-      this.state.image.style.height = `${this.imageContainerRef.current.offsetHeight}px`
+  coverMode(){
+    if(this.is(this.props.animatable)){
+      // set declared mode
+      this.mode = TRANSITION_TYPE["COVER"]
+      // set transitions for image and image-cover
+      this.setTransitions(this.mode)
+      // set background color for image-cover to solid primary color
+      this.setCoverColor(this.mode)
     }
   }
 
-  transitionIn(){
-    this.state.image.onload = function(){
-      window.setTimeout(this.animateContainer.bind(this), 300)
-    }.bind(this)
-  }
-
-  shrinkCoverDiv(){
-    this.state.coverDiv.style[this.state.propToAnimate] = 0
-  }
-
-  fadeInText(){
-    Array.from(this.imageContainerRef.current.getElementsByClassName('text')).forEach(function(text){
-      text.style.opacity = 100;
-    })
-  }
-
-  fadeOutText(){
-    Array.from(this.imageContainerRef.current.getElementsByClassName('text')).forEach(function(text){
-      text.style.opacity = 0;
-    })
-  }
-
-  showInfo(){
-    if(this.state.transitionType === TRANSITION_TYPE["HOVER"]){
-      this.expandCoverDiv()
-      this.fadeInText()
+  hoverMode(){
+    if(this.is(this.props.hoverable)){
+      // set declared mode
+      this.mode = TRANSITION_TYPE["HOVER"]
+      // set transitions for image and image-cover
+      this.setTransitions(this.mode)
+      // set background color for image-cover
+      this.setCoverColor(this.mode)
     }
   }
 
-  hideInfo(){
-    if(this.state.transitionType === TRANSITION_TYPE["HOVER"]){
-      this.fadeOutText()
-      this.shrinkCoverDiv()
+  noTransitionMode(){
+    // set declared mode
+    this.mode = TRANSITION_TYPE["NONE"]
+    // set transitions for image and image-cover
+    this.setTransitions(this.mode)
+  }
+
+  setTransitions(mode){
+    if(this.imageCover && this.image){
+      switch(mode){
+        case TRANSITION_TYPE["HOVER"]:
+          this.imageCover.style.transition = `${this.state.propToAnimate} ${this.container[this.state.propToTrack] / HOVER_TIME_SCALE}s ease-in-out`
+          this.image.style.transition = ''
+          return
+        case TRANSITION_TYPE["COVER"]:
+          this.imageCover.style.transition = `${this.state.propToAnimate} ${this.container[this.state.propToTrack] / COVER_TIME_SCALE}s ease-in-out`
+          this.image.style.transition = `${this.state.propToAnimate} ${this.container[this.state.propToTrack] / COVER_TIME_SCALE}s ease-in-out`
+          return
+        case TRANSITION_TYPE["NONE"]:
+          this.imageCover.style.transition = ''
+          this.image.style.transition = ''
+        default:
+          return
+      }
+    }
+  }
+
+  setCoverColor(mode = null){
+    if(this.imageCover){
+      switch(mode){
+        case TRANSITION_TYPE["HOVER"]:
+          this.imageCover.style.backgroundColor = HOVER_COLOR
+          return
+        case TRANSITION_TYPE["COVER"]:
+          this.imageCover.style.backgroundColor = COVER_COLOR
+          return
+        default:
+          if(this.props.coverColor){
+            this.imageCover.style.backgroundColor = this.props.coverColor
+          }
+      }
+    }
+  }
+
+  expandComponent(toLength, onFinish){
+    this.image.style[this.state.propToAnimate] = `${toLength}px`
+    this.imageCover.style[this.state.propToAnimate] = `${toLength}px`
+    if(onFinish){
+      let duration = (toLength / COVER_TIME_SCALE) * 1000
+      this.shrinkTimer = window.setTimeout(onFinish, duration)
+    }
+  }
+
+  shrinkComponent(onFinish){
+    let startLength = parseInt(this.image.style[this.state.propToAnimate])
+    this.zeroComponent()
+    if(onFinish){
+      let duration = (startLength / COVER_TIME_SCALE) * 1000
+      this.shrinkTimer = window.setTimeout(onFinish, duration)
+    }
+  }
+
+  zeroComponent(){
+    this.image.style[this.state.propToAnimate] = 0
+    this.imageCover.style[this.state.propToAnimate] = 0
+  }
+
+  expandCover(toLength, onFinish){
+    this.imageCover.style[this.state.propToAnimate] = `${toLength}px`
+    if(onFinish){
+      if(this.mode === TRANSITION_TYPE["COVER"]){
+        let duration = (toLength / COVER_TIME_SCALE) * 1000
+        this.expandTimer = window.setTimeout(onFinish, duration)
+      }
+      else if(this.mode === TRANSITION_TYPE["HOVER"]){
+        let duration = (toLength / HOVER_TIME_SCALE) * 1000
+        this.expandTimer = window.setTimeout(onFinish, duration)
+      }
+      else{
+        onFinish()
+      }
+    }
+  }
+
+  expandImage(toLength, onFinish){
+    this.image.style[this.state.propToAnimate] = `${toLength}px`
+    if(onFinish){
+      if(this.mode === TRANSITION_TYPE["COVER"]){
+        let duration = (toLength / COVER_TIME_SCALE) * 1000
+        this.expandTimer = window.setTimeout(onFinish, duration)
+      }
+      else if(this.mode === TRANSITION_TYPE["HOVER"]){
+        let duration = (toLength / HOVER_TIME_SCALE) * 1000
+        this.expandTimer = window.setTimeout(onFinish, duration)
+      }
+      else{
+        onFinish()
+      }
+    }
+  }
+
+  shrinkCover(onFinish){
+    let startLength = parseInt(this.imageCover.style[this.state.propToAnimate])
+    this.imageCover.style[this.state.propToAnimate] = 0
+    if(onFinish){
+      if(this.mode === TRANSITION_TYPE["COVER"]){
+        let duration = (startLength / COVER_TIME_SCALE) * 1000
+        this.shrinkTimer = window.setTimeout(onFinish, duration)
+      }
+      else if(this.mode === TRANSITION_TYPE["HOVER"]){
+        let duration = (startLength / HOVER_TIME_SCALE) * 1000
+        this.shrinkTimer = window.setTimeout(onFinish, duration)
+      }
+      else{
+        onFinish()
+      }
+    }
+  }
+
+  animationIn(){
+    if(this.image && this.imageCover){
+      // If not in cover mode, get into cover mode
+      if(this.mode !== TRANSITION_TYPE["COVER"]){
+        this.coverMode()
+      }
+      // Expand both the image-cover and image, schedule shrinking image cover
+      let shrinkCoverWithCallback = this.shrinkCover.bind(null, this.hoverMode)
+      this.expandComponent(this.container[this.state.propToTrack], shrinkCoverWithCallback)
+    }
+  }
+
+  animationOut(){
+    // If not in cover mode, get into cover mode
+    // Shrink both the image-cover and image
+    // go to null mode
+  }
+
+  textOpacity(level, textNodes){
+    let nodes
+    if(!textNodes || textNodes.length <= 0){
+      nodes = this.container.querySelectorAll('.text')
+    }
+    nodes.forEach(function(textNode){
+      textNode.style.opacity = level
+    })
+  }
+
+  hoverIn(){
+    // If not in hover mode, get into hover mode
+    if(this.mode === TRANSITION_TYPE["HOVER"]){
+      // expand image-cover
+      this.expandCover(this.container[this.state.propToTrack])
+      this.textOpacity(1)
+    }
+  }
+
+  hoverOut(){
+    // shrink image-cover
+    if(this.mode === TRANSITION_TYPE["HOVER"]){
+      this.shrinkCover()
+      this.textOpacity(0)
     }
   }
 
   openModal(){
-    this.hideInfo()
-    this.setState({open: true})
+    if(this.is(this.props.clickable)){
+      this.setState({open: true})
+    }
   }
 
   closeModal(){
     this.setState({open: false})
   }
 
+  is(able){
+    return able !== false
+  }
+
+  styleBasedOnAspectRatio = memoize(function (aspectRatio){
+    if(aspectRatio > 1){
+      return {width: '100%'}
+    }
+    else{
+      return {height: '100%'}
+    }
+  })
+
   render(){
     return (
-     <div className='image-container' ref={this.imageContainerRef} style={this.props.style}>
-       <div style={(this.state.aspectRatio < 1) ? {height: '100%'} : {width: '100%'}} onMouseOver={this.showInfo} onMouseLeave={this.hideInfo}>
+     <div className='image-container' ref={this.containerRef} style={this.props.style}>
+       <div style={this.styleBasedOnAspectRatio(this.aspectRatio)} onMouseOver={this.hoverIn} onMouseLeave={this.hoverOut}>
          <img className='image' onClick={this.openModal} src={this.props.src} alt={this.props.alt ? this.props.alt : ''}/>
          <div className='image-transition-div' onClick={this.openModal}></div>
        </div>
