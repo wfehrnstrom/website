@@ -7,8 +7,9 @@ import Button from '../../Button'
 import Navbar from '../../Navbar'
 import Video from './Video'
 import { VIEWS } from '../../../constants'
+import viewAware from '../../../containers/viewAware'
 
-class StarterPage extends React.Component {
+class StarterPageViewUnaware extends React.Component {
 
   renderVideo(){
     if(this.props.activeView === VIEWS["DESKTOP"]){
@@ -56,5 +57,7 @@ class StarterPage extends React.Component {
     )
   }
 }
+
+const StarterPage = viewAware(StarterPageViewUnaware)
 
 export default StarterPage

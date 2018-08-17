@@ -12,16 +12,16 @@ class LocationPage extends React.Component {
   renderMap(){
     if(this.props.locationNodes){
       if(this.props.activeView === VIEWS["MOBILE"] || this.props.activeView === VIEWS["TABLET"]){
-        return <LocationMapContainer activeView={this.props.activeView} locations={this.props.locationNodes} width='90vw' style={{top: '50%', position: 'relative'}}/>
+        return <LocationMapContainer locations={this.props.locationNodes} width='90vw' style={{top: '50%', position: 'relative'}}/>
       }
-      return <LocationMapContainer activeView={this.props.activeView} locations={this.props.locationNodes} width='55vw' style={{position: 'absolute', right: '3vw'}}/>
+      return <LocationMapContainer locations={this.props.locationNodes} width='55vw' style={{position: 'absolute', right: '3vw'}}/>
     }
     return null
   }
 
   renderPhotoGrid(){
     if(this.props.currLocationNode && this.props.currLocationNode.imgData.length > 0){
-      return <PhotoGrid activeView={this.props.activeView} rowHeight={'150px'} images={this.props.currLocationNode.imgData} style={{marginTop: '15vh', paddingBottom: '16px', width: '90vw'}}/>
+      return <PhotoGrid rowHeight={'150px'} images={this.props.currLocationNode.imgData} style={{marginTop: '15vh', paddingBottom: '16px', width: '90vw'}}/>
     }
     else{
       return <div style={{marginTop: '15vh', height: '150px', width: '90vw'}}></div>

@@ -1,0 +1,37 @@
+@media only screen and (min-width: 1001px){
+  .page-title {
+    font-size: 80px;
+  }
+}
+
+@media only screen and (max-width: 1000px) and (min-width: 501px){
+  .page-title {
+    font-size: 60px;
+  }
+}
+
+@media only screen and (max-width: 500px){
+  .page-title {
+    font-size: 40px;
+  }
+}
+
+.page-title {
+  --title-height: 27vh;
+  height: calc(--title-height);
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  color: black;
+  z-index: 1;
+}
+
+.title-rect {
+  background-color: #FF5959;
+  width: 0.2em;
+  height: 0.2em;
+  align-self: flex-end;
+  margin-bottom: 0.65rem;
+  margin-left: 0.3rem;
+  margin-right: 0.3rem;
+}

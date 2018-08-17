@@ -1,4 +1,6 @@
 import React from 'react'
+import PageTitle from '../PageTitle'
+import PhotoGrid from '../PhotoGrid'
 
 class Media extends React.Component {
   constructor(props){
@@ -6,7 +8,12 @@ class Media extends React.Component {
   }
 
   render(){
-    return null
+    return (
+      <div className='page-root'>
+        <PageTitle text={['media', 'peruse()']} style={{marginLeft: '5vw', paddingTop: '2vh'}}/>
+        {/* <PhotoGrid/> */}
+      </div>
+    )
   }
 }
 

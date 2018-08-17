@@ -1,6 +1,7 @@
 import LocationPage from '../components/LocationPage'
 import {connect} from 'react-redux'
 import {getLocations} from '../actions/mapDataActions'
+import viewAware from '../containers/viewAware'
 
 const mapStateToProps = (state, ownProps) => {
   return {
@@ -21,6 +22,6 @@ const mapDispatchToProps = (dispatch) => {
 const LocationPageContainer = connect(
   mapStateToProps,
   mapDispatchToProps
-)(LocationPage)
+)(viewAware(LocationPage))
 
 export default LocationPageContainer

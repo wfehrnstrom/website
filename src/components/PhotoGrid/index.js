@@ -4,6 +4,7 @@ import Image from '../Image'
 import {Grid, Row, Col} from 'react-flexbox-grid'
 import {IMG_COUNTS, VIEWS} from '../../constants'
 import memoize from 'memoize-one'
+import viewAware from '../../containers/viewAware'
 
 
 /**
@@ -12,7 +13,7 @@ import memoize from 'memoize-one'
  * @prop images - an array of ImageData objects
  * @prop style - css styling for the grid's container
  */
-class PhotoGrid extends React.Component {
+class PhotoGridViewUnaware extends React.Component {
 
   constructor(props){
     super(props)
@@ -98,5 +99,7 @@ class PhotoGrid extends React.Component {
     )
   }
 }
+
+const PhotoGrid = viewAware(PhotoGridViewUnaware)
 
 export default PhotoGrid
