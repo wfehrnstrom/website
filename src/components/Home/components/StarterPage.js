@@ -8,6 +8,7 @@ import Navbar from '../../Navbar'
 import Video from './Video'
 import { VIEWS } from '../../../constants'
 import viewAware from '../../../containers/viewAware'
+import withCoverTransition from '../../Transitions/withCoverTransition'
 
 class StarterPageViewUnaware extends React.Component {
 
@@ -37,10 +38,10 @@ class StarterPageViewUnaware extends React.Component {
         <Navbar className = "home-nav" elements={["Blog", "Media", "Projects"]} padding={[['20px', '5vw', '20px', '5vw'],['10vh', 0, '10vh', '10vw']]}
           margin={[[0, 0, 0, 0],[0, 0, 0, 0]]} textColor={['black', 'white']} style={{zIndex: 5}}/>
         <div className="content-wrapper">
-          <div className="homepage-left">
-            <div className="explore">
+          <div className="homepage-left" style={{position: 'relative', bottom: '7vh', height: '50vh'}}>
+            <div className="explore" style={{height: '100%'}}>
               <Video style={{objectFit: 'contain'}} sources={[logoVid]}/>
-              <Button style={{marginTop: '20px'}} text="Start" type="contained" color="primary" onClick={this.triggerTransition}/>
+              <Button style={{position: 'relative', bottom: '30px'}} text="Start" type="contained" color="primary" onClick={this.triggerTransition}/>
             </div>
           </div>
           <div className="homepage-right">

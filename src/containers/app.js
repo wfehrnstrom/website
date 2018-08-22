@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import Home from '../components/Home'
-import Media from '../components/Media'
+import MediaContainer from '../containers/mediaContainer'
 import Projects from '../components/Projects'
 import Blog from '../components/Blog'
 import {DESKTOP_BREAKPOINT, TABLET_BREAKPOINT, VIEWS} from '../constants'
@@ -82,7 +82,7 @@ class App extends Component {
           <Switch>
             <Route exact path='/' component={Home}/>
             <Route path='/home' component={Home}/>
-            <Route path='/media' component={Media}/>
+            <Route path='/media' component={MediaContainer}/>
             <Route path='/projects' component={Projects}/>
             <Route path='/blog' component={Blog}/>
           </Switch>

@@ -1,11 +1,14 @@
 import React from 'react'
 import '../../styles/PhotoGrid.css'
+import '../../styles/image.css'
 import Image from '../Image'
 import {Grid, Row, Col} from 'react-flexbox-grid'
 import {IMG_COUNTS, VIEWS} from '../../constants'
 import memoize from 'memoize-one'
 import viewAware from '../../containers/viewAware'
-
+import withCoverTransition from '../Transitions/withCoverTransition'
+import withModal from '../Transitions/withModal'
+import withHover from '../Transitions/withHover'
 
 /**
  * PhotoGrid
@@ -17,56 +20,117 @@ class PhotoGridViewUnaware extends React.Component {
 
   constructor(props){
     super(props)
-    this.map = new Map([[VIEWS["DESKTOP"], IMG_COUNTS["DESKTOP"]], [VIEWS["TABLET"], IMG_COUNTS["TABLET"]], [VIEWS["MOBILE"], IMG_COUNTS["MOBILE"]]])
+    this.viewMap = new Map([[VIEWS["DESKTOP"], IMG_COUNTS["DESKTOP"]], [VIEWS["TABLET"], IMG_COUNTS["TABLET"]], [VIEWS["MOBILE"], IMG_COUNTS["MOBILE"]]])
     let rowHeight = this.props.rowHeight ? this.props.rowHeight : '30vh'
     this.state = {
       rowHeight: rowHeight,
-      shouldAnimate: true,
-      prevImages: null,
+      imageDecorationMap: this.updateImageDecorationMap(this.props.images),
     }
   }
 
-  static getDerivedStateFromProps(props, state){
-    // initial render
-    if(props.images !== state.prevImages){
-      return {
-        shouldAnimate: true,
-        prevImages: props.images,
-      }
-    }
-    else if(props.images === state.prevImages){
-      return {
-        shouldAnimate: false
-      }
+  componentWillReceiveProps(nextProps){
+    if(nextProps.images !== this.props.images){
+      this.setState({imageDecorationMap: new Map(this.updateImageDecorationMap(nextProps.images))})
     }
   }
 
-  rowCalc = memoize((activeView, numImages) => {
+  updateImageDecorationMap(images){
+    let imageDecorationMap = (this.state && this.state.imageDecorationMap ? this.state.imageDecorationMap : new Map([]))
+    images.forEach((image) => {
+      if(!imageDecorationMap.get(image)){
+        imageDecorationMap.set(image, new Map([[withCoverTransition, true], [withHover, true], [withModal, true]]))
+      }
+    })
+    return imageDecorationMap
+  }
+
+  generateComponent(imageData, template=null){
+    if(template){
+      return this.composeImage(imageData, template)
+    }
+    else{
+      return this.composeImage(imageData, new Map([[withCoverTransition, true], [withHover, true], [withModal, true]]))
+    }
+  }
+
+  composeImage(imageData, abilities){
+    let image = Image
+    abilities.forEach((value, key, permissionMap) => {
+      // if the HOC is permitted for this component instance, apply it
+      if(permissionMap.get(key)){
+        // if we're dealing with a modal, we need to pass a plain image as the thing
+        // to render inside the modal
+        if(key === withModal){
+          image = key(image, Image)
+        }
+        else if(key === withHover){
+          let desc = <div className='text desc'>{imageData.desc}</div>
+          let date = <div className='text date'>{imageData.date.getFullYear()}</div>
+          let Info = (props) => {
+            return (
+              <div style={{width: '100%', height: '100%', position: 'relative'}}>
+                {imageData.desc && imageData.date && [desc, date]}
+              </div>
+            )
+          }
+          image = key(image, Info)
+        }
+        else{
+          image = key(image)
+        }
+      }
+    })
+    return image
+  }
+
+  handleImageError(imageID){
+    if(this.state.imageDecorationMap){
+      let imageDecorationMap = this.state.imageDecorationMap.set(imageID, new Map([[withCoverTransition, false], [withHover, false], [withModal, false]]))
+      this.setState({imageDecorationMap: new Map(imageDecorationMap)})
+    }
+  }
+
+  numRows = memoize((activeView, numImages) => {
     let numRows = 1
-    if(this.map.get(activeView)){
-      numRows = Math.ceil(numImages / (12 / this.map.get(activeView)))
+    if(this.viewMap.get(activeView)){
+      numRows = Math.ceil(numImages / (12 / this.viewMap.get(activeView)))
     }
     return numRows
   })
 
-  numPhotosInRow = memoize((activeView) => (this.map.get(activeView) ? (12 / this.map.get(activeView)) : 2))
+  numPhotosInRow = memoize((activeView) => (this.viewMap.get(activeView) ? (12 / this.viewMap.get(activeView)) : 2))
 
-  renderRow(photoNum){
-    let row = []
-    let lastIndex
+  getImageComponentMap = memoize((imageDecorationMap) => {
+    let componentMapping = new Map([])
+    imageDecorationMap.forEach((decoration, imageData) => {
+      componentMapping.set(imageData, this.generateComponent(imageData, decoration))
+    })
+    return componentMapping
+  })
+
+  getIndexOfLastPhotoInRow(indexOfFirstPhotoInRow){
+    let indexOfLastPhotoInRow
     let numPhotosInRow = this.numPhotosInRow(this.props.activeView)
-    if((photoNum + numPhotosInRow) < this.props.images.length){
-      lastIndex = photoNum + numPhotosInRow
+    if((indexOfFirstPhotoInRow + numPhotosInRow) < this.props.images.length){
+      indexOfLastPhotoInRow = indexOfFirstPhotoInRow + numPhotosInRow - 1
     }
     else{
-      lastIndex = this.props.images.length
+      indexOfLastPhotoInRow = this.props.images.length - 1
     }
-    for(let photoIndex = photoNum; photoIndex < lastIndex; photoIndex++){
+    return indexOfLastPhotoInRow
+  }
+
+  renderRow(photoNum){
+    let imageComponentMap = this.getImageComponentMap(this.state.imageDecorationMap)
+    let indexOfLastPhotoInRow = this.getIndexOfLastPhotoInRow(photoNum)
+    let row = []
+    for(let photoIndex = photoNum; photoIndex <= indexOfLastPhotoInRow; photoIndex++){
       let image = this.props.images[photoIndex]
-      let imgComponent = <Image animatable={this.state.shouldAnimate} hoverable={true} src={image.src} desc={image.desc} date={image.date} style={{width: '100%', height: '100%'}}/>
+      let errHandle = this.handleImageError.bind(this, image)
+      let ImageComponent = imageComponentMap.get(image)
       row.push(
         <Col key = {photoIndex} xs={IMG_COUNTS["MOBILE"]} sm={IMG_COUNTS["TABLET"]} md={IMG_COUNTS["TABLET"]} lg={IMG_COUNTS["DESKTOP"]} xl={IMG_COUNTS["DESKTOP"]}>
-          {imgComponent}
+          {ImageComponent && <ImageComponent src={image.src} desc={image.desc} date={image.date} handleError={errHandle}/>}
         </Col>
       )
     }
@@ -75,10 +139,10 @@ class PhotoGridViewUnaware extends React.Component {
 
   renderRows(){
     let toRender = []
-    let numRows = this.rowCalc(this.props.activeView, this.props.images.length)
+    let numRows = this.numRows(this.props.activeView, this.props.images.length)
     for(let rowIndex = 0; rowIndex < numRows; rowIndex++){
       let row = (
-        <Row key={`r${rowIndex}`} className = 'row' style={{height: this.state.rowHeight}}>
+        <Row key={`r${rowIndex}`} style={{height: this.state.rowHeight}}>
           {this.renderRow(rowIndex * this.numPhotosInRow(this.props.activeView))}
         </Row>
       )
@@ -86,8 +150,6 @@ class PhotoGridViewUnaware extends React.Component {
     }
     return toRender
   }
-
-
 
   render(){
     return (

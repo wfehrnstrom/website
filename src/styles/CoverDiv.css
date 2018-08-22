@@ -1,0 +1,8 @@
+.cover-div {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: #FF5959;
+  transition-timing-function: ease-in-out;
+  transition-property: width, height;
+}

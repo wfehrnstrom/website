@@ -1,0 +1,6 @@
+.hover-div {
+  z-index: 5;
+  top: 0;
+  left: 0;
+  transition: 'width' 1s ease-in-out
+}

@@ -1,4 +1,4 @@
-function ImageData(src, desc, date,){
+function ImageData(src, desc, date){
   this.src = src
   this.desc = desc
   this.date = date

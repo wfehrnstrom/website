@@ -8,5 +8,5 @@ module.exports = {
   COVER_COLOR: '#FF5959FF',
   TRANSITION_TYPE: Object.freeze({"COVER": 0, "HOVER": 1, "NONE": 2}),
   FADE_IN_TIMEOUT: 1250,
-  IMG_COUNTS: Object.freeze({"MOBILE": 12, "TABLET": 6, "DESKTOP": 4})
+  IMG_COUNTS: Object.freeze({"MOBILE": 12, "TABLET": 6, "DESKTOP": 4}),
 }
