@@ -1,5 +1,4 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
 import {getDisplayName} from '../../../constants/helpers'
 
 function withHover(Component, Overlay = null){
@@ -44,7 +43,7 @@ function withHover(Component, Overlay = null){
     shrink(){
       let [width, height] = this.getBounds()
       let aspectRatio = height / width
-      if(aspectRatio !== NaN && aspectRatio !== Infinity){
+      if(!isNaN(aspectRatio) && aspectRatio !== Infinity){
         if(aspectRatio > 1){
           return [width, 0]
         }
@@ -58,7 +57,7 @@ function withHover(Component, Overlay = null){
     calculateDurationInSec(){
       let [width, height] = this.getBounds()
       let aspectRatio = height / width
-      if(aspectRatio !== NaN && aspectRatio !== Infinity){
+      if(!isNaN(aspectRatio) && aspectRatio !== Infinity){
         if(aspectRatio > 1){
           return height / 300
         }

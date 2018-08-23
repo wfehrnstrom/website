@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import Home from '../components/Home'
 import MediaContainer from '../containers/mediaContainer'
 import Projects from '../components/Projects'
-import Blog from '../components/Blog'
+import BlogContainer from '../containers/BlogContainer'
 import {DESKTOP_BREAKPOINT, TABLET_BREAKPOINT, VIEWS} from '../constants'
 import ViewContext from './viewContext'
 
@@ -11,8 +11,6 @@ class App extends Component {
   constructor(props){
     super(props)
     this.updateView = this.updateView.bind(this)
-    let matchers = []
-    let matches = []
     let breakpoints
     if(props.breakpoint && props.breakpoints.length === 2){
       breakpoints = props.breakpoints
@@ -84,7 +82,7 @@ class App extends Component {
             <Route path='/home' component={Home}/>
             <Route path='/media' component={MediaContainer}/>
             <Route path='/projects' component={Projects}/>
-            <Route path='/blog' component={Blog}/>
+            <Route path='/blog' component={BlogContainer}/>
           </Switch>
         </BrowserRouter>
       </ViewContext.Provider>

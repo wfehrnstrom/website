@@ -8,7 +8,6 @@ import Navbar from '../../Navbar'
 import Video from './Video'
 import { VIEWS } from '../../../constants'
 import viewAware from '../../../containers/viewAware'
-import withCoverTransition from '../../Transitions/withCoverTransition'
 
 class StarterPageViewUnaware extends React.Component {
 
@@ -47,7 +46,7 @@ class StarterPageViewUnaware extends React.Component {
           <div className="homepage-right">
             <div className="homepage-right-content">
               <div className='explore'>
-                <img className='logo-right' src={whiteLogo}/>
+                <img className='logo-right' alt={'Will.Fehrnstrom'} src={whiteLogo}/>
                 <Button className='begin-button' style={{marginTop: '20px'}} text="Start" type="contained" color="primary" onClick={this.triggerTransition}/>
               </div>
               {this.renderVideo()}

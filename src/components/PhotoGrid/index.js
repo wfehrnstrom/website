@@ -1,6 +1,4 @@
 import React from 'react'
-import '../../styles/PhotoGrid.css'
-import '../../styles/image.css'
 import Image from '../Image'
 import {Grid, Row, Col} from 'react-flexbox-grid'
 import {IMG_COUNTS, VIEWS} from '../../constants'
@@ -9,6 +7,8 @@ import viewAware from '../../containers/viewAware'
 import withCoverTransition from '../Transitions/withCoverTransition'
 import withModal from '../Transitions/withModal'
 import withHover from '../Transitions/withHover'
+import '../../styles/PhotoGrid.css'
+import '../../styles/image.css'
 
 /**
  * PhotoGrid

@@ -1,0 +1,18 @@
+.now-viewing {
+  font-size: 0.8rem;
+  font-weight: 600;
+  transition: all 0.25s ease-in-out;
+}
+
+.focused-div {
+  box-sizing: border-box;
+  border-width: 0 2px 2px;
+  border-style: solid;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.category {
+  transition: width 1s ease-in-out;
+}

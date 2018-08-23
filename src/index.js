@@ -2,11 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './containers/app';
 import { Provider } from 'react-redux'
-import { createStore, compose, combineReducers, applyMiddleware} from 'redux'
+import { createStore, combineReducers, applyMiddleware} from 'redux'
 import registerServiceWorker from './registerServiceWorker'
 import thunkMiddleware from 'redux-thunk'
-import Enzyme from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16'
 import firebase from 'firebase'
 import appReducers from './reducers'
 import { config } from './firebase'

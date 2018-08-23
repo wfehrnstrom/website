@@ -1,6 +1,5 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import memoize from 'memoize-one'
 import '../../../styles/CoverDiv.css'
 import {getDisplayName} from '../../../constants/helpers'
 
@@ -60,8 +59,6 @@ function withCoverTransition(WrappedComponent){
     }
 
     triggerAnimation(){
-      let [width, height] = this.getDim()
-      let aspectRatio = height / width
       this.setState({coverSize: this.divSize(true), wrappedComponentSize: this.divSize(true)}, function(){
         this.addTransitionToComponent()
         this.resizeComponent()
@@ -71,8 +68,6 @@ function withCoverTransition(WrappedComponent){
     }
 
     shrinkCover(){
-      let [width, height] = this.getDim()
-      let aspectRatio = height / width
       this.setState({coverSize: this.divSize(false)})
       let duration = this.calculateDuration() * 1000
       this.doneHandler = window.setTimeout(this.removeThis, duration)
@@ -92,7 +87,7 @@ function withCoverTransition(WrappedComponent){
     toStyle(props, descriptors){
       let styleArr = props.map(function(prop){
         // if number or float, add px to string
-        if(!isNaN(prop) && prop.toString().indexOf('.') !== -1 || Number.isInteger(prop)){
+        if((!isNaN(prop) && prop.toString().indexOf('.') !== -1) || Number.isInteger(prop)){
           if(prop === 0){
             return prop
           }
@@ -184,8 +179,6 @@ function withCoverTransition(WrappedComponent){
       if(this.definedSize()){
         let transitionDuration = this.calculateDuration()
         if(!this.state.over){
-          let coverStyleProps = [this.state.coverSize[0], this.state.coverSize[1], `${transitionDuration}s`]
-          let coverDescriptors = ['width', 'height', 'transitionDuration']
           divContent = (
             <div>
               <WrappedComponent ref={this.setComponentRef} {...this.props}/>

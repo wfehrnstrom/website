@@ -1,6 +1,5 @@
 import React from 'react'
 import '../../styles/image.css'
-import memoize from 'memoize-one'
 import errorImg from '../../res/vector/image_error_msg.svg'
 
 class Image extends React.Component {

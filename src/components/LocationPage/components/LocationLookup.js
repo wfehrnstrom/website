@@ -1,7 +1,6 @@
 import React from 'react'
 import '../../../styles/LocationLookup.css'
 import Fade from '@material-ui/core/Fade'
-import {FADE_IN_TIMEOUT} from '../../../constants'
 
 const LocationLookup = (props) => {
   if(props.location){

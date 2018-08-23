@@ -1,6 +1,5 @@
 import React from 'react'
 import '../../styles/App.css'
-import {DESKTOP_BREAKPOINT, TABLET_BREAKPOINT, VIEWS} from '../../constants'
 import StarterPage from './components/StarterPage'
 import LocationPageContainer from '../../containers/LocationPageContainer'
 import Spacer from '../Spacer'

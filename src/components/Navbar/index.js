@@ -50,21 +50,10 @@ class Navbar extends React.Component {
   }
 
   componentDidMount(){
-    let box = document.getElementsByClassName('navbar-dot')
     if(!this.state.noRotate){
       window.addEventListener('resize', this.orientation)
     }
     this.orientation()
-    // document.addEventListener('click', function(e){
-    //   let toTransform = e.target.nextSibling
-    //   if(toTransform && toTransform.className === "navbar-dot"){
-    //     document.addEventListener("transitionend", this.dotSpring)
-    //     toTransform.style.transitionProperty = 'transform, opacity'
-    //     toTransform.style.transitionDuration = '0.3s'
-    //     toTransform.style.transitionTimingFunction = 'linear'
-    //     toTransform.style.transform = "rotate(45deg)"
-    //   }
-    // }.bind(this))
   }
 
   componentWillReceiveProps(nextProps){

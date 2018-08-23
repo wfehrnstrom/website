@@ -1,4 +1,3 @@
-import React from 'react'
 import { connect } from 'react-redux'
 import Media from '../components/Media'
 import * as mediaDataActions from '../actions/mediaDataActions'
