@@ -1,13 +1,13 @@
 .title-container {
   background-color: #FFFFFF;
   position: absolute;
-  width: 60%;
   height: 23%;
   bottom: 30px;
   left: 30px;
   display: flex;
   justify-content: flex-start;
   align-items: center;
+  box-shadow: 0 1px 7px
 }
 
 .title {

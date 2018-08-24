@@ -36,25 +36,6 @@ class CategoryBar extends React.Component {
       focusedCategory: null,
     }
     this.focusCategory = this.focusCategory.bind(this)
-    this.onWindowClick = this.onWindowClick.bind(this)
-  }
-
-  componentDidMount(){
-    window.addEventListener('click', this.onWindowClick)
-  }
-
-  componentWillUnmount(){
-    window.removeEventListener('click', this.onWindowClick)
-  }
-
-  onWindowClick(e){
-    let barWrapper = document.querySelector('.bar-wrapper')
-    if(!barWrapper.contains(e.target)){
-      this.setState({focusedCategory: null})
-      if(this.props.onGroupSelect){
-        this.props.onGroupSelect(null)
-      }
-    }
   }
 
   hasData(){
@@ -114,12 +95,20 @@ class CategoryBar extends React.Component {
   }
 
   focusCategory(category){
-    if(this.state && this.state.focusedCategory !== category && this.state.categories.get(category)){
-      this.setState({focusedCategory: category})
-      if(this.props.onGroupSelect){
-        this.props.onGroupSelect(category)
+    if(this.state){
+      let newFocusedCategory = null
+      if(category !== null && !this.state.categories.get(category)){
+        return
       }
-      let barWidths = this.getBarWidthMap(this.state.categories)
+      if(this.state.focusedCategory !== category){
+        newFocusedCategory = category
+      }
+      this.setState({focusedCategory: newFocusedCategory}, () => {
+        this.getBarWidthMap(this.state.categories)
+      })
+      if(this.props.onGroupSelect){
+        this.props.onGroupSelect(newFocusedCategory)
+      }
     }
   }
 

@@ -106,7 +106,7 @@ function withHover(Component, Overlay = null){
           <Component {...this.props} style={{...this.props.style, width: '100%', height: '100%'}}/>
           <div className='hoverDiv' style={{width: `${this.state.coverSize[0]}px`, height: `${this.state.coverSize[1]}px`, backgroundColor: '#24202080', position: 'absolute', top: 0, left: 0, zIndex: 6, ...this.props.style}}></div>
           <div className='info-div' style={{width: '100%', height: '100%', position: 'absolute', top: 0, left: 0, zIndex: 7}}>
-            {Overlay && <Overlay className='overlay'/>}
+            {Overlay}
           </div>
         </div>
       )

@@ -14,4 +14,5 @@ module.exports = {
            "#BA6060": true, "#FF57A8": true},
   OTHER: 'other',
   OTHER_COLOR: '#A8A8A8',
+  BLOG_FORMATS: Object.freeze({"GRIDDED": 0, "SCROLLTHROUGH": 1})
 }

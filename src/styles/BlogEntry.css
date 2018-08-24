@@ -1,0 +1,29 @@
+.blog-entry {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  color: 'black'
+}
+
+.blog-entry > * {
+  margin: 20px 0;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 800;
+}
+
+.blog-date {
+  font-size: 1.6rem;
+  font-weight: 100;
+  font-style: italic;
+}
+
+.content {
+  --size: 1rem;
+  font-size: var(--size);
+  font-weight: 400;
+  line-height: calc(1.35 * var(--size));
+}

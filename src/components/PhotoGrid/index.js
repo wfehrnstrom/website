@@ -2,6 +2,7 @@ import React from 'react'
 import Image from '../Image'
 import {Grid, Row, Col} from 'react-flexbox-grid'
 import {IMG_COUNTS, VIEWS} from '../../constants'
+import {composeImage} from '../../constants/helpers'
 import memoize from 'memoize-one'
 import viewAware from '../../containers/viewAware'
 import withCoverTransition from '../Transitions/withCoverTransition'
@@ -46,41 +47,11 @@ class PhotoGridViewUnaware extends React.Component {
 
   generateComponent(imageData, template=null){
     if(template){
-      return this.composeImage(imageData, template)
+      return composeImage(imageData, template)
     }
     else{
-      return this.composeImage(imageData, new Map([[withCoverTransition, true], [withHover, true], [withModal, true]]))
+      return composeImage(imageData, new Map([[withCoverTransition, true], [withHover, true], [withModal, true]]))
     }
-  }
-
-  composeImage(imageData, abilities){
-    let image = Image
-    abilities.forEach((value, key, permissionMap) => {
-      // if the HOC is permitted for this component instance, apply it
-      if(permissionMap.get(key)){
-        // if we're dealing with a modal, we need to pass a plain image as the thing
-        // to render inside the modal
-        if(key === withModal){
-          image = key(image, Image)
-        }
-        else if(key === withHover){
-          let desc = <div className='text desc'>{imageData.desc}</div>
-          let date = <div className='text date'>{imageData.date.getFullYear()}</div>
-          let Info = (props) => {
-            return (
-              <div style={{width: '100%', height: '100%', position: 'relative'}}>
-                {imageData.desc && imageData.date && [desc, date]}
-              </div>
-            )
-          }
-          image = key(image, Info)
-        }
-        else{
-          image = key(image)
-        }
-      }
-    })
-    return image
   }
 
   handleImageError(imageID){

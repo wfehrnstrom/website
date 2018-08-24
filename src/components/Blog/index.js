@@ -47,14 +47,14 @@ class BlogViewUnaware extends React.Component {
     if(!blogMap){
       return []
     }
-    let passedBlogs = []
+    let passedBlogs = new Map([])
     let filter = filterSeed ? filterSeed : this.state.activeFilter
     if(!filter){
-      return Array.from(blogMap.values())
+      return blogMap
     }
-    blogMap.forEach(function(blogObj, blogType){
+    blogMap.forEach(function(blogObj, blogTitle){
       if(blogObj.type === filter){
-        passedBlogs.push(blogObj)
+        passedBlogs.set(blogTitle, blogObj)
       }
     })
     return passedBlogs
@@ -64,6 +64,7 @@ class BlogViewUnaware extends React.Component {
     let blogGroupToColorMap = new Map([['personal', '#4C98FF'], ['technical', '#FF5959'], [OTHER, OTHER_COLOR]])
     let blogs = this.filterBlogs(this.props.blogs)
     if(this.props.blogs){
+      const BLOG_CLASS_NAME = 'blog-wrapper'
       return (
         <div style={{display: 'flex', flexDirection: 'column'}}>
           <CategoryBar strict groups={blogGroupToColorMap} data={Array.from(this.props.blogs.values())} filter={'type'} onGroupSelect={this.applyFilter} style={{width: '70vw', height: '2rem', marginTop: '5vh'}}/>
@@ -74,7 +75,7 @@ class BlogViewUnaware extends React.Component {
     else{
       return (
         <div style={{width: '100vw', height: '80vh', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-          There doesn't seem to be anything here.
+          There aren't any blogs in this neighborhood!  Stay tuned!
         </div>
       )
     }
