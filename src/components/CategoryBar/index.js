@@ -1,6 +1,6 @@
 import React from 'react'
 import memoize from 'memoize-one'
-import {COLORS} from '../../constants'
+import {COLORS, OTHER, OTHER_COLOR} from '../../constants'
 import ActiveCategory from './components/ActiveCategory'
 
 
@@ -19,8 +19,6 @@ import ActiveCategory from './components/ActiveCategory'
  */
 
 const barColors = Object.assign({}, COLORS)
-const OTHER = 'other'
-const OTHER_COLOR = '#A8A8A8'
 
 class CategoryBar extends React.Component {
   constructor(props){
@@ -53,6 +51,9 @@ class CategoryBar extends React.Component {
     let barWrapper = document.querySelector('.bar-wrapper')
     if(!barWrapper.contains(e.target)){
       this.setState({focusedCategory: null})
+      if(this.props.onGroupSelect){
+        this.props.onGroupSelect(null)
+      }
     }
   }
 
@@ -115,6 +116,9 @@ class CategoryBar extends React.Component {
   focusCategory(category){
     if(this.state && this.state.focusedCategory !== category && this.state.categories.get(category)){
       this.setState({focusedCategory: category})
+      if(this.props.onGroupSelect){
+        this.props.onGroupSelect(category)
+      }
       let barWidths = this.getBarWidthMap(this.state.categories)
     }
   }

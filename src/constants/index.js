@@ -12,4 +12,6 @@ module.exports = {
   COLORS: {"#4C98FF": true, "#FF5959": true, "#88ED7F": true, "#D96CFF": true, "#EDDC7F": true,
            "#FFA944": true, "#8FFDF6": true, "#268700": true, "#0205d6": true, "#353535": true,
            "#BA6060": true, "#FF57A8": true},
+  OTHER: 'other',
+  OTHER_COLOR: '#A8A8A8',
 }
