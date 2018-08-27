@@ -64,7 +64,6 @@ class BlogViewUnaware extends React.Component {
     let blogGroupToColorMap = new Map([['personal', '#4C98FF'], ['technical', '#FF5959'], [OTHER, OTHER_COLOR]])
     let blogs = this.filterBlogs(this.props.blogs)
     if(this.props.blogs){
-      const BLOG_CLASS_NAME = 'blog-wrapper'
       return (
         <div style={{display: 'flex', flexDirection: 'column'}}>
           <CategoryBar strict groups={blogGroupToColorMap} data={Array.from(this.props.blogs.values())} filter={'type'} onGroupSelect={this.applyFilter} style={{width: '70vw', height: '2rem', marginTop: '5vh'}}/>

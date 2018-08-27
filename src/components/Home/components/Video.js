@@ -1,6 +1,8 @@
 import React from 'react'
 import memoize from 'memoize-one'
 
+const VIDEO_PREFIX =  'video/'
+
 class Video extends React.Component {
   constructor(props){
     super(props)
@@ -9,48 +11,76 @@ class Video extends React.Component {
     }
   }
 
-  renderSources(){
-    return this.props.sources.map(function(source, i){
-      return <source key={i} src={source} type={this.state.types[i]}/>
-    }.bind(this))
-  }
-
   componentDidMount(){
-    let types = []
-    let prefix = 'video/'
-    for(let i = 0; i < this.props.sources.length; i++){
-      let source = this.props.sources[i]
-      let vidtype = prefix + source.substring(source.lastIndexOf('.') + 1, source.length)
-      types.push(vidtype)
-    }
     this.videoStyle(this.props)
     this.setState({
-      types: types
+      types: this.typesFromFiles(this.props.sources)
     })
   }
 
-  videoStyle = memoize((style, parallax) => {
-    let newStyle
-    if(style){
-      newStyle = {...style}
-      if(parallax && (newStyle.position === 'fixed' || !newStyle.position)){
-        newStyle.position = 'fixed'
-      }
-      newStyle.width = newStyle.width ? newStyle.width : '100%'
-      newStyle.height = newStyle.height ? newStyle.height : '100%'
-      newStyle.zIndex = newStyle.zIndex ? newStyle.zIndex : -2
-      return newStyle
+  typesFromFiles(files){
+    let types = []
+    if(files){
+      types = files.map(function(filename){
+        return this.createTypeFromFilename(filename, VIDEO_PREFIX)
+      }.bind(this))
     }
-    return {width: '100%', height: '100%', zIndex: -2}
-  })
+    return types
+  }
 
-  componentWillReceiveProps(nextProps){
-    this.videoStyle(nextProps)
+  createTypeFromFilename(filename, prefix = ''){
+    let type = prefix + filename.substring(filename.lastIndexOf('.') + 1, filename.length)
+    return type
+  }
+
+
+  videoStyle(){
+    let newStyle = this.applyPropStyles()
+    if(this.shouldBeParallax(newStyle)){
+      newStyle = this.setStylePosition(newStyle, 'fixed')
+    }
+    newStyle = this.setZIndexIfUndefined(newStyle, -2)
+    return newStyle
+  }
+
+  setZIndexIfUndefined(style, newIndex){
+    if(!style){
+      style = {}
+    }
+    if(!style.zIndex){
+      style.zIndex = newIndex
+    }
+    return style
+  }
+
+  setStylePosition(style, positionVal){
+    style.position = positionVal
+    return style
+  }
+
+  applyPropStyles(){
+    if(this.props.style){
+      return {...this.props.style}
+    }
+    return {}
+  }
+
+  shouldBeParallax(styles){
+    if(this.props.parallax && (!styles || !styles.position || styles.position === 'fixed')){
+      return true
+    }
+    return false
+  }
+
+  renderSources(){
+    return this.props.sources.map(function(source, i){
+      return <source key={this.state.types[i]} src={source} type={this.state.types[i]}/>
+    }.bind(this))
   }
 
   render(){
     return (
-      <video muted autoPlay loop style={this.videoStyle(this.props.style, this.props.parallax)}>
+      <video className={this.props.className} muted autoPlay loop style={this.videoStyle(this.props.parallax)}>
         {this.renderSources()}
       </video>
     )

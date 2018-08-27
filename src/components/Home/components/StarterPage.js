@@ -1,8 +1,8 @@
 import React from 'react'
-import '../../../styles/homepage.css'
 import whiteLogo from '../../../res/vector/white_logo.svg'
 import homeVid from '../../../res/img/person_flickering.mp4'
 import logoVid from '../../../res/img/logo.mp4'
+import '../../../styles/homepage.css'
 import Button from '../../Button'
 import Navbar from '../../Navbar'
 import Video from './Video'
@@ -12,46 +12,48 @@ import viewAware from '../../../containers/viewAware'
 class StarterPageViewUnaware extends React.Component {
 
   renderVideo(){
-    if(this.props.activeView === VIEWS["DESKTOP"]){
-      return <Video parallax style={{left: '60vw', top: '20vh', width: '30vw', height: '50vh'}} sources={[homeVid]}/>
-    }
-    else if(this.props.activeView === VIEWS["TABLET"]){
-      return <Video parallax style={{left: 0, top: 0, width: '100vw', height: '100vh'}} sources={[homeVid]}/>
-    }
-    else if(this.props.activeView === VIEWS["MOBILE"]){
-      return <Video parallax style={{left: 0, top: 0, width: '100vw', height: '100vh'}}  sources={[homeVid]}/>
-    }
-    else{
-      return null
-    }
+    return <Video className='person-vid' parallax sources={[homeVid]}/>
   }
 
   triggerTransition(){
-    let find_me_here = document.querySelectorAll('.pages .page-section .section-title')[0] || document.querySelectorAll('.pages .page-section-spacer')[0]
-    find_me_here.scrollIntoView({behavior: 'smooth', block: 'start', inline: 'nearest'})
+    let about_me = document.querySelectorAll('.pages .page-section')[0] || document.querySelectorAll('.pages .page-section-spacer')[0]
+    about_me.scrollIntoView({behavior: 'smooth', block: 'start', inline: 'nearest'})
+  }
+
+  renderCallToAction(){
+    return (
+      <div className="homepage-left" style={{position: 'relative', bottom: '14vh', height: '50vh'}}>
+        <div className="explore" style={{height: '100%'}}>
+          <Video style={{objectFit: 'contain'}} sources={[logoVid]}/>
+          <Button style={{position: 'relative', bottom: '30px'}} text="Start" type="contained" color="primary" onClick={this.triggerTransition}/>
+        </div>
+      </div>
+    )
+  }
+
+  renderPortrait(){
+    return (
+      <div className="homepage-right">
+        <div className="homepage-right-content">
+          <div className='explore'>
+            <img className='logo-right' alt={'Will.Fehrnstrom'} src={whiteLogo}/>
+            <Button className='begin-button' style={{marginTop: '20px'}} text="Start" type="contained" color="primary" onClick={this.triggerTransition}/>
+          </div>
+          {this.renderVideo()}
+        </div>
+      </div>
+    )
   }
 
   render(){
     return (
       <div className="page-wrapper">
+        {/* {TODO: Change Navbar to accept elements instead that automatically distribute themselves well} */}
         <Navbar className = "home-nav" elements={["Blog", "Media", "Projects"]} padding={[['20px', '5vw', '20px', '5vw'],['10vh', 0, '10vh', '10vw']]}
           margin={[[0, 0, 0, 0],[0, 0, 0, 0]]} textColor={['black', 'white']} style={{zIndex: 5}}/>
         <div className="content-wrapper">
-          <div className="homepage-left" style={{position: 'relative', bottom: '7vh', height: '50vh'}}>
-            <div className="explore" style={{height: '100%'}}>
-              <Video style={{objectFit: 'contain'}} sources={[logoVid]}/>
-              <Button style={{position: 'relative', bottom: '30px'}} text="Start" type="contained" color="primary" onClick={this.triggerTransition}/>
-            </div>
-          </div>
-          <div className="homepage-right">
-            <div className="homepage-right-content">
-              <div className='explore'>
-                <img className='logo-right' alt={'Will.Fehrnstrom'} src={whiteLogo}/>
-                <Button className='begin-button' style={{marginTop: '20px'}} text="Start" type="contained" color="primary" onClick={this.triggerTransition}/>
-              </div>
-              {this.renderVideo()}
-            </div>
-          </div>
+          {this.renderCallToAction()}
+          {this.renderPortrait()}
         </div>
       </div>
     )

@@ -6,6 +6,7 @@ import Projects from '../components/Projects'
 import BlogContainer from '../containers/BlogContainer'
 import {DESKTOP_BREAKPOINT, TABLET_BREAKPOINT, VIEWS} from '../constants'
 import ViewContext from './viewContext'
+// import View from '../constants/View'
 
 class App extends Component {
   constructor(props){
@@ -36,7 +37,7 @@ class App extends Component {
       view = VIEWS["MOBILE"]
     }
     else if(width < 1001 && width > 500){
-      view = VIEWS["TABLE"]
+      view = VIEWS["TABLET"]
     }
     else{
       view = VIEWS["DESKTOP"]
@@ -47,6 +48,24 @@ class App extends Component {
       activeView: view,
       breakpointMap: sizeMap,
     }
+  }
+
+  getBreakpoints(){
+    let {breakpoints} = this.props
+    if(breakpoints && this.allBreakpointsDefined){
+      return this.props.breakpoints
+    }
+    else{
+      breakpoints = this.getPresetBreakpoints()
+    }
+  }
+
+  allBreakpointsDefined(){
+    return this.props.breakpoints.length === 2
+  }
+
+  getPresetBreakpoints(){
+    return [TABLET_BREAKPOINT, DESKTOP_BREAKPOINT]
   }
 
   updateView(){

@@ -7,16 +7,13 @@ export function loadPhotosFromData(images){
 }
 
 function jsonImgToImgData(loadPath, jsonImg){
-  let fullFilePath = loadPath + jsonImg.filename
-  let imgEl = new Image()
-  imgEl.src = fullFilePath
-  return new ImageData(imgEl, jsonImg.desc, new Date(jsonImg.date))
+  return new ImageData(loadPath + jsonImg.filename, jsonImg.desc, new Date(jsonImg.date))
 }
 
 export function getPhotos(){
   return (dispatch) => {
     let imgArr = JSON.parse(JSON.stringify(json))
-    const loadPath = '../img/'
+    const loadPath = process.env.PUBLIC_URL + '/images/'
     console.log(imgArr)
     let imgDataToSend = imgArr.map((imgObject) => {
       return jsonImgToImgData(loadPath, imgObject)

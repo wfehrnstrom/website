@@ -22,7 +22,7 @@ class Media extends React.Component {
             <PageTitle text={['media', 'peruse()']} style={{marginLeft: '5vw', paddingTop: '2vh'}}/>
           </Fade>
           <Link to='/home'>
-            <Image src={wfsmall} alt={'w.f'} style={{backgroundColor: 'white', position: 'fixed', width: '3rem', height: '2rem', top: '5vh', right: '5vw', objectFit: 'contain'}}/>
+            <Image src={wfsmall} alt={'w.f'} style={{backgroundColor: 'white', zIndex: 7, position: 'fixed', width: '3rem', height: '2rem', top: '5vh', right: '5vw', objectFit: 'contain'}}/>
           </Link>
           {this.props.media && <PhotoGrid rowHeight={'300px'} images={this.props.media}/>}
         </div>

@@ -23,22 +23,20 @@ class Image extends React.Component {
   }
 
   getStyle(){
-    if(this.props.width !== undefined && this.props.height !== undefined){
-      return {
-        ...this.props.style,
-        width: `${this.props.width}px`,
-        height: `${this.props.height}px`,
+    return this.props.style
+  }
+
+  propsDefined(props){
+    props.forEach(function(prop){
+      if(!this.propDefined(prop)){
+        return false
       }
-    }
-    else if(this.props.style){
-      return this.props.style
-    }
-    else{
-      return {
-        width: '100%',
-        height: '100%',
-      }
-    }
+    }.bind(this))
+    return true
+  }
+
+  propDefined(prop){
+    return (this.props[prop] !== undefined && this.props[prop] !== null)
   }
 
   render(){

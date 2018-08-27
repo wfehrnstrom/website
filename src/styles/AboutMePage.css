@@ -1,0 +1,35 @@
+.about-me {
+  background-color: #FF59F9;
+}
+
+.about-me-title {
+  font-size: 3rem;
+  color: white;
+  font-weight: 900;
+}
+
+.about-me-content {
+  font-size: 1rem;
+}
+
+@media only screen and (min-width: 1000px){
+  .about-me-content {
+    width: 45vw;
+  }
+
+  .about-me {
+    height: 100vh;
+  }
+}
+
+@media only screen and (min-width: 500px) and (max-width: 999px){
+  .about-me-content {
+    width: 80vw;
+  }
+}
+
+@media only screen and (max-width: 999px){
+  .about-me {
+    height: 60vh;
+  }
+}

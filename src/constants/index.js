@@ -2,6 +2,7 @@ module.exports = {
   WEBSITE_RED: '#FF5959FF',
   DESKTOP_BREAKPOINT: 1000,
   TABLET_BREAKPOINT: 576,
+  DIMENSION: Object.freeze({"WIDTH": 0, "HEIGHT": 1}),
   VIEWS: Object.freeze({"DESKTOP": 0, "TABLET": 1, "MOBILE": 2}),
   STORAGE_LOCATION_PREFIX: 'locations',
   HOVER_COLOR: '#24202080',
@@ -14,5 +15,5 @@ module.exports = {
            "#BA6060": true, "#FF57A8": true},
   OTHER: 'other',
   OTHER_COLOR: '#A8A8A8',
-  BLOG_FORMATS: Object.freeze({"GRIDDED": 0, "SCROLLTHROUGH": 1})
+  BLOG_FORMATS: Object.freeze({"GRIDDED": 0, "SCROLLTHROUGH": 1}),
 }
