@@ -28,7 +28,7 @@ class BlogCollection extends React.Component {
   }
 
   blogsNotMapType(){
-    return (!this.props.blogs || !(this.props.blogs instanceof Map))
+    return (!this.props || !this.props.blogs || !(this.props.blogs instanceof Map))
   }
 
   renderGriddedBlog(){
@@ -36,10 +36,9 @@ class BlogCollection extends React.Component {
       return null
     }
     let blogArr = this.getBlogArrFrom(this.props.blogs)
-    let gridEntries = this.getBlogPortalsFrom(blogArr)
     return (
       <Row style={{height: this.props.rowHeight}}>
-        {gridEntries}
+        {this.getBlogPortalsFrom(blogArr)}
       </Row>
     )
   }
@@ -68,19 +67,10 @@ class BlogCollection extends React.Component {
     let blogsToDisplay = new Map(this.props.blogs)
     let {activeEntry} = this.state
     if(this.anEntryIsFocused()){
-      let blogs = [this.renderBlogEntry(activeEntry)]
-      blogsToDisplay.delete(activeEntry.title)
-      Array.from(blogsToDisplay.values()).forEach(function(blog){
-        blogs.push(<BlogEntry key={blog.title} title={blog.title} date={blog.date} content={blog.content}/>)
-      })
-      return blogs
+      return this.renderFocusedEntryThenOthers()
     }
     else{
-      return Array.from(this.props.blogs.values()).map(function(blog){
-        return (
-          <BlogEntry key={blog.title} title={blog.title} date={blog.date} content={blog.content}/>
-        )
-      })
+      return this.renderAllBlogEntries()
     }
   }
 
@@ -93,18 +83,30 @@ class BlogCollection extends React.Component {
   }
 
   renderFocusedEntryThenOthers(){
-    let blogsToDisplay = [this.renderBlogEntry(this.state.activeEntry)]
     let blogsToSelectFrom = new Map(this.props.blogs)
     blogsToSelectFrom = this.deselectFocusedBlog(blogsToSelectFrom)
     let blogArr = this.getBlogArrFrom(blogsToSelectFrom)
-    blogArr.forEach(function(blog){
-      blogsToDisplay.push(this.renderBlogEntry(blog))
-    })
+    return [this.renderBlogEntry(this.state.activeEntry), ...this.renderBlogEntries(blogArr)]
   }
 
   deselectFocusedBlog(blogsToSelectFrom){
     let key = this.state.activeEntry.title
     return blogsToSelectFrom.delete(key)
+  }
+
+  renderAllBlogEntries(){
+    return this.renderBlogEntriesFromMap(this.props.blogs)
+  }
+
+  renderBlogEntriesFromMap(blogMap){
+    let blogArr = this.getBlogArrFrom(blogMap)
+    return this.renderBlogEntries(blogArr)
+  }
+
+  renderBlogEntries(blogArr){
+    return blogArr.map(function(blog){
+      return this.renderBlogEntry(blog)
+    }.bind(this))
   }
 
   renderBlogEntry(blog){

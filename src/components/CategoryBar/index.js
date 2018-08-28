@@ -3,19 +3,20 @@ import memoize from 'memoize-one'
 import {COLORS, OTHER, OTHER_COLOR} from '../../constants'
 import ActiveCategory from './components/ActiveCategory'
 import withFilter from '../Blog/components/withFilter'
+import ColorManager from '../../constants/ColorManager'
 
 
 /**
  * DistributionBar
  * @extends React
  *  @prop data - the data to place into groups
- *  @prop filterGroupsOn - the property of the data object which is used to sort the objects into groups.  If none is specified,
+ *  @prop filterGroupsWith - the property of the data object which is used to sort the objects into groups.  If none is specified,
  *    1. if the data is an object, the first key is the filter
  *    2. if the data is not an object, the data itself is the filter
  *  @prop groups - map with key value pairs of the form ['propertyInCommonVal', 'uiColor']
  *  @prop strict - controls grouping behavior.  If strict mode is applied (true), any property that does not match a grouping within
  *  groups is put into an 'other' group.  If strict mode is not applied (false), any property that does not match a grouping within
- *  groups is put into it's own group
+ *  groups is put into its own group type
  *  @prop style - the style to apply to the distribution bar
  */
 
@@ -24,128 +25,140 @@ const barColors = Object.assign({}, COLORS)
 class CategoryBar extends React.Component {
   constructor(props){
     super(props)
-    let grouping
-    if(!this.state || !this.state.categories){
-      grouping = this.initializeGroups()
-    }
-    else{
-      grouping = this.state.categories
-    }
+    let grouping = this.initializeGroups()
     let filter = this.getGroupingFilter()
     this.state = {
-      categories: this.calculateGroups(filter, grouping),
+      categories: this.calculateGroupSizes(filter, grouping),
       focusedCategory: null,
     }
     this.focusCategory = this.focusCategory.bind(this)
   }
 
-  hasData(){
-    return (this.props.data && this.props.data.length > 0)
+  getGroupingFilter(){
+    let {filterGroupsWith} = this.props
+    return (filterGroupsWith ? filterGroupsWith : '')
+  }
+
+  toggleFocus(category){
+    if(this.categoryNotValid(category)){
+      return
+    }
+    let newlyFocusedCategory
+    if(this.isNotFocused(category)){
+      newlyFocusedCategory = this.focusCategory(category)
+    }
+    else{
+      newlyFocusedCategory = this.unfocusCategory()
+    }
+    this.propagateUpFocusEvent(newlyFocusedCategory)
+  }
+
+  focusCategory(category){
+    this.setState({focusedCategory: category})
+    return category
+  }
+
+  unfocusCategory(){
+    this.setState({focusedCategory: null})
+    return null
+  }
+
+  // NOTE: null is a valid category, as this is used to unfocus the category bar
+  categoryNotValid(category){
+    return (!this.state || this.categoryNotFound(category))
+  }
+
+  categoryNotFound(category){
+    if(category !== null && !this.state.categories.get(category)){
+      return true
+    }
+    return false
+  }
+
+  isNotFocused(category){
+    return this.state.focusedCategory !== category
+  }
+
+  propagateUpFocusEvent(category){
+    if(this.props.onGroupSelect){
+      this.props.onGroupSelect(category)
+    }
+  }
+
+  initializeGroups(){
+    let propertyAndColorMapping = this.props.groups
+    let dataGrouping = this.copyOverPropertyMappings(propertyAndColorMapping)
+    if(this.props.strict && this.otherGroupNotInitialized(dataGrouping)){
+      this.initializeOtherGroup(dataGrouping)
+    }
+    return dataGrouping
+  }
+
+  copyOverPropertyMappings(map){
+    let dataGrouping = new Map([])
+    if(!map){
+      return dataGrouping
+    }
+    map.forEach(function(color, propertyVal){
+      dataGrouping.set(propertyVal, [0, color])
+      ColorManager.useColor(barColors, color)
+    })
+    return dataGrouping
+  }
+
+  otherGroupNotInitialized(grouping){
+    return !grouping.get(OTHER)
+  }
+
+  initializeOtherGroup(grouping){
+    grouping.set(OTHER, [0, OTHER_COLOR])
+  }
+
+  calculateGroupSizes = memoize((field, grouping) => {
+    if(this.dataIsObject() && field){
+      grouping = this.incrementGroupSizeWithObjects(this.props.data, field, grouping)
+    }
+    else if(this.props.data){
+      grouping = this.incrementGroupSizeWithPrimitives(this.props.data, grouping)
+    }
+    return grouping
+  })
+
+  incrementGroupSizeWithObjects(objects, field, groupsToIncrement){
+    objects.forEach(function(object){
+      groupsToIncrement = this.incrementGroupSizeWithObject(object, field, groupsToIncrement)
+    }.bind(this))
+    return groupsToIncrement
+  }
+
+  incrementGroupSizeWithObject(object, field, groupsToIncrement){
+    let groupNameToIncrement = object[field]
+    groupsToIncrement = this.incrementGroupSizeByOne(groupNameToIncrement, groupsToIncrement)
+    return groupsToIncrement
+  }
+
+  incrementGroupSizeWithPrimitives(primitives, groupsToIncrement){
+    primitives.forEach(function(primitive){
+      groupsToIncrement = this.incrementGroupSizeWithPrimitive(primitive, groupsToIncrement)
+    }.bind(this))
+    return groupsToIncrement
+  }
+
+  incrementGroupSizeWithPrimitive(primitive, groupsToIncrement){
+    let groupNameToIncrement = primitive
+    groupsToIncrement = this.incrementGroupSizeByOne(groupNameToIncrement, groupsToIncrement)
+    return groupsToIncrement
   }
 
   dataIsObject(){
     return (this.hasData() && this.props.data[0] instanceof Object)
   }
 
-  getGroupingFilter(){
-    let filter = ''
-    if(this.props.filterGroupsOn){
-      filter = this.props.filterGroupsOn
-    }
-    else if(this.dataIsObject()){
-      // set our filter to the first object key
-      filter = Object.keys(this.props.data[0])[0]
-    }
-    return filter
+  hasData(){
+    return (this.props.data && this.props.data.length > 0)
   }
 
-  static useColor(colors, color){
-    if(colors[color]){
-      colors[color] = false
-    }
-    return color
-  }
-
-  static getUnusedColor(colors){
-    let chosenColor
-    Array.from(Object.keys(colors)).some(function(color){
-      if(colors[color]){
-        console.log(color)
-        CategoryBar.useColor(colors, color)
-        chosenColor = color
-        return true
-      }
-    })
-    if(chosenColor){
-      return chosenColor
-    }
-    else{
-      console.warn("CategoryBar Color Generator has run out of colors to use, and is now relying on random colors.")
-      return CategoryBar.getRandomColor()
-    }
-  }
-
-  static getRandomColor(){
-    let hexString = '0123456789ABCDEF'
-    let color = '#'
-    for(let colorDigit = 0; colorDigit < 6; colorDigit++){
-      let hexDigit = Math.floor(Math.random() * 16)
-      color += hexString[hexDigit]
-    }
-    return color
-  }
-
-  focusCategory(category){
-    if(this.state){
-      let newFocusedCategory = null
-      if(category !== null && !this.state.categories.get(category)){
-        return
-      }
-      if(this.state.focusedCategory !== category){
-        newFocusedCategory = category
-      }
-      this.setState({focusedCategory: newFocusedCategory})
-      if(this.props.onGroupSelect){
-        this.props.onGroupSelect(newFocusedCategory)
-      }
-    }
-  }
-
-  initializeGroups(){
-    // if we are passed a valid grouping
-    let dataGrouping = new Map([])
-    if(this.props.groups){
-      this.props.groups.forEach(function(colorVal, groupPropertyVal){
-        dataGrouping.set(groupPropertyVal, [0, colorVal])
-        CategoryBar.useColor(barColors, colorVal)
-      })
-      if(this.props.strict && !dataGrouping.get(OTHER)){
-        dataGrouping.set(OTHER, [0, OTHER_COLOR])
-      }
-    }
-    return dataGrouping
-  }
-
-  calculateGroups = memoize((filter, grouping) => {
-    if(this.dataIsObject() && filter){
-      // sort by object key name
-      this.props.data.forEach(function(pieceOfData){
-        let groupName = pieceOfData[filter]
-        grouping = this.sortDataIntoGroups(groupName, grouping)
-      }.bind(this))
-    }
-    else{
-      if(this.props.data){
-        // sort by actual data value
-        this.props.data.forEach(function(pieceOfData){
-          grouping = this.sortDataIntoGroups(pieceOfData, grouping)
-        }.bind(this))
-      }
-    }
-    return grouping
-  })
-
-  sortDataIntoGroups(groupName, grouping){
+  incrementGroupSizeByOne(groupName, grouping){
     let groupMatch = grouping.get(groupName)
     if(groupMatch){
       let numGroupMembers = groupMatch[0]
@@ -153,13 +166,18 @@ class CategoryBar extends React.Component {
     }
     else{
       if(this.props.strict){
-        let numOthers = grouping.get(OTHER) ? grouping.get(OTHER)[0] : 0
-        grouping.set(OTHER, [numOthers + 1, OTHER_COLOR])
+        grouping = this.incrementOthersByOne(grouping)
       }
       else{
-        grouping.set(groupName, [1, CategoryBar.getUnusedColor(barColors)])
+        grouping = this.addGroup(groupName, grouping)
       }
     }
+    return grouping
+  }
+
+  incrementOthersByOne(grouping){
+    let numOthers = grouping.get(OTHER) ? grouping.get(OTHER)[0] : 0
+    grouping.set(OTHER, [numOthers + 1, OTHER_COLOR])
     return grouping
   }
 
@@ -170,36 +188,67 @@ class CategoryBar extends React.Component {
   getBarWidthMap(groupMap){
     let widthMap = new Map([])
     if(groupMap){
-      if(this.state.focusedCategory){
-        groupMap.forEach((numberAndColor, category) => {
-          if(category === this.state.focusedCategory){
-            widthMap.set(category, '100%')
-          }
-          else{
-            widthMap.set(category, '0%')
-          }
-        })
+      if(this.hasFocus()){
+        widthMap = this.setWidthsAccordingToFocus(groupMap)
       }
       else{
-        let sum = 0
-        groupMap.forEach((numberAndColor, category) => {
-          widthMap.set(category, numberAndColor[0])
-          sum += numberAndColor[0]
-        })
-        widthMap.forEach((numberInCategory, category) => {
-          let percentage = Math.floor((numberInCategory / sum) * 100)
-          widthMap.set(category, `${percentage}%`)
-        })
+        widthMap = this.setWidthsAccordingToGroupSizes(groupMap)
       }
     }
     return widthMap
+  }
+
+  setWidthsAccordingToFocus(groupMap){
+    let percentageWidthMap = new Map([])
+    groupMap.forEach(function(quantityAndColor, category){
+      if(category === this.state.focusedCategory){
+        percentageWidthMap.set(category, '100%')
+      }
+      else{
+        percentageWidthMap.set(category, '0%')
+      }
+    }.bind(this))
+    return percentageWidthMap
+  }
+
+  setWidthsAccordingToGroupSizes(groupMap){
+    if(groupMap){
+      let percentageWidthMap = new Map([])
+      let groupNumberArr = this.getGroupSizesFromGroupMap(groupMap)
+      let sum = this.getTotalNumberOfGroupMembers(groupNumberArr)
+      let percentageArr = groupNumberArr.map((numberElementsInCategory) => {
+        return Math.floor((numberElementsInCategory / sum) * 100)
+      })
+      let i = 0
+      groupMap.forEach(function(numberAndColor, category){
+        percentageWidthMap.set(category, `${percentageArr[i++]}%`)
+      })
+      return percentageWidthMap
+    }
+  }
+
+  getGroupSizesFromGroupMap(groupMap){
+    return Array.from(groupMap.values()).map(function(numAndColorArr){
+      return numAndColorArr[0]
+    })
+  }
+
+  getTotalNumberOfGroupMembers(groupNumberArr){
+    function getSum(total, num){
+      return total + num
+    }
+    return groupNumberArr.reduce(getSum)
+  }
+
+  hasFocus(){
+    return (this.state && this.state.focusedCategory !== null && !this.categoryNotValid(this.state.focusedCategory))
   }
 
   renderGroups(){
     let barDivs = []
     let barWidths = this.getBarWidthMap(this.state.categories)
     barWidths.forEach((percentageWidth, category) => {
-      let div = (<div className='category' key={category} style={{width: percentageWidth, height: '100%', backgroundColor: this.state.categories.get(category)[1]}} onClick={this.focusCategory.bind(this, category)}></div>)
+      let div = (<div className='category' key={category} style={{width: percentageWidth, height: '100%', backgroundColor: this.state.categories.get(category)[1]}} onClick={this.toggleFocus.bind(this, category)}></div>)
       barDivs.push(div)
     })
     return barDivs
