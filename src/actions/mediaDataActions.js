@@ -14,7 +14,6 @@ export function getPhotos(){
   return (dispatch) => {
     let imgArr = JSON.parse(JSON.stringify(json))
     const loadPath = process.env.PUBLIC_URL + '/images/'
-    console.log(imgArr)
     let imgDataToSend = imgArr.map((imgObject) => {
       return jsonImgToImgData(loadPath, imgObject)
     })

@@ -2,13 +2,14 @@ import React from 'react'
 import memoize from 'memoize-one'
 import {COLORS, OTHER, OTHER_COLOR} from '../../constants'
 import ActiveCategory from './components/ActiveCategory'
+import withFilter from '../Blog/components/withFilter'
 
 
 /**
  * DistributionBar
  * @extends React
  *  @prop data - the data to place into groups
- *  @prop filter - the property of the data object which is used to sort the objects.  If none is specified,
+ *  @prop filterGroupsOn - the property of the data object which is used to sort the objects into groups.  If none is specified,
  *    1. if the data is an object, the first key is the filter
  *    2. if the data is not an object, the data itself is the filter
  *  @prop groups - map with key value pairs of the form ['propertyInCommonVal', 'uiColor']
@@ -48,8 +49,8 @@ class CategoryBar extends React.Component {
 
   getGroupingFilter(){
     let filter = ''
-    if(this.props.filter){
-      filter = this.props.filter
+    if(this.props.filterGroupsOn){
+      filter = this.props.filterGroupsOn
     }
     else if(this.dataIsObject()){
       // set our filter to the first object key
@@ -103,9 +104,7 @@ class CategoryBar extends React.Component {
       if(this.state.focusedCategory !== category){
         newFocusedCategory = category
       }
-      this.setState({focusedCategory: newFocusedCategory}, () => {
-        this.getBarWidthMap(this.state.categories)
-      })
+      this.setState({focusedCategory: newFocusedCategory})
       if(this.props.onGroupSelect){
         this.props.onGroupSelect(newFocusedCategory)
       }
@@ -200,7 +199,7 @@ class CategoryBar extends React.Component {
     let barDivs = []
     let barWidths = this.getBarWidthMap(this.state.categories)
     barWidths.forEach((percentageWidth, category) => {
-      let div = (<div className='category' style={{width: percentageWidth, height: '100%', backgroundColor: this.state.categories.get(category)[1]}} onClick={this.focusCategory.bind(this, category)}></div>)
+      let div = (<div className='category' key={category} style={{width: percentageWidth, height: '100%', backgroundColor: this.state.categories.get(category)[1]}} onClick={this.focusCategory.bind(this, category)}></div>)
       barDivs.push(div)
     })
     return barDivs
@@ -218,4 +217,4 @@ class CategoryBar extends React.Component {
   }
 }
 
-export default CategoryBar
+export default withFilter(CategoryBar)

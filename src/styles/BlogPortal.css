@@ -16,3 +16,9 @@
   font-size: 2rem;
   font-weight: 400;
 }
+
+.background-img {
+  width: 100%;
+  height: 95%;
+  position: absolute;
+}

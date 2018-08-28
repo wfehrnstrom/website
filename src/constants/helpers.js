@@ -48,7 +48,7 @@ export function renderImage(imageData, style=null){
   return null
 }
 
-function createImage(src){
+export function createImage(src){
   let img = document.createElement('img')
   img.src = src
   return img
@@ -59,4 +59,9 @@ export function linkString(str){
     return
   }
   return str.replace(/ /g, "%20")
+}
+
+const LOAD_PATH = '/images/'
+export function getImgLoadPath(imagename){
+  return process.env.PUBLIC_URL + LOAD_PATH + imagename
 }

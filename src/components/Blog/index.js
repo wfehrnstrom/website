@@ -5,7 +5,7 @@ import CategoryBar from '../CategoryBar'
 import BlogCollection from './components/BlogCollection'
 import viewAware from '../../containers/viewAware'
 import {MuiThemeProvider} from '@material-ui/core/styles'
-import {OTHER, OTHER_COLOR} from '../../constants'
+import {OTHER, OTHER_COLOR, BLOG_FORMATS} from '../../constants'
 import SearchBar from 'material-ui-search-bar'
 import {Link} from 'react-router-dom'
 import Image from '../Image'
@@ -17,6 +17,8 @@ class BlogViewUnaware extends React.Component {
     this.props.loadBlogs()
     this.state = {
       activeFilter: null,
+      filteringOn: null,
+      blogFormat: BLOG_FORMATS["GRIDDED"]
     }
     this.applyFilter = this.applyFilter.bind(this)
   }
@@ -40,44 +42,49 @@ class BlogViewUnaware extends React.Component {
   }
 
   applyFilter(filter){
-    this.setState({activeFilter: filter})
+    this.setState({activeFilter: filter, filteringOn: 'type'})
   }
 
   filterBlogs(blogMap, filterSeed = null){
-    if(!blogMap){
-      return []
-    }
-    let passedBlogs = new Map([])
+    let filteredBlogs = new Map([])
     let filter = filterSeed ? filterSeed : this.state.activeFilter
+    if(!blogMap){
+      return new Map([])
+    }
     if(!filter){
       return blogMap
     }
     blogMap.forEach(function(blogObj, blogTitle){
       if(blogObj.type === filter){
-        passedBlogs.set(blogTitle, blogObj)
+        filteredBlogs.set(blogTitle, blogObj)
       }
     })
-    return passedBlogs
+    return filteredBlogs
   }
 
-  renderBlogs(){
+  hasBlogsToShow(blogs){
+    return blogs && blogs.size > 0
+  }
+
+  renderBlogsIfFound(){
+    if(this.hasBlogsToShow(this.props.blogs)){
+      return this.renderBlogs(this.props.blogs)
+    }
+    return this.renderNoBlogMessage()
+  }
+
+  onBlogPortalClick(){
+    this.setState({blogFormat: BLOG_FORMATS["SCROLLTHROUGH"]})
+  }
+
+  renderBlogs(blogs){
     let blogGroupToColorMap = new Map([['personal', '#4C98FF'], ['technical', '#FF5959'], [OTHER, OTHER_COLOR]])
-    let blogs = this.filterBlogs(this.props.blogs)
-    if(this.props.blogs){
-      return (
-        <div style={{display: 'flex', flexDirection: 'column'}}>
-          <CategoryBar strict groups={blogGroupToColorMap} data={Array.from(this.props.blogs.values())} filter={'type'} onGroupSelect={this.applyFilter} style={{width: '70vw', height: '2rem', marginTop: '5vh'}}/>
-          <BlogCollection colorMapping={blogGroupToColorMap} blogs={blogs} style={{width: '70%', margin: '20px auto'}} rowHeight={'50vh'}/>
-        </div>
-      )
-    }
-    else{
-      return (
-        <div style={{width: '100vw', height: '80vh', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-          There aren't any blogs in this neighborhood!  Stay tuned!
-        </div>
-      )
-    }
+    return (
+      <div style={{display: 'flex', flexDirection: 'column'}}>
+        <CategoryBar strict filterThrough={'blogs'} filterOn={'type'} filter={this.state.activeFilter} groups={blogGroupToColorMap} data={Array.from(this.props.blogs.values())} filterGroupsOn={'type'} onGroupSelect={this.applyFilter} style={{width: '70vw', height: '2rem', marginTop: '5vh'}}/>
+        <BlogCollection format={this.state.blogFormat} filterThrough={'blogs'} filterOn={'type'} filter={this.state.activeFilter} colorMapping={blogGroupToColorMap} blogs={blogs} onBlogPortalClick={this.onBlogPortalClick.bind(this)} style={{width: '70%', margin: '20px auto'}} rowHeight={'50vh'}/>
+      </div>
+    )
   }
 
   render(){
@@ -89,7 +96,15 @@ class BlogViewUnaware extends React.Component {
           <Link to='/home'>
             <Image src={wfsmall} alt={'w.f'} style={{backgroundColor: 'white', position: 'fixed', width: '3rem', height: '2rem', top: '5vh', right: '5vw', objectFit: 'contain'}}/>
           </Link>
-          {this.renderBlogs()}
+          {this.renderBlogsIfFound()}
+      </div>
+    )
+  }
+
+  renderNoBlogMessage(){
+    return (
+      <div style={{width: '100vw', height: '80vh', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+        There aren't any blogs in this neighborhood!  Stay tuned!
       </div>
     )
   }

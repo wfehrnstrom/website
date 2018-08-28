@@ -1,11 +1,14 @@
 import React from 'react'
 import '../../../styles/BlogPortal.css'
 
-const calculateTitleSize = (title) => {
-  if(!title){
-    return 0
+function renderBackgroundImgIfFound(blog){
+  if(blog && blog.backgroundImg){
+    return (
+      <div className='background-img'>
+        <img src={blog.backgroundImg} style={{width: '100%', height: '100%'}}alt={`Background Image for ${blog.title}`}/>
+      </div>
+    )
   }
-  return `${title.length * 7}%`
 }
 
 const BlogPortal = (props) => {
@@ -13,6 +16,7 @@ const BlogPortal = (props) => {
   let {color} = props
   return (
     <div className='portal-wrapper' onClick={props.onClick} style={{backgroundColor: color, position: 'relative', width: '100%', height: '100%'}}>
+      {renderBackgroundImgIfFound(props.blog)}
       <div className='title-container' style={{width: '80%'}}>
         <div className='title'>{title}</div>
       </div>
