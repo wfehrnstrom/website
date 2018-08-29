@@ -234,7 +234,7 @@ class BlogViewUnaware extends React.Component {
     return (
       <div className='page-root'>
           <Fade in={true} timeout={400}>
-            <PageTitle text={['blog', 'read()']} style={{marginLeft: '15vw', paddingTop: '4vh'}}/>
+            <PageTitle className='page-title' text={['blog', 'read()']}/>
           </Fade>
           <HomeLink/>
           {this.renderBlogsIfFound()}

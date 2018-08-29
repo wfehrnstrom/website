@@ -18,6 +18,11 @@
   width: 70%;
 }
 
+.page-title {
+  margin-left: 15vw;
+  padding-top: 4vh;
+}
+
 @media only screen and (min-width: 1000px){
   #blog-toolbar {
     position: fixed;
@@ -46,6 +51,10 @@
 @media only screen and (max-width: 499px){
   .blog-collection, #blog-type-bar {
     width: 90%;
+  }
+
+  .page-title{
+    margin-left: 5vw;
   }
 
   #blog-toolbar {

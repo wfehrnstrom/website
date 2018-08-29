@@ -10,7 +10,7 @@ import '../../styles/PageTitle.css'
  *    which downscales as appropriate
  */
 const PageTitle = (props) => (
-  <div className='page-title' style={props.style}>
+  <div className={props.className ? props.className : 'page-title'} style={props.style}>
     <div style={{fontWeight: 900}}>{props.text[0]}</div>
     <div className='title-rect'></div>
     <div style={{fontWeight: 400}}>{props.text[1]}</div>
