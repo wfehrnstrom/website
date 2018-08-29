@@ -15,15 +15,38 @@
   font-weight: 800;
 }
 
-.blog-date {
-  font-size: 1.6rem;
-  font-weight: 100;
-  font-style: italic;
+.blog-header {
+  display: flex;
+  align-items: center;
+  font-size: 1.2rem;
+  font-weight: 200;
 }
 
-.content {
+.blog-date {
+  font-size: 1.2rem;
+  font-weight: 100;
+  font-style: italic;
+  margin-left: 20px
+}
+
+.blog-content > * {
+  margin: 20px 0;
+}
+
+.writing {
   --size: 1rem;
   font-size: var(--size);
   font-weight: 400;
   line-height: calc(1.35 * var(--size));
+}
+
+@media only screen and (max-width: 499px){
+  .blog-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .blog-date {
+    margin-left: 0;
+  }
 }

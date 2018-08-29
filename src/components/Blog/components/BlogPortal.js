@@ -1,48 +1,53 @@
 import React from 'react'
 import Fade from '@material-ui/core/Fade'
+import Collapse from '@material-ui/core/Collapse'
 import '../../../styles/BlogPortal.css'
 
-function renderBackgroundImgIfFound(blog){
-  if(blog && blog.backgroundImg){
+class BlogPortal extends React.Component {
+  renderBackgroundImgIfFound(blog){
+    if(blog && blog.backgroundImg){
+      return (
+        <div className='background-img'>
+          <img src={blog.backgroundImg} style={{width: '100%', height: '100%'}} alt={`Background Image for ${blog.title}`}/>
+        </div>
+      )
+    }
+  }
+
+  shouldFade(){
+    return this.props && this.props.fade
+  }
+
+  renderPortal(){
+    let {title} = this.props.blog
+    let {color} = this.props
     return (
-      <div className='background-img'>
-        <img src={blog.backgroundImg} style={{width: '100%', height: '100%'}}alt={`Background Image for ${blog.title}`}/>
+      <div className='portal-wrapper' onClick={this.props.onClick} style={{backgroundColor: color, position: 'relative', width: '100%', height: '100%'}}>
+        {this.renderBackgroundImgIfFound(this.props.blog)}
+        <div className='title-container' style={{width: '80%'}}>
+          <div className='title'>{title}</div>
+        </div>
+        <div className='footer' style={{backgroundColor: color, width: '100%', height: '10px', position: 'absolute', bottom: 0}}></div>
       </div>
     )
   }
-}
 
-function shouldFade(props){
-  return props && props.fade
-}
+  renderPortalWithFade(){
+    return (
+      <Fade in={true} timeout={1000}>
+        {this.renderPortal(this.props)}
+      </Fade>
+    )
+  }
 
-function renderPortal(props){
-  let {title} = props.blog
-  let {color} = props
-  return (
-    <div className='portal-wrapper' onClick={props.onClick} style={{backgroundColor: color, position: 'relative', width: '100%', height: '100%'}}>
-      {renderBackgroundImgIfFound(props.blog)}
-      <div className='title-container' style={{width: '80%'}}>
-        <div className='title'>{title}</div>
-      </div>
-      <div className='footer' style={{backgroundColor: color, width: '100%', height: '10px', position: 'absolute', bottom: 0}}></div>
-    </div>
-  )
-}
-
-function renderPortalWithFade(props){
-  return (
-    <Fade in={true} timeout={1000}>
-      {renderPortal(props)}
-    </Fade>
-  )
-}
-
-const BlogPortal = (props) => {
-  let {title} = props.blog
-  let {color} = props
-  let portal = (shouldFade(props) ? renderPortalWithFade(props) : renderPortal(props))
-  return portal
+  render(){
+    if(this.shouldFade()){
+      return this.renderPortalWithFade()
+    }
+    else{
+      return this.renderPortal()
+    }
+  }
 }
 
 export default BlogPortal

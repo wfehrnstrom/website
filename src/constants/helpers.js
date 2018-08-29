@@ -69,7 +69,11 @@ export function linkString(str){
   if(!str){
     return
   }
-  return str.replace(/ /g, "%20")
+  return replaceSpacesInStrWith(str, "%20")
+}
+
+function replaceSpacesInStrWith(str, replacement){
+  return str.replace(/ /g, replacement)
 }
 
 const LOAD_PATH = '/images/'

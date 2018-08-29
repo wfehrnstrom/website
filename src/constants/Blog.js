@@ -4,4 +4,5 @@ export default function Blog(blog){
   this.backgroundImg  = blog.image
   this.type = blog.type
   this.content = blog.content
+  this.author = blog.author
 }

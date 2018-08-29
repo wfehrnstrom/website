@@ -17,7 +17,9 @@ class BlogEntry extends React.Component {
     this.state = {
       date: this.getFormattedDate(props.date),
       images: [renderImageFromSrcPath(this.props.bannerImg, {width: '100%', height: '50vh'})],
+      minimized: false,
     }
+    this.toggleMinimize = this.toggleMinimize.bind(this)
   }
 
   hasImages(){
@@ -42,10 +44,34 @@ class BlogEntry extends React.Component {
     return (
       <div className='blog-entry'>
         <div className='title'>{this.props.title}</div>
-        <LazyLoadingBanner style={{margin: 0, width: '100%', height: '1rem'}} color={this.props.bannerColor}/>
+        <LazyLoadingBanner onClick={this.toggleMinimize} style={{margin: 0, width: '100%', height: '1rem'}} color={this.props.bannerColor}/>
+        {this.renderBlogContent()}
+      </div>
+    )
+  }
+
+  toggleMinimize(){
+    this.setState({minimized: !this.state.minimized})
+  }
+
+  renderBlogContent(){
+    if(!this.state.minimized){
+      return (
+        <div className='blog-content' style={{width: '100%'}}>
+          {this.renderHeader()}
+          {this.hasImages() && this.renderBannerImage()}
+          <div className='writing'>{this.props.content}</div>
+        </div>
+      )
+    }
+    return null
+  }
+
+  renderHeader(){
+    return (
+      <div className='blog-header'>
+        <div className='blog-author'>{this.props.author},</div>
         <div className='blog-date'>{this.state.date}</div>
-        {this.hasImages() && this.renderBannerImage()}
-        <div className='content'>{this.props.content}</div>
       </div>
     )
   }

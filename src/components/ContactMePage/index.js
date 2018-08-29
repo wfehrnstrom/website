@@ -27,6 +27,7 @@ class ContactMePage extends React.Component {
     this.onEmailChange = this.onEmailChange.bind(this)
     this.onTitleChange = this.onTitleChange.bind(this)
     this.onMessageChange = this.onMessageChange.bind(this)
+    this.resetFormValues = this.resetFormValues.bind(this)
     this.state = {
       showButton: false,
       validEmail: true,
@@ -70,13 +71,21 @@ class ContactMePage extends React.Component {
     let subject = linkString(this.state.title)
     let body = linkString(this.state.message)
     return (
-      <a href={`mailto:wfehrnstrom@gmail.com?subject=${subject}&body=${body}`}>
-        <Button style={{textTransform: 'none', marginTop: '40px', borderRadius: '2px'}}variant='outlined'>
+      <a href={`mailto:wfehrnstrom@gmail.com?subject=${subject}&body=${body}`} onClick={this.resetFormValues}>
+        <Button style={{textTransform: 'none', marginTop: '40px', borderRadius: '2px'}} variant='outlined'>
           Submit
           <SendIcon style={{marginLeft: '10px'}}/>
         </Button>
       </a>
     )
+  }
+
+  resetFormValues(){
+    this.setState({
+      email: '',
+      title: '',
+      message: ''
+    })
   }
 
   render(){
@@ -93,9 +102,9 @@ class ContactMePage extends React.Component {
           </div>
           <div id='contact-form' className='form-container'>
             <MuiThemeProvider theme={theme}>
-              <TextField id='email' label='Email' error={!this.state.validEmail} style={{width: '100%', marginBottom: '30px'}} onChange={this.onEmailChange}/>
-              <TextField id='subject' label='Title' style={{width: '100%', marginBottom: '30px'}} onChange={this.onTitleChange}/>
-              <TextField id='message' label='Message' multiline style={{width: '100%'}} onChange={this.onMessageChange}/>
+              <TextField id='email' label='Email' error={!this.state.validEmail} style={{width: '100%', marginBottom: '30px'}} value={this.state.email} onChange={this.onEmailChange}/>
+              <TextField id='subject' label='Title' style={{width: '100%', marginBottom: '30px'}} value={this.state.title} onChange={this.onTitleChange}/>
+              <TextField id='message' label='Message' multiline style={{width: '100%'}} value={this.state.message} onChange={this.onMessageChange}/>
             </MuiThemeProvider>
             {this.validForm(this.state.email, this.state.title, this.state.message) && this.renderSubmit()}
           </div>

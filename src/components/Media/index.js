@@ -4,7 +4,7 @@ import PhotoGrid from '../PhotoGrid'
 import Fade from '@material-ui/core/Fade'
 import wfsmall from '../../res/vector/wfsmall.svg'
 import Image from '../Image'
-import {Link} from 'react-router-dom'
+import HomeLink from '../HomeLink'
 
 class Media extends React.Component {
   constructor(props){
@@ -21,9 +21,7 @@ class Media extends React.Component {
           <Fade in={true} timeout={400}>
             <PageTitle text={['media', 'peruse()']} style={{marginLeft: '5vw', paddingTop: '2vh'}}/>
           </Fade>
-          <Link to='/home'>
-            <Image src={wfsmall} alt={'w.f'} style={{backgroundColor: 'white', zIndex: 7, position: 'fixed', width: '3rem', height: '2rem', top: '5vh', right: '5vw', objectFit: 'contain'}}/>
-          </Link>
+          <HomeLink/>
           {this.props.media && <PhotoGrid rowHeight={'300px'} images={this.props.media}/>}
         </div>
     )

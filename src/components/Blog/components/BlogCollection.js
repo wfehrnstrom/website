@@ -122,7 +122,7 @@ class BlogCollection extends React.Component {
   }
 
   renderBlogEntry(blog){
-    return (<BlogEntry key={blog.title} bannerColor={this.props.blogColorMap.get(blog.type)} bannerImg={blog.backgroundImg} title={blog.title} date={blog.date} content={blog.content}/>)
+    return (<BlogEntry key={blog.title} bannerColor={this.props.blogColorMap.get(blog.type)} bannerImg={blog.backgroundImg} author={blog.author} title={blog.title} date={blog.date} content={blog.content}/>)
   }
 
   renderBlog(){

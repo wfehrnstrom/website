@@ -13,8 +13,12 @@ function withLazyLoad(Component){
     }
 
     componentDidMount(){
-      window.addEventListener('scroll', this.setLoadState)
+      this.onScroll = window.addEventListener('scroll', this.setLoadState)
       this.setLoadState()
+    }
+
+    componentWillUnmount(){
+      window.removeEventListener('scroll', this.setLoadState)
     }
 
     refLoaded(){
@@ -28,15 +32,24 @@ function withLazyLoad(Component){
     }
 
     shouldLoad(){
-      if(this.refLoaded()){
+      if(this.refLoaded() && !this.state.shouldLoad){
+        let viewportPos = this.getViewportPos()
         let el = this.lazyLoadRef.current
-        let viewportBottomPos = window.innerHeight + window.scrollY
         let elementDistanceFromDocumentTop = this.getOffsetFromDocTop(el)
-        if(elementDistanceFromDocumentTop < viewportBottomPos){
+        if(elementDistanceFromDocumentTop < viewportPos){
           return true
         }
       }
       return false
+    }
+
+    getViewportPos(){
+      if(this.props.loadAtTop){
+        return window.scrollY
+      }
+      else{
+        return window.innerHeight + window.scrollY
+      }
     }
 
     getOffsetFromDocTop(el){

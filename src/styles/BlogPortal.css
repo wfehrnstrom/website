@@ -22,3 +22,8 @@
   height: 95%;
   position: absolute;
 }
+
+.blog-info-text {
+  font-size: 0.8rem;
+  color: white;
+}

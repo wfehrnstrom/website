@@ -16,9 +16,8 @@ import IconButton from '@material-ui/core/IconButton'
 import Tooltip from '@material-ui/core/Tooltip'
 import {OTHER, OTHER_COLOR, BLOG_FORMATS, VIEWS} from '../../constants'
 import SearchBar from 'material-ui-search-bar'
-import {Link} from 'react-router-dom'
 import Image from '../Image'
-import wfsmall from '../../res/vector/wfsmall.svg'
+import HomeLink from '../HomeLink'
 import '../../styles/Blog.css'
 
 class BlogViewUnaware extends React.Component {
@@ -237,9 +236,7 @@ class BlogViewUnaware extends React.Component {
           <Fade in={true} timeout={400}>
             <PageTitle text={['blog', 'read()']} style={{marginLeft: '15vw', paddingTop: '4vh'}}/>
           </Fade>
-          <Link to='/home'>
-            <Image src={wfsmall} alt={'w.f'} style={{backgroundColor: 'white', position: 'fixed', width: '3rem', height: '2rem', top: '5vh', right: '5vw', objectFit: 'contain'}}/>
-          </Link>
+          <HomeLink/>
           {this.renderBlogsIfFound()}
       </div>
     )
