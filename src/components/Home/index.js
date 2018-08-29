@@ -9,6 +9,11 @@ import viewAware from '../../containers/viewAware'
 
 
 class HomePage extends React.Component {
+  constructor(props){
+    super(props)
+    window.scrollTo(0, 0)
+  }
+
   render(){
     return (
       <div className ='page-root'>

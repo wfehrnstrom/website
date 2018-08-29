@@ -1,0 +1,7 @@
+.banner-container {
+  width: 100%;
+}
+
+.banner {
+  transition: width 1.5s ease-in-out;
+}

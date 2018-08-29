@@ -4,6 +4,7 @@ import '../../styles/ContactMePage.css'
 import {linkString} from '../../constants/helpers'
 import TextField from '@material-ui/core/TextField'
 import {MuiThemeProvider, createMuiTheme} from '@material-ui/core/styles'
+import SendIcon from '@material-ui/icons/Send'
 import memoize from 'memoize-one'
 import Button from '@material-ui/core/Button'
 import green from '@material-ui/core/colors/green'
@@ -69,7 +70,12 @@ class ContactMePage extends React.Component {
     let subject = linkString(this.state.title)
     let body = linkString(this.state.message)
     return (
-      <a href={`mailto:wfehrnstrom@gmail.com?subject=${subject}&body=${body}`}><Button style={{textTransform: 'none', marginTop: '40px', borderRadius: '2px'}}variant='outlined'>Submit</Button></a>
+      <a href={`mailto:wfehrnstrom@gmail.com?subject=${subject}&body=${body}`}>
+        <Button style={{textTransform: 'none', marginTop: '40px', borderRadius: '2px'}}variant='outlined'>
+          Submit
+          <SendIcon style={{marginLeft: '10px'}}/>
+        </Button>
+      </a>
     )
   }
 

@@ -2,12 +2,13 @@ import React from 'react'
 import Image from '../Image'
 import {Grid, Row, Col} from 'react-flexbox-grid'
 import {IMG_COUNTS, VIEWS} from '../../constants'
-import {composeImage} from '../../constants/helpers'
+import {composeImage, createAbilityMap} from '../../constants/helpers'
 import memoize from 'memoize-one'
 import viewAware from '../../containers/viewAware'
 import withCoverTransition from '../Transitions/withCoverTransition'
 import withModal from '../Transitions/withModal'
 import withHover from '../Transitions/withHover'
+import withLazyLoad from '../Transitions/withLazyLoad'
 import '../../styles/PhotoGrid.css'
 import '../../styles/image.css'
 
@@ -39,7 +40,7 @@ class PhotoGridViewUnaware extends React.Component {
     let imageDecorationMap = (this.state && this.state.imageDecorationMap ? this.state.imageDecorationMap : new Map([]))
     images.forEach((image) => {
       if(!imageDecorationMap.get(image)){
-        imageDecorationMap.set(image, new Map([[withCoverTransition, true], [withHover, true], [withModal, true]]))
+        imageDecorationMap.set(image, new Map([[withCoverTransition, true], [withHover, true], [withModal, true], [withLazyLoad, true]]))
       }
     })
     return imageDecorationMap
@@ -50,13 +51,13 @@ class PhotoGridViewUnaware extends React.Component {
       return composeImage(imageData, template)
     }
     else{
-      return composeImage(imageData, new Map([[withCoverTransition, true], [withHover, true], [withModal, true]]))
+      return composeImage(imageData, createAbilityMap())
     }
   }
 
   handleImageError(imageID){
     if(this.state.imageDecorationMap){
-      let imageDecorationMap = this.state.imageDecorationMap.set(imageID, new Map([[withCoverTransition, false], [withHover, false], [withModal, false]]))
+      let imageDecorationMap = this.state.imageDecorationMap.set(imageID, new Map([[withLazyLoad, false], [withCoverTransition, false], [withHover, false], [withModal, false]]))
       this.setState({imageDecorationMap: new Map(imageDecorationMap)})
     }
   }

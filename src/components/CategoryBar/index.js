@@ -256,7 +256,7 @@ class CategoryBar extends React.Component {
 
   render(){
     return (
-      <div className = 'bar-wrapper' style={{marginLeft: 'auto', marginRight: 'auto', width: '100%', height: '30px', ...this.props.style}}>
+      <div id={this.props.id} className = 'bar-wrapper' style={{marginLeft: 'auto', marginRight: 'auto', height: '30px', ...this.props.style}}>
         <div className='div-container' style={{marginLeft: 'auto', marginRight: 'auto', display: 'flex', justifyContent: 'flex-start', alignItems: 'center', width: '100%', height: '50%'}}>
           {this.renderGroups()}
         </div>

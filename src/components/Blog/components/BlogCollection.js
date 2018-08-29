@@ -2,10 +2,13 @@ import React from 'react'
 import BlogPortal from './BlogPortal'
 import BlogEntry from './BlogEntry'
 import withFilter from './withFilter'
+import withLazyLoad from '../../Transitions/withLazyLoad'
 import {Row, Col} from 'react-flexbox-grid'
 import '../../../styles/BlogCollection.css'
 import Fade from '@material-ui/core/Fade'
 import {BLOG_FORMATS} from '../../../constants'
+
+const LazyLoadingBlogPortal = withLazyLoad(BlogPortal)
 
 class BlogCollection extends React.Component {
 
@@ -16,12 +19,22 @@ class BlogCollection extends React.Component {
     }
   }
 
+  componentWillReceiveProps(nextProps){
+    if(nextProps.format !== this.props.format){
+      this.goToPageTop()
+    }
+  }
+
+  goToPageTop(){
+    window.scrollTo(0, 0)
+  }
+
   getColorFromBlogType(type){
     return this.props.colorMapping.get(type)
   }
 
   onBlogPortalClick(blog){
-    this.setState({activeEntry: blog.title})
+    this.setState({activeEntry: blog})
     if(this.props.onBlogPortalClick){
       this.props.onBlogPortalClick()
     }
@@ -55,11 +68,9 @@ class BlogCollection extends React.Component {
 
   renderBlogPortal(blog){
     return (
-      <Fade key={blog.title} in={true} timeout={1000}>
-        <Col xs={12} lg={6}>
-          <BlogPortal onClick={this.onBlogPortalClick.bind(this, blog)} color={this.getColorFromBlogType(blog.type)} blog={blog}/>
-        </Col>
-      </Fade>
+      <Col xs={12} lg={6}>
+        <LazyLoadingBlogPortal fade onClick={this.onBlogPortalClick.bind(this, blog)} color={this.getColorFromBlogType(blog.type)} blog={blog}/>
+      </Col>
     )
   }
 
@@ -91,7 +102,8 @@ class BlogCollection extends React.Component {
 
   deselectFocusedBlog(blogsToSelectFrom){
     let key = this.state.activeEntry.title
-    return blogsToSelectFrom.delete(key)
+    blogsToSelectFrom.delete(key)
+    return blogsToSelectFrom
   }
 
   renderAllBlogEntries(){
@@ -110,7 +122,7 @@ class BlogCollection extends React.Component {
   }
 
   renderBlogEntry(blog){
-    return (<BlogEntry key={blog.title} title={blog.title} date={blog.date} content={blog.content}/>)
+    return (<BlogEntry key={blog.title} bannerColor={this.props.blogColorMap.get(blog.type)} bannerImg={blog.backgroundImg} title={blog.title} date={blog.date} content={blog.content}/>)
   }
 
   renderBlog(){

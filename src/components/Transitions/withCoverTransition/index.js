@@ -177,25 +177,39 @@ function withCoverTransition(WrappedComponent){
     render(){
       let divContent = null
       if(this.definedSize()){
-        let transitionDuration = this.calculateDuration()
-        if(!this.state.over){
-          divContent = (
-            <div>
-              <WrappedComponent ref={this.setComponentRef} {...this.props}/>
-              <div className='cover-div' style={{width: `${this.state.coverSize[0]}px`, height: `${this.state.coverSize[1]}px`, transitionDuration: `${transitionDuration}s`, backgroundColor: this.bgColor()}}></div>
-            </div>
-          )
-        }
-        else{
-          divContent = <WrappedComponent ref={this.setComponentRef} style={{transitionDuration: `${transitionDuration}s`, ...this.props.style}} {...this.props}/>
-        }
+        divContent = this.renderComponent()
       }
       return (
-        <div style={{width: '100%', height: '100%', position: 'relative'}} ref={this.containerRef}>
+        <div style={{width: '100%', height: '100%', position: 'relative', ...this.props.style}} ref={this.containerRef}>
           {divContent}
         </div>
       )
     }
+
+    renderComponent(){
+      if(!this.state.over){
+        return this.renderComponentInTransition()
+      }
+      return this.renderCompletedTransition()
+    }
+
+    renderComponentInTransition(){
+      let transitionDuration = this.calculateDuration()
+      return (
+        <div>
+          <WrappedComponent ref={this.setComponentRef} {...this.props}/>
+          <div className='cover-div' style={{width: `${this.state.coverSize[0]}px`, height: `${this.state.coverSize[1]}px`, transitionDuration: `${transitionDuration}s`, backgroundColor: this.bgColor()}}></div>
+        </div>
+      )
+    }
+
+    renderCompletedTransition(){
+      let transitionDuration = this.calculateDuration()
+      return (
+        <WrappedComponent ref={this.setComponentRef} style={{transitionDuration: `${transitionDuration}s`, ...this.props.style}} {...this.props}/>
+      )
+    }
+
   }
   withCoverTransition.displayName = `withCoverTransition(${getDisplayName(WrappedComponent)})`
   return withCoverTransition
