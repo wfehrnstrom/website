@@ -2,6 +2,7 @@ import React from 'react'
 import Image from '../../../Image'
 import Banner from './components/Banner'
 import {renderImageFromSrcPath} from '../../../../constants/helpers'
+import Collapse from '@material-ui/core/Collapse'
 import ImageData from '../../../../constants/ImageData'
 import withCoverTransition from '../../../Transitions/withCoverTransition'
 import withHover from '../../../Transitions/withHover'
@@ -43,9 +44,11 @@ class BlogEntry extends React.Component {
   render(){
     return (
       <div className='blog-entry'>
-        <div className='title'>{this.props.title}</div>
+        <div className='title' style={{marginTop: 0}}>{this.props.title}</div>
         <LazyLoadingBanner onClick={this.toggleMinimize} style={{margin: 0, width: '100%', height: '1rem'}} color={this.props.bannerColor}/>
-        {this.renderBlogContent()}
+        <Collapse style={{width: '100%'}} in={!this.state.minimized} timeout={500}>
+          {this.renderBlogContent()}
+        </Collapse>
       </div>
     )
   }
@@ -55,16 +58,13 @@ class BlogEntry extends React.Component {
   }
 
   renderBlogContent(){
-    if(!this.state.minimized){
-      return (
-        <div className='blog-content' style={{width: '100%'}}>
-          {this.renderHeader()}
-          {this.hasImages() && this.renderBannerImage()}
-          <div className='writing'>{this.props.content}</div>
-        </div>
-      )
-    }
-    return null
+    return (
+      <div className='blog-content' style={{width: '100%'}}>
+        {this.renderHeader()}
+        {this.hasImages() && this.renderBannerImage()}
+        <div className='writing'>{this.props.content}</div>
+      </div>
+    )
   }
 
   renderHeader(){

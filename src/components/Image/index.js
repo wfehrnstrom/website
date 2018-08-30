@@ -43,7 +43,7 @@ class Image extends React.Component {
     let wrapperStyle = this.getStyle()
     let imgStyle = (this.props.style && this.props.style.objectFit) ? {objectFit: this.props.style.objectFit} : null
     return (
-      <div className = 'image-div' style={wrapperStyle}>
+      <div className = 'image-div' style={wrapperStyle} onClick={this.props.onClick}>
         <img className='image' style={imgStyle} onClick={this.openModal} src={this.state.error ? errorImg : this.props.src} onError={this.handleError} alt={this.props.alt ? this.props.alt : ''}/>
       </div>
     )

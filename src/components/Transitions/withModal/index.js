@@ -9,8 +9,13 @@ function withModal(Component, ComponentInModal = null){
       this.state = {
         open: false
       }
+      this.toggle = this.toggle.bind(this)
       this.close = this.close.bind(this)
       this.open = this.open.bind(this)
+    }
+
+    toggle(){
+      this.setState({open: !this.state.open})
     }
 
     open(){
@@ -39,11 +44,12 @@ function withModal(Component, ComponentInModal = null){
     }
 
     renderComponentInModal(){
+      let propsPassed = {...this.props, onClick: this.toggle}
       if(ComponentInModal){
-        return <ComponentInModal {...this.props} style={{width: '100%', height: '100%', ...this.props.style}}/>
+        return <ComponentInModal {...propsPassed} style={{width: '100%', height: '100%', ...propsPassed.style}}/>
       }
       else{
-        return <Component {...this.props} style={{width: '100%', height: '100%', ...this.props.style}}/>
+        return <Component {...propsPassed} style={{width: '100%', height: '100%', ...propsPassed.style}}/>
       }
     }
   }

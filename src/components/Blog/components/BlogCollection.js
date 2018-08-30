@@ -1,7 +1,9 @@
 import React from 'react'
 import BlogPortal from './BlogPortal'
 import BlogEntry from './BlogEntry'
+import CategoryBar from '../../CategoryBar'
 import withFilter from './withFilter'
+import withOrdering from './withOrdering'
 import withLazyLoad from '../../Transitions/withLazyLoad'
 import {Row, Col} from 'react-flexbox-grid'
 import '../../../styles/BlogCollection.css'
@@ -68,7 +70,7 @@ class BlogCollection extends React.Component {
 
   renderBlogPortal(blog){
     return (
-      <Col xs={12} lg={6}>
+      <Col key={blog.title} xs={12} lg={6}>
         <LazyLoadingBlogPortal fade onClick={this.onBlogPortalClick.bind(this, blog)} color={this.getColorFromBlogType(blog.type)} blog={blog}/>
       </Col>
     )
@@ -125,6 +127,10 @@ class BlogCollection extends React.Component {
     return (<BlogEntry key={blog.title} bannerColor={this.props.blogColorMap.get(blog.type)} bannerImg={blog.backgroundImg} author={blog.author} title={blog.title} date={blog.date} content={blog.content}/>)
   }
 
+  renderBlogTypeCategoryBar(){
+    return <CategoryBar id={'blog-type-bar'} groups={this.props.blogColorMap} data={Array.from(this.props.blogs.values())} filterGroupsWith={'type'} onGroupSelect={this.props.applyFilter} style={{height: '2rem', margin: '3vh 0 5vh 0'}}/>
+  }
+
   renderBlog(){
     if(!this.props.blogs || this.props.blogs.length === 0){
       return (<div style={{color: 'black', fontSize: '2rem'}}>{'No Blogs. :('}</div>)
@@ -140,10 +146,11 @@ class BlogCollection extends React.Component {
   render(){
     return (
       <div className={this.props.className} style={this.props.style}>
+        {this.renderBlogTypeCategoryBar()}
         {this.renderBlog()}
       </div>
     )
   }
 }
 
-export default withFilter(BlogCollection)
+export default withFilter(withOrdering(BlogCollection))

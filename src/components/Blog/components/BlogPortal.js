@@ -34,7 +34,7 @@ class BlogPortal extends React.Component {
 
   renderPortalWithFade(){
     return (
-      <Fade in={true} timeout={1000}>
+      <Fade in={true} timeout={500}>
         {this.renderPortal(this.props)}
       </Fade>
     )

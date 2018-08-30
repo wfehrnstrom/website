@@ -91,6 +91,7 @@ class CategoryBar extends React.Component {
     if(this.props.strict && this.otherGroupNotInitialized(dataGrouping)){
       this.initializeOtherGroup(dataGrouping)
     }
+    dataGrouping = this.orderGroupingByDataOccurrence(dataGrouping)
     return dataGrouping
   }
 
@@ -112,6 +113,37 @@ class CategoryBar extends React.Component {
 
   initializeOtherGroup(grouping){
     grouping.set(OTHER, [0, OTHER_COLOR])
+  }
+
+  orderGroupingByDataOccurrence(grouping){
+    let newGrouping = new Map()
+    this.props.data.forEach(function(pieceOfData){
+      let groupName = pieceOfData[this.props.filterGroupsWith]
+      newGrouping = this.initializeGroupOfName(groupName, newGrouping, grouping)
+    }.bind(this))
+    return newGrouping
+  }
+
+  initializeGroupOfName(groupName, newGrouping, oldGrouping){
+    if(!newGrouping.get(groupName)){
+      if(!oldGrouping.get(groupName)){
+        newGrouping = this.insertNewGroup(groupName, newGrouping, oldGrouping)
+      }
+      else{
+        newGrouping.set(groupName, oldGrouping.get(groupName))
+      }
+    }
+    return newGrouping
+  }
+
+  insertNewGroup(groupName, newGrouping, oldGrouping){
+    if(this.props.strict){
+      newGrouping.set(OTHER, oldGrouping.get(OTHER))
+    }
+    else{
+      newGrouping.set(groupName [0, ColorManager.getUnusedColor()])
+    }
+    return newGrouping
   }
 
   calculateGroupSizes = memoize((field, grouping) => {
@@ -266,4 +298,4 @@ class CategoryBar extends React.Component {
   }
 }
 
-export default withFilter(CategoryBar)
+export default CategoryBar

@@ -12,15 +12,15 @@ export default function withFilter(Component){
         return map
       }
       map.forEach(function(obj, key){
-        if(this.passFilter(obj, filterOn, filter)){
+        if(this.passFilter(obj)){
           filteredMap.set(key, obj)
         }
       }.bind(this))
       return filteredMap
     }
 
-    passFilter(obj, filterOn, filter){
-      let {filterFunc} = this.props
+    passFilter(obj){
+      let {filterFunc, filterOn, filter} = this.props
       if(filterFunc){
         return filterFunc(obj[filterOn], filter)
       }

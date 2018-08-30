@@ -2,6 +2,7 @@ import React from 'react'
 import PageTitle from '../PageTitle'
 import Fade from '@material-ui/core/Fade'
 import CategoryBar from '../CategoryBar'
+import withOrdering from './components/withOrdering'
 import BlogCollection from './components/BlogCollection'
 import ToolBar from '../ToolBar'
 import ToolBarItem from '../ToolBar/components/ToolBarItem'
@@ -14,11 +15,17 @@ import ViewStreamIcon from '@material-ui/icons/ViewStream'
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
 import IconButton from '@material-ui/core/IconButton'
 import Tooltip from '@material-ui/core/Tooltip'
+import Menu from '@material-ui/core/Menu'
+import MenuItem from '@material-ui/core/MenuItem'
 import {OTHER, OTHER_COLOR, BLOG_FORMATS, VIEWS} from '../../constants'
 import SearchBar from 'material-ui-search-bar'
 import Image from '../Image'
 import HomeLink from '../HomeLink'
 import '../../styles/Blog.css'
+
+const COMPARISONS = Object.freeze({"AUTHOR": 1, "DATE": 2})
+
+const OrderedCategoryBar = withOrdering(CategoryBar)
 
 class BlogViewUnaware extends React.Component {
   constructor(props){
@@ -31,11 +38,17 @@ class BlogViewUnaware extends React.Component {
       menuTooltipPlacement: 'left',
       toolbarVisible: true,
       showToolbarToggle: true,
+      sortMenuAnchor: null,
+      filterMenuAnchor: null,
+      comparisonType: COMPARISONS["DATE"],
     }
     this.applyFilter = this.applyFilter.bind(this)
     this.goToGridView = this.goToGridView.bind(this)
     this.goToStreamView = this.goToStreamView.bind(this)
     this.toggleToolbarVisibility = this.toggleToolbarVisibility.bind(this)
+    this.toggleMenu = this.toggleMenu.bind(this)
+    this.closeMenu = this.closeMenu.bind(this)
+    this.compareByAuthor = this.compareByAuthor.bind(this)
   }
 
   componentWillReceiveProps(nextProps){
@@ -129,13 +142,80 @@ class BlogViewUnaware extends React.Component {
     this.setState({blogFormat: BLOG_FORMATS["SCROLLTHROUGH"]})
   }
 
+  getComparison(){
+    return this.getComparisonFromSortingType(this.state.comparisonType)
+  }
+
+  getComparisonFromSortingType(comparisonType){
+    switch(comparisonType){
+      case COMPARISONS["AUTHOR"]:
+        return this.compareByAuthor
+      case COMPARISONS["DATE"]:
+      default:
+        return this.compareByDate
+    }
+  }
+
+  setSortingType(comparisonType){
+    this.setState({comparisonType})
+  }
+
+  compareByDate(blog1, blog2){
+    if(blog1.date.getTime() > blog2.date.getTime()){
+      return -1
+    }
+    else if(blog1.date.getTime() < blog2.date.getTime()){
+      return 1
+    }
+    return 0
+  }
+
+  compareByAuthor(blog1, blog2){
+    if(this.noAuthors(blog1, blog2)){
+      return 0
+    }
+    let [author1, author2] = [blog1.author.toLowerCase(), blog2.author.toLowerCase()]
+    let priorityResult = this.prioritizeAuthor(author1, author2)
+    if(priorityResult){
+      return priorityResult
+    }
+    else{
+      return this.normalPriorityCompareAuthors(blog1.author, blog2.author)
+    }
+  }
+
+  noAuthors(blog1, blog2){
+    return !blog1.author || !blog2.author
+  }
+
+  prioritizeAuthor(author1, author2, priorityAuthor = "will fehrnstrom"){
+    if(author1 === priorityAuthor && author2 !== priorityAuthor){
+      return -1
+    }
+    else if(author2 === priorityAuthor && author1 !== priorityAuthor){
+      return 1
+    }
+    return 0
+  }
+
+  normalPriorityCompareAuthors(author1, author2){
+    if(author1 < author2){
+      return -1
+    }
+    else if(author1 > author2){
+      return 1
+    }
+    return 0
+  }
+
   renderBlogs(blogs){
     let blogGroupToColorMap = new Map([['personal', '#4C98FF'], ['technical', '#FF5959'], [OTHER, OTHER_COLOR]])
     return (
       <div style={{display: 'flex', flexDirection: 'column'}}>
-        <CategoryBar id={'blog-type-bar'} strict filterThrough={'blogs'} filterOn={'type'} filter={this.state.activeFilter} groups={blogGroupToColorMap} data={Array.from(this.props.blogs.values())} filterGroupsWith={'type'} onGroupSelect={this.applyFilter} style={{height: '2rem', marginTop: '5vh'}}/>
         {this.renderToolBar()}
-        <BlogCollection blogColorMap={blogGroupToColorMap} className='blog-collection' format={this.state.blogFormat} filterThrough={'blogs'} filterOn={'type'} filter={this.state.activeFilter} colorMapping={blogGroupToColorMap} blogs={blogs} onBlogPortalClick={this.onBlogPortalClick.bind(this)} style={{margin: '20px auto'}} rowHeight={'50vh'}/>
+        <BlogCollection blogColorMap={blogGroupToColorMap} className='blog-collection' format={this.state.blogFormat} applyFilter={this.applyFilter} filterThrough={'blogs'}
+          filterOn={'type'} filter={this.state.activeFilter} colorMapping={blogGroupToColorMap} blogs={blogs} onBlogPortalClick={this.onBlogPortalClick.bind(this)}
+          sortThrough={'blogs'} cmpFunc={this.getComparison()} style={{margin: '0 auto 20px auto'}} rowHeight={'50vh'}/>
       </div>
     )
   }
@@ -166,8 +246,28 @@ class BlogViewUnaware extends React.Component {
     return (
       <div className='toolbar-content'>
         {this.renderStreamOrGridIcon()}
-        {this.renderToolBarIcon(ReorderIcon, 'Sort Posts')}
-        {this.renderToolBarIcon(FilterListIcon, 'Filter Posts')}
+        {this.renderIconMenu(
+          ReorderIcon,
+          'Sort Posts',
+            {
+              anchor: 'sortMenuAnchor',
+              items: [<MenuItem onClick={this.setSortingType.bind(this, COMPARISONS["AUTHOR"])}>By Author</MenuItem>,
+                      <MenuItem onClick={this.setSortingType.bind(this, COMPARISONS["DATE"])}>By Date</MenuItem>,
+                      <MenuItem>Alphabetically</MenuItem>,
+                      <MenuItem>By Length</MenuItem>
+                    ]
+            },
+          )
+        }
+        {this.renderIconMenu(
+          FilterListIcon,
+          'Sort Posts',
+            {
+              anchor: 'filterMenuAnchor',
+              items: [<MenuItem>By Author</MenuItem>, <MenuItem>By Date</MenuItem>]
+            },
+         )
+        }
       </div>
     )
   }
@@ -187,6 +287,47 @@ class BlogViewUnaware extends React.Component {
     else{
       return this.renderToolBarIcon(ViewStreamIcon, 'Read Through Blogs', {onClick: this.goToStreamView})
     }
+  }
+
+  renderIconMenu(Icon, label, props){
+    function onIconClick(event){
+      this.toggleMenu.bind(this, event, props.anchor)()
+    }
+
+    return (
+      <div>
+        { this.renderToolBarIcon(Icon, label, {...props, onClick: onIconClick.bind(this) })}
+        <Menu
+          anchorEl={this.state[props.anchor]}
+          open={Boolean(this.state[props.anchor])}
+          onClose={onIconClick.bind(this)}
+        >
+          {props.items}
+        </Menu>
+      </div>
+    )
+  }
+
+  renderFilterMenu(){
+    return (
+      <div>
+
+      </div>
+    )
+  }
+
+  toggleMenu(event, anchor){
+    let target = event.currentTarget
+    if(!this.state[anchor]){
+      this.setState({[anchor]: target})
+    }
+    else {
+      this.closeMenu(anchor)
+    }
+  }
+
+  closeMenu(anchor){
+    this.setState({[anchor]: null})
   }
 
   goToGridView(){

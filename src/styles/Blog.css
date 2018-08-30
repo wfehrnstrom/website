@@ -14,7 +14,11 @@
   transform: rotate(0deg);
 }
 
-.blog-collection, #blog-type-bar {
+#blog-type-bar {
+  width: 100%;
+}
+
+.blog-collection {
   width: 70%;
 }
 
@@ -49,7 +53,7 @@
 }
 
 @media only screen and (max-width: 499px){
-  .blog-collection, #blog-type-bar {
+  .blog-collection{
     width: 90%;
   }
 
