@@ -3,33 +3,53 @@ import {getDisplayName} from '../../../constants/helpers'
 
 function withOrdering(Component){
   class WrappedComponent extends React.Component {
-    sortThrough(map){
-      let sortableEntries = Array.from(map.entries())
-      sortableEntries = this.quicksortHelper(sortableEntries)
-      let sortedMap = new Map([])
-      sortableEntries.forEach(function(entry){
-        let [key, value] = entry
-        sortedMap.set(key, value)
-      })
-      return sortedMap
+    sortThrough(data){
+      let sortedData
+      if(data instanceof Map){
+        let sortableEntries = Array.from(data.entries())
+        sortableEntries = this.quicksortHelper(sortableEntries)
+        sortedData = new Map(sortableEntries)
+      }
+      else if(data instanceof Array){
+        sortedData = this.quicksortHelper(data)
+      }
+      return sortedData
     }
 
     quicksortHelper(arr){
-      if(arr.length < 2){
+      if(arr && arr.length < 2){
         return arr
       }
       let pivot = arr[0]
       let lesser = []
       let greater = []
       for(let i = 1; i < arr.length; i++){
-        if(this.compare(arr[i][1], pivot[1]) <= 0){
+        let comparison = this.getComparisonBasedOnDataType(arr[i], pivot)
+        if(comparison <= 0){
           lesser.push(arr[i])
         }
         else{
           greater.push(arr[i])
         }
       }
-      return this.quicksortHelper(lesser).concat([pivot], this.quicksortHelper(greater))
+      return this.returnAppropriateDataType(lesser, greater, pivot)
+    }
+
+    returnAppropriateDataType(lesser, greater, pivot){
+      if(pivot instanceof Array){
+        return this.quicksortHelper(lesser).concat([pivot], this.quicksortHelper(greater))
+      }
+      return this.quicksortHelper(lesser).concat(pivot, this.quicksortHelper(greater))
+    }
+
+
+    getComparisonBasedOnDataType(obj1, obj2){
+      if(obj1 instanceof Array && obj2 instanceof Array){
+        return this.compare(obj1[1], obj2[1])
+      }
+      else {
+        return this.compare(obj1, obj2)
+      }
     }
 
     compare(obj1, obj2){
@@ -48,7 +68,7 @@ function withOrdering(Component){
 
     defaultCmpObj(obj1, obj2){
       while(obj1 instanceof Object){
-        let key1 = obj1.keys()[0]
+        let key1 = Object.keys(obj1)[0]
         obj1 = obj1[key1]
         obj2 = obj2[key1]
       }

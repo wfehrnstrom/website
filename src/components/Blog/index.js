@@ -23,7 +23,7 @@ import Image from '../Image'
 import HomeLink from '../HomeLink'
 import '../../styles/Blog.css'
 
-const COMPARISONS = Object.freeze({"AUTHOR": 1, "DATE": 2})
+const COMPARISONS = Object.freeze({"AUTHOR": 1, "DATE": 2, "TITLE": 3,})
 
 const OrderedCategoryBar = withOrdering(CategoryBar)
 
@@ -49,6 +49,7 @@ class BlogViewUnaware extends React.Component {
     this.toggleMenu = this.toggleMenu.bind(this)
     this.closeMenu = this.closeMenu.bind(this)
     this.compareByAuthor = this.compareByAuthor.bind(this)
+    this.compareByTitle = this.compareByTitle.bind(this)
   }
 
   componentWillReceiveProps(nextProps){
@@ -150,6 +151,8 @@ class BlogViewUnaware extends React.Component {
     switch(comparisonType){
       case COMPARISONS["AUTHOR"]:
         return this.compareByAuthor
+      case COMPARISONS["TITLE"]:
+        return this.compareByTitle
       case COMPARISONS["DATE"]:
       default:
         return this.compareByDate
@@ -180,7 +183,7 @@ class BlogViewUnaware extends React.Component {
       return priorityResult
     }
     else{
-      return this.normalPriorityCompareAuthors(blog1.author, blog2.author)
+      return this.compareStrings(blog1.author, blog2.author)
     }
   }
 
@@ -198,11 +201,16 @@ class BlogViewUnaware extends React.Component {
     return 0
   }
 
-  normalPriorityCompareAuthors(author1, author2){
-    if(author1 < author2){
+  compareByTitle(blog1, blog2){
+    let [title1, title2] = [blog1.title.toLowerCase(), blog2.title.toLowerCase()]
+    return this.compareStrings(title1, title2)
+  }
+
+  compareStrings(string1, string2){
+    if(string1 < string2){
       return -1
     }
-    else if(author1 > author2){
+    else if(string1 > string2){
       return 1
     }
     return 0
@@ -213,6 +221,9 @@ class BlogViewUnaware extends React.Component {
     return (
       <div style={{display: 'flex', flexDirection: 'column'}}>
         {this.renderToolBar()}
+        <OrderedCategoryBar id={'blog-type-bar'} groups={blogGroupToColorMap} data={Array.from(this.props.blogs.values())} sortThrough={'data'} filterGroupsWith={'type'}
+          cmpFunc={this.getComparison()} onGroupSelect={this.applyFilter} 
+          style={{width: '70%', height: '2rem', margin: '3vh auto 5vh auto'}}/>
         <BlogCollection blogColorMap={blogGroupToColorMap} className='blog-collection' format={this.state.blogFormat} applyFilter={this.applyFilter} filterThrough={'blogs'}
           filterOn={'type'} filter={this.state.activeFilter} colorMapping={blogGroupToColorMap} blogs={blogs} onBlogPortalClick={this.onBlogPortalClick.bind(this)}
           sortThrough={'blogs'} cmpFunc={this.getComparison()} style={{margin: '0 auto 20px auto'}} rowHeight={'50vh'}/>
@@ -253,7 +264,7 @@ class BlogViewUnaware extends React.Component {
               anchor: 'sortMenuAnchor',
               items: [<MenuItem onClick={this.setSortingType.bind(this, COMPARISONS["AUTHOR"])}>By Author</MenuItem>,
                       <MenuItem onClick={this.setSortingType.bind(this, COMPARISONS["DATE"])}>By Date</MenuItem>,
-                      <MenuItem>Alphabetically</MenuItem>,
+                      <MenuItem onClick={this.setSortingType.bind(this, COMPARISONS["TITLE"])}>By Title</MenuItem>,
                       <MenuItem>By Length</MenuItem>
                     ]
             },

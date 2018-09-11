@@ -2,6 +2,7 @@ import React from 'react'
 import memoize from 'memoize-one'
 import {COLORS, OTHER, OTHER_COLOR} from '../../constants'
 import ActiveCategory from './components/ActiveCategory'
+import Category from './components/Category'
 import withFilter from '../Blog/components/withFilter'
 import ColorManager from '../../constants/ColorManager'
 
@@ -115,12 +116,22 @@ class CategoryBar extends React.Component {
     grouping.set(OTHER, [0, OTHER_COLOR])
   }
 
+  /**
+   * orderGroupingByDataOccurence - this function orders groups based on the ordering of the data underlying
+   * the groups, in this case blogs.  If the group does not occur at all in the data (and this is actually
+   * a degenerate case that does occur when we filter out the data (since our categories state persists)), it
+   * is pushed to the end of the ordering
+   * @param  {Map} grouping mapping of the types of the categories to the number of elements in that category,
+   * and the color to be used for that part of the bar
+   * @return {Map} a new, ordered, version of the old mapping, all categories preserved.
+   */
   orderGroupingByDataOccurrence(grouping){
     let newGrouping = new Map()
     this.props.data.forEach(function(pieceOfData){
       let groupName = pieceOfData[this.props.filterGroupsWith]
       newGrouping = this.initializeGroupOfName(groupName, newGrouping, grouping)
     }.bind(this))
+    newGrouping = this.appendAllUnusedCategories(newGrouping, grouping)
     return newGrouping
   }
 
@@ -136,12 +147,21 @@ class CategoryBar extends React.Component {
     return newGrouping
   }
 
+  appendAllUnusedCategories(newGrouping, grouping){
+    grouping.forEach(function(quantityAndColor, name){
+      if(!newGrouping.get(name)){
+        newGrouping.set(name, quantityAndColor)
+      }
+    })
+    return newGrouping
+  }
+
   insertNewGroup(groupName, newGrouping, oldGrouping){
     if(this.props.strict){
       newGrouping.set(OTHER, oldGrouping.get(OTHER))
     }
     else{
-      newGrouping.set(groupName [0, ColorManager.getUnusedColor()])
+      newGrouping.set(groupName, [0, ColorManager.getUnusedColor()])
     }
     return newGrouping
   }
@@ -213,6 +233,10 @@ class CategoryBar extends React.Component {
     return grouping
   }
 
+  addGroup(groupName, grouping){
+    grouping.set(groupName, [0, ColorManager.getUnusedColor(COLORS)])
+  }
+
   /**
    * getBarWidthMap - calculates the percentage width each div of the Category Bar should take up
    * @return {Map} key is the category type, value is the percentage width that should be taken up by the category's div
@@ -277,13 +301,19 @@ class CategoryBar extends React.Component {
   }
 
   renderGroups(){
-    let barDivs = []
-    let barWidths = this.getBarWidthMap(this.state.categories)
+    let barCategories = []
+    let categories = this.calculateGroupSizes(this.getGroupingFilter(), this.state.categories)
+    let barWidths = this.orderGroupingByDataOccurrence(this.getBarWidthMap(categories))
     barWidths.forEach((percentageWidth, category) => {
-      let div = (<div className='category' key={category} style={{width: percentageWidth, height: '100%', backgroundColor: this.state.categories.get(category)[1]}} onClick={this.toggleFocus.bind(this, category)}></div>)
-      barDivs.push(div)
+      let div = <Category
+                 name={category}
+                 percentageWidth={percentageWidth}
+                 color={this.state.categories.get(category)[1]}
+                 toggleActive={this.toggleFocus.bind(this, category)}
+               />
+      barCategories.push(div)
     })
-    return barDivs
+    return barCategories
   }
 
   render(){

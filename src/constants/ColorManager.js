@@ -14,7 +14,7 @@ const ColorManager = {
         chosenColor = color
         return true
       }
-    })
+    }.bind(this))
     if(chosenColor){
       return chosenColor
     }

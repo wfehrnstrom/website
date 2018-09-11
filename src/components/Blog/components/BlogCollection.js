@@ -146,7 +146,7 @@ class BlogCollection extends React.Component {
   render(){
     return (
       <div className={this.props.className} style={this.props.style}>
-        {this.renderBlogTypeCategoryBar()}
+        {/* {this.renderBlogTypeCategoryBar()} */}
         {this.renderBlog()}
       </div>
     )
