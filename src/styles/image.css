@@ -61,6 +61,7 @@
 .image-div {
   transition-property: width, height;
   transition-timing-function: ease-in-out;
+  height: 100%;
 }
 
 .cover-div {

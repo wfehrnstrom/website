@@ -71,6 +71,13 @@ class BlogViewUnaware extends React.Component {
     }
   }
 
+  getCategoryBarWidth(viewSize){
+    if(viewSize === VIEWS["MOBILE"]){
+      return '90%'
+    }
+    return '70%'
+  }
+
   getTooltipPlacement(viewSize){
     if(viewSize === VIEWS["DESKTOP"]){
       return 'left'
@@ -222,8 +229,8 @@ class BlogViewUnaware extends React.Component {
       <div style={{display: 'flex', flexDirection: 'column'}}>
         {this.renderToolBar()}
         <OrderedCategoryBar id={'blog-type-bar'} groups={blogGroupToColorMap} data={Array.from(this.props.blogs.values())} sortThrough={'data'} filterGroupsWith={'type'}
-          cmpFunc={this.getComparison()} onGroupSelect={this.applyFilter} 
-          style={{width: '70%', height: '2rem', margin: '3vh auto 5vh auto'}}/>
+          cmpFunc={this.getComparison()} onGroupSelect={this.applyFilter}
+          style={{width: this.getCategoryBarWidth(this.props.activeView), height: '2rem', margin: '3vh auto 5vh auto'}}/>
         <BlogCollection blogColorMap={blogGroupToColorMap} className='blog-collection' format={this.state.blogFormat} applyFilter={this.applyFilter} filterThrough={'blogs'}
           filterOn={'type'} filter={this.state.activeFilter} colorMapping={blogGroupToColorMap} blogs={blogs} onBlogPortalClick={this.onBlogPortalClick.bind(this)}
           sortThrough={'blogs'} cmpFunc={this.getComparison()} style={{margin: '0 auto 20px auto'}} rowHeight={'50vh'}/>
@@ -272,7 +279,7 @@ class BlogViewUnaware extends React.Component {
         }
         {this.renderIconMenu(
           FilterListIcon,
-          'Sort Posts',
+          'Filter Posts',
             {
               anchor: 'filterMenuAnchor',
               items: [<MenuItem>By Author</MenuItem>, <MenuItem>By Date</MenuItem>]

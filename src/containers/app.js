@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import Home from '../components/Home'
 import MediaContainer from '../containers/mediaContainer'
-import Projects from '../components/Projects'
+import ProjectsContainer from '../containers/projectsContainer'
 import BlogContainer from '../containers/BlogContainer'
 import {DESKTOP_BREAKPOINT, TABLET_BREAKPOINT, VIEWS} from '../constants'
 import ViewContext from './viewContext'
@@ -100,8 +100,8 @@ class App extends Component {
             <Route exact path='/' component={Home}/>
             <Route path='/home' component={Home}/>
             <Route path='/media' component={MediaContainer}/>
-            <Route path='/projects' component={Projects}/>
             <Route path='/blog' component={BlogContainer}/>
+            <Route path='/projects' component={ProjectsContainer}/>
           </Switch>
         </BrowserRouter>
       </ViewContext.Provider>

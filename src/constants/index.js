@@ -16,5 +16,7 @@ module.exports = {
   OTHER: 'other',
   OTHER_COLOR: '#A8A8A8',
   BLOG_FORMATS: Object.freeze({"GRIDDED": 0, "SCROLLTHROUGH": 1}),
-  SORT_DATATYPE: Object.freeze({"MAP": 0, "ARRAY": 1})
+  SORT_DATATYPE: Object.freeze({"MAP": 0, "ARRAY": 1}),
+  STATUS: Object.freeze({"ACTIVE": 0, "COMPLETED": 1, "TERMINATED": 2}),
+  PROJECT_TYPES: Object.freeze({"CS": 0, "EE": 1, "MECH": 2, "LIT": 3, "OTHER": 4})
 }

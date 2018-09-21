@@ -1,5 +1,6 @@
 import React from 'react'
 import Image from '../Image'
+import {Link} from 'react-router-dom'
 import {Grid, Row, Col} from 'react-flexbox-grid'
 import {IMG_COUNTS, VIEWS} from '../../constants'
 import {composeImage, createAbilityMap} from '../../constants/helpers'
@@ -38,12 +39,37 @@ class PhotoGridViewUnaware extends React.Component {
 
   updateImageDecorationMap(images){
     let imageDecorationMap = (this.state && this.state.imageDecorationMap ? this.state.imageDecorationMap : new Map([]))
-    images.forEach((image) => {
-      if(!imageDecorationMap.get(image)){
-        imageDecorationMap.set(image, new Map([[withCoverTransition, true], [withHover, true], [withModal, true], [withLazyLoad, true]]))
-      }
-    })
+    if(images){
+      images.forEach((image) => {
+        if(!imageDecorationMap.get(image)){
+          imageDecorationMap.set(image, this.getDecorations())
+        }
+      })
+    }
     return imageDecorationMap
+  }
+
+  getDecorations(){
+    if(this.props.static){
+      return new Map([[withCoverTransition, false], [withHover, false], [withModal, false], [withLazyLoad, false]])
+    }
+    return this.getDecorationsFromProps()
+  }
+
+  getDecorationsFromProps(){
+    let shouldCover = true
+    let shouldHover = true
+    let shouldModal = true
+    if(this.props.noCover){
+      shouldCover = false
+    }
+    if(this.props.noHover){
+      shouldHover = false
+    }
+    if(this.props.noModal || this.props.links){
+      shouldModal = false
+    }
+    return new Map([[withCoverTransition, shouldCover], [withHover, shouldHover], [withModal, shouldModal], [withLazyLoad, false]])
   }
 
   generateComponent(imageData, template=null){
@@ -102,11 +128,32 @@ class PhotoGridViewUnaware extends React.Component {
       let ImageComponent = imageComponentMap.get(image)
       row.push(
         <Col key = {photoIndex} xs={IMG_COUNTS["MOBILE"]} sm={IMG_COUNTS["TABLET"]} md={IMG_COUNTS["TABLET"]} lg={IMG_COUNTS["DESKTOP"]} xl={IMG_COUNTS["DESKTOP"]}>
-          {ImageComponent && <ImageComponent src={image.src} desc={image.desc} date={image.date} handleError={errHandle}/>}
+          {this.renderImage(image, imageComponentMap)}
         </Col>
       )
     }
     return row
+  }
+
+  renderImage(image, imageComponentMap){
+    let errHandle = this.handleImageError.bind(this, image)
+    let ImageComponent = imageComponentMap.get(image)
+    if(this.hasLink(image)){
+      return this.getLinkedImage(image, ImageComponent, errHandle)
+    }
+    return this.getUnlinkedImage(image, ImageComponent, errHandle)
+  }
+
+  getLinkedImage(image, ImageComponent, errHandle){
+    return (<Link to={this.props.links.get(image)}>{this.getUnlinkedImage(image, ImageComponent, errHandle)}</Link>)
+  }
+
+  getUnlinkedImage(image, ImageComponent, errHandle){
+    return <ImageComponent src={image.src} desc={image.desc} date={image.date} handleError={errHandle}/>
+  }
+
+  hasLink(image){
+    return this.props.links && this.props.links.get(image)
   }
 
   renderRows(){
@@ -126,9 +173,22 @@ class PhotoGridViewUnaware extends React.Component {
   render(){
     return (
       <div className='grid-container' style={this.props.style}>
+        {this.renderPhotosIfTheyExist()}
+      </div>
+    )
+  }
+
+  renderPhotosIfTheyExist(){
+    if(this.props.images && this.props.images.length > 0){
+      return (
         <Grid className = 'grid' fluid>
           {this.renderRows()}
         </Grid>
+      )
+    }
+    return (
+      <div style={{marginTop: '10vh', fontWeight: '100', fontSize: '1rem'}}>
+        <strong>LOOK! It's a squirrel!</strong> Will, hide the photos while they're distracted!
       </div>
     )
   }

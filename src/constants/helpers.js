@@ -65,6 +65,16 @@ export function createImage(src){
   return img
 }
 
+export function elementGetOffsetFromParent(element, parent){
+  let currEl = element
+  let offset =  0
+  while(currEl !== parent){
+    offset += currEl.offsetTop
+    currEl = currEl.offsetParent
+  }
+  return offset
+}
+
 export function linkString(str){
   if(!str){
     return

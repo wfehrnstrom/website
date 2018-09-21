@@ -1,6 +1,6 @@
 import React from 'react'
 import whiteLogo from '../../../res/vector/white_logo.svg'
-import homeVid from '../../../res/img/person_flickering.mp4'
+import homeVid from '../../../res/img/me.mp4'
 import logoVid from '../../../res/img/logo.mp4'
 import '../../../styles/homepage.css'
 import Button from '../../Button'
@@ -35,9 +35,11 @@ class StarterPageViewUnaware extends React.Component {
     return (
       <div className="homepage-right">
         <div className="homepage-right-content">
-          <div className='explore'>
-            <img className='logo-right' alt={'Will.Fehrnstrom'} src={whiteLogo}/>
-            <Button className='begin-button' style={{marginTop: '20px'}} text="Start" type="contained" color="primary" onClick={this.triggerTransition}/>
+          <div className='explore-wrapper' style={{backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.7))'}}>
+            <div className='explore'>
+              <img className='logo-right' alt={'Will.Fehrnstrom'} src={whiteLogo}/>
+              <Button className='begin-button' style={{marginTop: '20px'}} text="Start" type="contained" color="primary" onClick={this.triggerTransition}/>
+            </div>
           </div>
           {this.renderVideo()}
         </div>
@@ -49,12 +51,13 @@ class StarterPageViewUnaware extends React.Component {
     return (
       <div className="page-wrapper">
         {/* {TODO: Change Navbar to accept elements instead that automatically distribute themselves well} */}
-        <Navbar className = "home-nav" elements={["Blog", "Media", "Projects"]} padding={[['20px', '5vw', '20px', '5vw'],['10vh', 0, '10vh', '10vw']]}
+        <Navbar className = "home-nav" elements={["Blog", "Media", "Projects"]} padding={[['20px', '5vw', '20px', '5vw'],['4vh', 0, '10vh', '10vw']]}
           margin={[[0, 0, 0, 0],[0, 0, 0, 0]]} textColor={['black', 'white']} style={{zIndex: 5}}/>
         <div className="content-wrapper">
           {this.renderCallToAction()}
           {this.renderPortrait()}
         </div>
+        <div className= 'demo-disclaimer'>Proof of Concept</div>
       </div>
     )
   }

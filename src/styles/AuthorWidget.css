@@ -1,0 +1,19 @@
+.author-widget {
+  position: relative;
+  width: 90%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.author {
+  width: 1.5rem;
+  height: 1.5rem;
+  clip-path: circle(40%);
+}
+
+.author-img {
+  height: 100%;
+}

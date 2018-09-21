@@ -1,0 +1,64 @@
+.project-list-container {
+  margin-left: 8vw;
+}
+
+.project-banner-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+}
+
+.project-entry:nth-child(odd) > .project-banner-img{
+  clip-path: polygon(10% 0%, 100% 0%, 90% 100%, 0% 100%);
+  animation-name: odd-list-item;
+  animation-duration: 1s;
+}
+
+.project-entry:nth-child(even) > .project-banner-img{
+  clip-path: polygon(0% 0%, 90% 0%, 100% 100%, 10% 100%);
+  animation-name: even-list-item;
+  animation-duration: 1s;
+  /* animation-delay: 0.5s; */
+}
+
+@keyframes odd-list-item {
+  0% {
+    clip-path: polygon(10% 0%, 100% 0%, 90% 0%, 0% 0%);
+  }
+
+  100% {
+    clip-path: polygon(10% 0%, 100% 0%, 90% 100%, 0% 100%);
+  }
+}
+
+@keyframes even-list-item {
+  0% {
+    clip-path: polygon(0% 0%, 90% 0%, 100% 0%, 10% 0%);
+  }
+
+  100% {
+    clip-path: polygon(0% 0%, 90% 0%, 100% 100%, 10% 100%);
+  }
+}
+
+.project-entry:first-child {
+  margin-top: 40px;
+}
+
+.project-entry {
+  position: relative;
+  height: 80px;
+  width: 75vw;
+  margin-bottom: 40px;
+  filter: drop-shadow(0px 2px 5px rgba(0, 0, 0, 0.5));
+  transition: 0.1s filter ease-in-out;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.project-entry:hover {
+  filter: drop-shadow(0px 7px 5px rgba(0, 0, 0, 0.5));
+}
