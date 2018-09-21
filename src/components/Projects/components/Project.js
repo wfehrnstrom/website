@@ -53,8 +53,8 @@ class Project extends React.Component{
       <div className='date-widget-container' style={this.state.focused ? {height: '100%', width: '20vw'} : {width: '20vw'}}>
         <div className='project-short-title-label' style={this.state.focused ? {opacity: 1, ...labelPosition} : {opacity: 0, ...labelPosition}}>Dates</div>
         <div className={`project-title-widget-dates ${oddOrEven}-widget-dates`}>
-          <div className={`left-title-widget-dates-${oddOrEven}`}></div>
-          <div className={`right-title-widget-dates-${oddOrEven}`}></div>
+          <div className={`negative-space left-title-widget-dates-${oddOrEven}`}></div>
+          <div className={`negative-space right-title-widget-dates-${oddOrEven}`}></div>
           <p style={{margin: 0, marginBlockStart: 0, marginBlockEnd: 0, display: 'inline'}}>
             <span><strong>from </strong>{this.props.createdOn && this.props.createdOn.toDateString()}<br/></span>
             {this.mapFinishDateToText()}
@@ -79,8 +79,8 @@ class Project extends React.Component{
       <div className='author-widget-container' style={this.state.focused ? {height: '100%', width: '20vw'} : {width: '20vw'}}>
         <div className='project-short-title-label' style={this.state.focused ? {opacity: 1, ...labelPosition} : {opacity: 0, ...labelPosition}}>Authors</div>
         <div className={`project-title-widget-authors ${oddOrEven}`}>
-          <div className={`left-title-widget-authors-${oddOrEvenMargin}`}></div>
-          <div className={`right-title-widget-authors-${oddOrEvenMargin}`}></div>
+          <div className={`negative-space left-title-widget-authors-${oddOrEvenMargin}`}></div>
+          <div className={`negative-space right-title-widget-authors-${oddOrEvenMargin}`}></div>
           {this.renderAuthorImages(this.props.authors)}
         </div>
       </div>
@@ -128,7 +128,9 @@ class Project extends React.Component{
       <div>
         <div className='project-short-title-label' style={this.state.focused ? {opacity: 1, ...labelPosition} : {opacity: 0, ...labelPosition}}>Title</div>
         <div className={`project-short-title ${oddOrEven}`} style={this.state.focused ? {opacity: 1} : {opacity: 0}}>
-          <div>{this.props.title}</div>
+          <div className={`negative-space left-title-${oddOrEven}`}></div>
+          <div className={`negative-space right-title-${oddOrEven}`}></div>
+          <div className='short-title-text'>{this.props.title}</div>
         </div>
       </div>
     )
