@@ -1,0 +1,8 @@
+.percentage-count {
+  position: relative;
+  left: 5px;
+  top: 100%;
+  font-weight: 200;
+  font-size: 0.7rem;
+  transition: opacity 0.1s ease-in-out;
+}

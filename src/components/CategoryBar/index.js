@@ -310,6 +310,7 @@ class CategoryBar extends React.Component {
                  percentageWidth={percentageWidth}
                  color={this.state.categories.get(category)[1]}
                  toggleActive={this.toggleFocus.bind(this, category)}
+                 showPercentage={(this.state.focusedCategory === null)}
                />
       barCategories.push(div)
     })

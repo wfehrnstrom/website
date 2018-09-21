@@ -49,10 +49,10 @@ export function renderImage(imageData, style=null){
   return null
 }
 
-export function renderImageFromSrcPath(src, style=null){
+export function renderImageFromSrcPath(src, style=null, props=null){
   let abilityMap = createAbilityMap()
   let ImageComponent = composeImage(null, abilityMap)
-  return <ImageComponent src={src} style={style} alt={'image'}/>
+  return <ImageComponent src={src} style={style} alt={'image'} {...props}/>
 }
 
 export function createAbilityMap(){

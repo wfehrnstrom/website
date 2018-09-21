@@ -63,13 +63,13 @@ function withCoverTransition(WrappedComponent){
         this.addTransitionToComponent()
         this.resizeComponent()
       }.bind(this))
-      let duration = this.calculateDuration() * 1000
+      let duration = this.getDuration() * 1000
       this.coverShrinking = window.setTimeout(this.shrinkCover, duration)
     }
 
     shrinkCover(){
       this.setState({coverSize: this.divSize(false)})
-      let duration = this.calculateDuration() * 1000
+      let duration = this.getDuration() * 1000
       this.doneHandler = window.setTimeout(this.removeThis, duration)
     }
 
@@ -81,6 +81,15 @@ function withCoverTransition(WrappedComponent){
       }
       else{
         return width / 250
+      }
+    }
+
+    getDuration(){
+      if(this.props.duration){
+        return this.props.duration
+      }
+      else{
+        return this.calculateDuration()
       }
     }
 
@@ -118,7 +127,7 @@ function withCoverTransition(WrappedComponent){
       let node = ReactDOM.findDOMNode(this.componentRef)
       if(node){
         node.style.transitionProperty = 'width,height'
-        node.style.transitionDuration = `${this.calculateDuration()}s`
+        node.style.transitionDuration = `${this.getDuration()}s`
       }
     }
 
@@ -194,7 +203,7 @@ function withCoverTransition(WrappedComponent){
     }
 
     renderComponentInTransition(){
-      let transitionDuration = this.calculateDuration()
+      let transitionDuration = this.getDuration()
       return (
         <div>
           <WrappedComponent ref={this.setComponentRef} {...this.props}/>
@@ -204,7 +213,7 @@ function withCoverTransition(WrappedComponent){
     }
 
     renderCompletedTransition(){
-      let transitionDuration = this.calculateDuration()
+      let transitionDuration = this.getDuration()
       return (
         <WrappedComponent ref={this.setComponentRef} style={{transitionDuration: `${transitionDuration}s`, ...this.props.style}} {...this.props}/>
       )

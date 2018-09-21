@@ -57,7 +57,7 @@ class StarterPageViewUnaware extends React.Component {
           {this.renderCallToAction()}
           {this.renderPortrait()}
         </div>
-        <div className= 'demo-disclaimer'>Proof of Concept</div>
+        <div className= 'demo-disclaimer'>PROOF OF CONCEPT</div>
       </div>
     )
   }

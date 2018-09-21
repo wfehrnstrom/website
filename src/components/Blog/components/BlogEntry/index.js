@@ -17,7 +17,7 @@ class BlogEntry extends React.Component {
     super(props)
     this.state = {
       date: this.getFormattedDate(props.date),
-      images: [renderImageFromSrcPath(this.props.bannerImg, {width: '100%', height: '50vh'})],
+      images: [renderImageFromSrcPath(this.props.bannerImg, {width: '100%', height: '50vh'}, {duration: 1})],
       minimized: false,
     }
     this.toggleMinimize = this.toggleMinimize.bind(this)
