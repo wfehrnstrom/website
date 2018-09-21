@@ -1,19 +1,14 @@
 import React from 'react'
 import PageTitle from '../PageTitle'
-import ImageData from '../../constants/ImageData'
 import Project from '../../constants/Project'
 import {STATUS, PROJECT_TYPES} from '../../constants'
-import PhotoGrid from '../PhotoGrid'
 import ProjectList from '../ProjectList'
 import Fade from '@material-ui/core/Fade'
 import HomeLink from '../HomeLink'
 
 import uasPhoto from '../../res/img/projects/uas.jpeg'
-import lidarPhoto from '../../res/img/projects/lidar.png'
 import mePhoto from '../../res/img/projects/me.jpeg'
 import profilePhoto from '../../res/img/me_author.png'
-import swarmLabPhoto from '../../res/img/projects/swarmlab.jpeg'
-import teachLAPhoto from '../../res/img/projects/teachla_logo.png'
 
 class Projects extends React.Component {
   constructor(props){
@@ -25,7 +20,7 @@ class Projects extends React.Component {
           'Drone Construction',
           null,
           STATUS["COMPLETED"],
-          new Date(Date.now()),
+          new Date(2016, 2, 14, 24, 0, 0, 0),
           null,
           null,
           [uasPhoto],
@@ -36,7 +31,7 @@ class Projects extends React.Component {
           'Personal Website',
           'https://github.com/wfehrnstrom/website',
           STATUS["ACTIVE"],
-          new Date(Date.now()),
+          new Date(2018, 6, 0, 24, 0, 0, 0),
           null,
           null,
           [mePhoto],

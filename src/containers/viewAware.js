@@ -3,10 +3,6 @@ import React from 'react'
 
 export default function viewAware(Component){
   return class extends React.Component{
-    constructor(props){
-      super(props)
-    }
-
     render(){
       return  (
         <ViewContext.Consumer>

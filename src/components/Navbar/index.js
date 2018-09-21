@@ -34,6 +34,12 @@ class Navbar extends React.Component {
     this.setState({textColor: coloring, urls: urls})
   }
 
+  componentWillUnmount(){
+    window.removeEventListener('resize', this.orientation)
+    document.removeEventListener('transitionend', this.dotSpring)
+    document.removeEventListener('transitionend', this.addBackOpacityTransition)
+  }
+
   addBackOpacityTransition(e){
     e.target.style.transitionProperty = "opacity";
     document.removeEventListener('transitionend', this.addBackOpacityTransition)
@@ -46,12 +52,12 @@ class Navbar extends React.Component {
 
     }
     document.removeEventListener('transitionend', this.dotSpring)
-    document.addEventListener('transitionend', this.addBackOpacityTransition)
+    this.transitionEndHandler = document.addEventListener('transitionend', this.addBackOpacityTransition)
   }
 
   componentDidMount(){
     if(!this.state.noRotate){
-      window.addEventListener('resize', this.orientation)
+      this.resizeHandler = window.addEventListener('resize', this.orientation)
     }
     this.orientation()
   }

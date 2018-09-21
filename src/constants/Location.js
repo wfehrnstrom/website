@@ -3,6 +3,6 @@ export default function Location(name, desc, yearString, coords, position){
   this.desc = desc
   this.yearString = yearString
   this.coords = coords
-  this.startYear = parseInt(yearString.substring(0, yearString.indexOf('-')))
+  this.startYear = parseInt(yearString.substring(0, yearString.indexOf('-')), 10)
   this.position = position
 }

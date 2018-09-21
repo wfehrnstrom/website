@@ -5,9 +5,7 @@ import CategoryBar from '../CategoryBar'
 import withOrdering from './components/withOrdering'
 import BlogCollection from './components/BlogCollection'
 import ToolBar from '../ToolBar'
-import ToolBarItem from '../ToolBar/components/ToolBarItem'
 import viewAware from '../../containers/viewAware'
-import Collapse from '@material-ui/core/Collapse'
 import FilterListIcon from '@material-ui/icons/FilterList'
 import ReorderIcon from '@material-ui/icons/Reorder'
 import ViewModuleIcon from '@material-ui/icons/ViewModule'
@@ -19,7 +17,6 @@ import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import {OTHER, OTHER_COLOR, BLOG_FORMATS, VIEWS} from '../../constants'
 import SearchBar from 'material-ui-search-bar'
-import Image from '../Image'
 import HomeLink from '../HomeLink'
 import '../../styles/Blog.css'
 
@@ -269,10 +266,10 @@ class BlogViewUnaware extends React.Component {
           'Sort Posts',
             {
               anchor: 'sortMenuAnchor',
-              items: [<MenuItem onClick={this.setSortingType.bind(this, COMPARISONS["AUTHOR"])}>By Author</MenuItem>,
-                      <MenuItem onClick={this.setSortingType.bind(this, COMPARISONS["DATE"])}>By Date</MenuItem>,
-                      <MenuItem onClick={this.setSortingType.bind(this, COMPARISONS["TITLE"])}>By Title</MenuItem>,
-                      <MenuItem>By Length</MenuItem>
+              items: [<MenuItem key={'by_author'} onClick={this.setSortingType.bind(this, COMPARISONS["AUTHOR"])}>By Author</MenuItem>,
+                      <MenuItem key={'by_date'} onClick={this.setSortingType.bind(this, COMPARISONS["DATE"])}>By Date</MenuItem>,
+                      <MenuItem key={'by_title'} onClick={this.setSortingType.bind(this, COMPARISONS["TITLE"])}>By Title</MenuItem>,
+                      <MenuItem key={'by_length'} >By Length</MenuItem>
                     ]
             },
           )
@@ -282,7 +279,7 @@ class BlogViewUnaware extends React.Component {
           'Filter Posts',
             {
               anchor: 'filterMenuAnchor',
-              items: [<MenuItem>By Author</MenuItem>, <MenuItem>By Date</MenuItem>]
+              items: [<MenuItem key={'by_author'}>By Author</MenuItem>, <MenuItem key={'by_date'}>By Date</MenuItem>]
             },
          )
         }
@@ -313,9 +310,10 @@ class BlogViewUnaware extends React.Component {
     }
 
     return (
-      <div>
+      <div key={label}>
         { this.renderToolBarIcon(Icon, label, {...props, onClick: onIconClick.bind(this) })}
         <Menu
+          key={label}
           anchorEl={this.state[props.anchor]}
           open={Boolean(this.state[props.anchor])}
           onClose={onIconClick.bind(this)}

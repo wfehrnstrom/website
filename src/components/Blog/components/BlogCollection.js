@@ -7,7 +7,6 @@ import withOrdering from './withOrdering'
 import withLazyLoad from '../../Transitions/withLazyLoad'
 import {Row, Col} from 'react-flexbox-grid'
 import '../../../styles/BlogCollection.css'
-import Fade from '@material-ui/core/Fade'
 import {BLOG_FORMATS} from '../../../constants'
 
 const LazyLoadingBlogPortal = withLazyLoad(BlogPortal)
@@ -77,8 +76,6 @@ class BlogCollection extends React.Component {
   }
 
   renderExpandedBlog(){
-    let blogsToDisplay = new Map(this.props.blogs)
-    let {activeEntry} = this.state
     if(this.anEntryIsFocused()){
       return this.renderFocusedEntryThenOthers()
     }

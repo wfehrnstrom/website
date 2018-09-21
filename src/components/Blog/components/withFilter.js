@@ -3,7 +3,7 @@ import React from 'react'
 export default function withFilter(Component){
   return class extends React.Component {
     filterThrough(map){
-      let {filter, filterOn} = this.props
+      let {filter} = this.props
       let filteredMap = new Map([])
       if(!map){
         return new Map([])

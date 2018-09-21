@@ -1,5 +1,4 @@
 import React from 'react'
-import {COVER_COLOR} from '../../../constants'
 import Button from '@material-ui/core/Button'
 
 const HiddenButton = (props) => {

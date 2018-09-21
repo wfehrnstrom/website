@@ -2,14 +2,6 @@ import React from 'react'
 import '../../../styles/Category.css'
 
 class Category extends React.Component {
-  constructor(props){
-    super(props)
-  }
-
-  onHover(){
-    // Material UI Dropdown hover effect here
-  }
-
   render(){
     let {name, percentageWidth, color, toggleActive} = this.props
     return (

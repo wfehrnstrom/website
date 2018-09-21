@@ -75,7 +75,7 @@ export function getLocations(){
           if(images){
             images.forEach(function(image){
               let storageRef = storage.ref(`${STORAGE_LOCATION_PREFIX}/${imgRef}/${image.filename}`)
-              let url = storageRef.getDownloadURL().then(function(url){
+              storageRef.getDownloadURL().then(function(url){
                 let imageData = new ImageData(url, image.desc, image.date.toDate())
                 imArray.push(imageData)
                 if(imArray.length === images.length){

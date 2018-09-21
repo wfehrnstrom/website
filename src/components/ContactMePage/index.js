@@ -1,5 +1,4 @@
 import React from 'react'
-import HiddenButton from './components/HiddenButton'
 import '../../styles/ContactMePage.css'
 import {linkString} from '../../constants/helpers'
 import TextField from '@material-ui/core/TextField'

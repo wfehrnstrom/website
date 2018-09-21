@@ -1,6 +1,5 @@
 import React from 'react'
 import Fade from '@material-ui/core/Fade'
-import Collapse from '@material-ui/core/Collapse'
 import '../../../styles/BlogPortal.css'
 
 class BlogPortal extends React.Component {
@@ -8,7 +7,7 @@ class BlogPortal extends React.Component {
     if(blog && blog.backgroundImg){
       return (
         <div className='background-img'>
-          <img src={blog.backgroundImg} style={{width: '100%', height: '100%'}} alt={`Background Image for ${blog.title}`}/>
+          <img src={blog.backgroundImg} style={{width: '100%', height: '100%'}} alt={`Background for ${blog.title}`}/>
         </div>
       )
     }

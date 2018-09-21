@@ -6,7 +6,6 @@ import '../../../styles/homepage.css'
 import Button from '../../Button'
 import Navbar from '../../Navbar'
 import Video from './Video'
-import { VIEWS } from '../../../constants'
 import viewAware from '../../../containers/viewAware'
 
 class StarterPageViewUnaware extends React.Component {
@@ -57,7 +56,7 @@ class StarterPageViewUnaware extends React.Component {
           {this.renderCallToAction()}
           {this.renderPortrait()}
         </div>
-        <div className= 'demo-disclaimer'>PROOF OF CONCEPT</div>
+        <div className= 'demo-disclaimer'>ALPHA, v0.4</div>
       </div>
     )
   }

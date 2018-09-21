@@ -1,5 +1,4 @@
 import React from 'react'
-import memoize from 'memoize-one'
 
 const VIDEO_PREFIX =  'video/'
 
@@ -74,7 +73,7 @@ class Video extends React.Component {
 
   renderSources(){
     return this.props.sources.map(function(source, i){
-      return <source key={this.state.types[i]} src={source} type={this.state.types[i]}/>
+      return <source key={source} src={source} type={this.state.types[i]}/>
     }.bind(this))
   }
 

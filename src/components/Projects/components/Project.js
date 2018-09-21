@@ -1,8 +1,9 @@
 import React from 'react'
-import AuthorWidget from './AuthorWidget'
 import {PROJECT_TYPES} from '../../../constants'
 import '../../../styles/Project.css'
+import '../../../styles/AuthorWidget.css'
 import memoize from 'memoize-one'
+
 
 class Project extends React.Component{
   constructor(props){
@@ -43,7 +44,7 @@ class Project extends React.Component{
   }
 
   incrementMiniView(){
-    this.setState({miniViewIndex: this.state.miniViewIndex++})
+    this.setState({miniViewIndex: this.state.miniViewIndex + 1})
   }
 
   renderProjectDates(){
@@ -93,8 +94,8 @@ class Project extends React.Component{
     }
     return authors.map(function(author){
       return (
-        <div className='author' style={{display: 'inline-block'}}>
-          {(author && author.img) && <img className='author-img' src={author.img}/>}
+        <div key={author.name} className='author' style={{display: 'inline-block'}}>
+          {(author && author.img) && <img className='author-img' src={author.img} alt={'Author headshot'}/>}
         </div>
       )
     })
@@ -180,24 +181,28 @@ class Project extends React.Component{
     if(this.props.urls && this.props.urls.length > 0){
       return this.renderWithLink()
     }
-    return (
-      <div className='project-entry' onMouseEnter={this.onHover} onMouseLeave={this.onUnhover}>
-        <img className='project-banner-img' src={this.props.imgs[0]}/>
-        {this.renderTitle()}
-        {this.renderAuthors()}
-        {this.renderProjectDates()}
-      </div>
-    )
+    return this.renderWithoutLink()
   }
 
   renderWithLink(){
     return (
       <a className='project-entry' onMouseEnter={this.onHover} onMouseLeave={this.onUnhover} href={this.props.urls[0]}>
-        <img className='project-banner-img' src={this.props.imgs[0]}/>
+        <img className='project-banner-img' src={this.props.imgs[0]} alt={'Project Background'}/>
         {this.renderTitle()}
         {this.renderAuthors()}
         {this.renderProjectDates()}
       </a>
+    )
+  }
+
+  renderWithoutLink(){
+    return (
+      <div className='project-entry' onMouseEnter={this.onHover} onMouseLeave={this.onUnhover}>
+        <img className='project-banner-img' src={this.props.imgs[0]} alt={'Project Background'}/>
+        {this.renderTitle()}
+        {this.renderAuthors()}
+        {this.renderProjectDates()}
+      </div>
     )
   }
 }

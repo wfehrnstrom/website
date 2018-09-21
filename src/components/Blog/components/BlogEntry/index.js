@@ -1,12 +1,7 @@
 import React from 'react'
-import Image from '../../../Image'
 import Banner from './components/Banner'
 import {renderImageFromSrcPath} from '../../../../constants/helpers'
 import Collapse from '@material-ui/core/Collapse'
-import ImageData from '../../../../constants/ImageData'
-import withCoverTransition from '../../../Transitions/withCoverTransition'
-import withHover from '../../../Transitions/withHover'
-import withModal from '../../../Transitions/withModal'
 import withLazyLoad from '../../../Transitions/withLazyLoad'
 import '../../../../styles/BlogEntry.css'
 

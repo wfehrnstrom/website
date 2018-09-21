@@ -1,5 +1,4 @@
 import React from 'react'
-import Image from '../Image'
 import {Link} from 'react-router-dom'
 import {Grid, Row, Col} from 'react-flexbox-grid'
 import {IMG_COUNTS, VIEWS} from '../../constants'
@@ -124,8 +123,6 @@ class PhotoGridViewUnaware extends React.Component {
     let row = []
     for(let photoIndex = photoNum; photoIndex <= indexOfLastPhotoInRow; photoIndex++){
       let image = this.props.images[photoIndex]
-      let errHandle = this.handleImageError.bind(this, image)
-      let ImageComponent = imageComponentMap.get(image)
       row.push(
         <Col key = {photoIndex} xs={IMG_COUNTS["MOBILE"]} sm={IMG_COUNTS["TABLET"]} md={IMG_COUNTS["TABLET"]} lg={IMG_COUNTS["DESKTOP"]} xl={IMG_COUNTS["DESKTOP"]}>
           {this.renderImage(image, imageComponentMap)}

@@ -3,10 +3,6 @@ import Button from '@material-ui/core/Button'
 import '../../styles/AboutMePage.css'
 
 class AboutMePage extends React.Component {
-  constructor(props){
-    super(props)
-  }
-
   contactMe(){
     let contactPage = document.querySelectorAll('.contact-me-title')[0]
     contactPage.scrollIntoView({behavior: 'smooth', block: 'start', inline: 'nearest'})

@@ -28,7 +28,6 @@ function setHeightAndBorderWidthStyle(style, heightAndBorder = {height: '75%', b
 }
 
 const ActiveCategory = (props) => {
-  let height = 0
   let name = getCategoryDescriptorFromName(props.name)
   let style = applyDefaultStyling(props)
   if(categoryDefined(props.name, props.bgColor)){

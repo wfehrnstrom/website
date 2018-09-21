@@ -2,15 +2,9 @@ import React from 'react'
 import PageTitle from '../PageTitle'
 import PhotoGrid from '../PhotoGrid'
 import Fade from '@material-ui/core/Fade'
-import wfsmall from '../../res/vector/wfsmall.svg'
-import Image from '../Image'
 import HomeLink from '../HomeLink'
 
 class Media extends React.Component {
-  constructor(props){
-    super(props)
-  }
-
   componentDidMount(){
     this.props.loadMedia()
   }

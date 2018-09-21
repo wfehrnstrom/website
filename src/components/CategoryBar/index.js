@@ -3,7 +3,6 @@ import memoize from 'memoize-one'
 import {COLORS, OTHER, OTHER_COLOR} from '../../constants'
 import ActiveCategory from './components/ActiveCategory'
 import Category from './components/Category'
-import withFilter from '../Blog/components/withFilter'
 import ColorManager from '../../constants/ColorManager'
 
 
@@ -305,7 +304,7 @@ class CategoryBar extends React.Component {
     let categories = this.calculateGroupSizes(this.getGroupingFilter(), this.state.categories)
     let barWidths = this.orderGroupingByDataOccurrence(this.getBarWidthMap(categories))
     barWidths.forEach((percentageWidth, category) => {
-      let div = <Category
+      let div = <Category key={category}
                  name={category}
                  percentageWidth={percentageWidth}
                  color={this.state.categories.get(category)[1]}

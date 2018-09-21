@@ -108,7 +108,7 @@ function withCoverTransition(WrappedComponent){
           return prop
         }
       })
-      let style = new Object()
+      let style = {}
       styleArr.forEach(function(styleVal, i){
         style[descriptors[i]] = styleVal
       })
@@ -143,6 +143,7 @@ function withCoverTransition(WrappedComponent){
       window.clearTimeout(this.animationTriggered)
       window.clearTimeout(this.coverShrinking)
       window.clearTimeout(this.removeThis)
+      window.clearTimeout(this.doneHandler)
       window.removeEventListener('resize', this.onWindowResize)
     }
 

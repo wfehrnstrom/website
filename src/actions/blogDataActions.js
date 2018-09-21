@@ -1,6 +1,6 @@
 import * as json from '../res/data/blogs.json'
 import Blog from '../constants/Blog'
-import {getImgLoadPath, createImage} from '../constants/helpers'
+import {getImgLoadPath} from '../constants/helpers'
 
 export const LOAD_BLOGS = 'LOAD_BLOGS'
 export function loadBlogs(){
