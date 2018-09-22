@@ -2,6 +2,7 @@ import React from 'react'
 import whiteLogo from '../../../res/vector/white_logo.svg'
 import homeVid from '../../../res/img/me.mp4'
 import logoVid from '../../../res/img/logo.mp4'
+import usaFlag from '../../../res/img/american_flag_small.jpg'
 import '../../../styles/homepage.css'
 import Button from '../../Button'
 import Navbar from '../../Navbar'
@@ -57,6 +58,7 @@ class StarterPageViewUnaware extends React.Component {
           {this.renderPortrait()}
         </div>
         <div className= 'demo-disclaimer'>ALPHA, v0.4</div>
+        <div className= 'usa-flag'><img src={usaFlag} alt={'US Flag'}/></div>
       </div>
     )
   }

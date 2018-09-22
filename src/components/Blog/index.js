@@ -266,10 +266,10 @@ class BlogViewUnaware extends React.Component {
           'Sort Posts',
             {
               anchor: 'sortMenuAnchor',
-              items: [<MenuItem key={'by_author'} onClick={this.setSortingType.bind(this, COMPARISONS["AUTHOR"])}>By Author</MenuItem>,
-                      <MenuItem key={'by_date'} onClick={this.setSortingType.bind(this, COMPARISONS["DATE"])}>By Date</MenuItem>,
-                      <MenuItem key={'by_title'} onClick={this.setSortingType.bind(this, COMPARISONS["TITLE"])}>By Title</MenuItem>,
-                      <MenuItem key={'by_length'} >By Length</MenuItem>
+              items: [<MenuItem key={'by_author'} selected={this.state.comparisonType === COMPARISONS["AUTHOR"]} onClick={this.setSortingType.bind(this, COMPARISONS["AUTHOR"])}>By Author</MenuItem>,
+                      <MenuItem key={'by_date'} selected={this.state.comparisonType === COMPARISONS["DATE"]} onClick={this.setSortingType.bind(this, COMPARISONS["DATE"])}>By Date</MenuItem>,
+                      <MenuItem key={'by_title'} selected={this.state.comparisonType === COMPARISONS["TITLE"]} onClick={this.setSortingType.bind(this, COMPARISONS["TITLE"])}>By Title</MenuItem>,
+                      // <MenuItem key={'by_length'} >By Length</MenuItem>
                     ]
             },
           )

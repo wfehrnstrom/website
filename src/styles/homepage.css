@@ -67,6 +67,14 @@
   font-size: 1.2rem;
 }
 
+.usa-flag {
+  height: 1.5rem;
+  width: 3rem;
+  position: absolute;
+  top: 90vh;
+  left: 18vw;
+}
+
 @media only screen and (min-width: 1001px){
   .homepage-right-content > .explore-wrapper {
     visibility: hidden;
