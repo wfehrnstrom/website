@@ -72,3 +72,7 @@
   transition-timing-function: ease-in-out;
   transition-property: width, height;
 }
+
+.clickable {
+  cursor: pointer;
+}

@@ -23,7 +23,7 @@ class Banner extends React.Component {
 
   render(){
     return (
-      <div className='banner-container' onClick={this.props.onClick} style={this.props.style} ref={this.bannerContainer}>
+      <div className='banner-container clickable' onClick={this.props.onClick} style={this.props.style} ref={this.bannerContainer}>
         <div className='banner' style={{height: '100%', backgroundColor: this.props.color}}></div>
       </div>
     )

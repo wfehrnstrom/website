@@ -71,8 +71,6 @@
   height: 1.5rem;
   width: 3rem;
   position: absolute;
-  top: 90vh;
-  left: 18vw;
 }
 
 @media only screen and (min-width: 1001px){
@@ -94,6 +92,11 @@
     color: black;
     top: 90vh;
     left: 5vw;
+  }
+
+  .usa-flag {
+    top: 90vh;
+    left: 20vw;
   }
 }
 
@@ -155,6 +158,11 @@
     color: white;
     right: 5vw;
     font-size: 0.6rem;
+  }
+
+  .usa-flag {
+    right: 5vw;
+    top: 15vh;
   }
 }
 

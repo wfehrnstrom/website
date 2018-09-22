@@ -21,7 +21,7 @@ class BlogPortal extends React.Component {
     let {title} = this.props.blog
     let {color} = this.props
     return (
-      <div className='portal-wrapper' onClick={this.props.onClick} style={{backgroundColor: color, position: 'relative', width: '100%', height: '100%'}}>
+      <div className='portal-wrapper clickable' onClick={this.props.onClick} style={{backgroundColor: color, position: 'relative', width: '100%', height: '100%'}}>
         {this.renderBackgroundImgIfFound(this.props.blog)}
         <div className='title-container' style={{width: '80%'}}>
           <div className='title'>{title}</div>

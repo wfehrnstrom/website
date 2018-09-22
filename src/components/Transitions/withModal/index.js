@@ -32,11 +32,11 @@ function withModal(Component, ComponentInModal = null){
 
     render(){
       return (
-        <div style={{height: '100%', width: '100%'}}>
+        <div className='clickable' style={{height: '100%', width: '100%'}}>
           <div ref={this.scrollHook} style={{height: '100%', width: '100%'}} onClick={this.open}>
             <Component {...this.props}/>
           </div>
-          <Modal disableAutoFocus open={this.state.open} onClose={this.close} style={this.modalStyle()}>
+          <Modal className={'clickable'} disableAutoFocus open={this.state.open} onClose={this.close} style={this.modalStyle()}>
             {this.renderComponentInModal()}
           </Modal>
         </div>
