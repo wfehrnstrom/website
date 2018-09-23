@@ -3,6 +3,7 @@ import whiteLogo from '../../../res/vector/white_logo.svg'
 import homeVid from '../../../res/img/me.mp4'
 import logoVid from '../../../res/img/logo.mp4'
 import usaFlag from '../../../res/img/american_flag_small.jpg'
+import me from '../../../res/img/me_author.png'
 import '../../../styles/homepage.css'
 import Button from '../../Button'
 import Navbar from '../../Navbar'
@@ -12,7 +13,7 @@ import viewAware from '../../../containers/viewAware'
 class StarterPageViewUnaware extends React.Component {
 
   renderVideo(){
-    return <Video className='person-vid' parallax sources={[homeVid]}/>
+    return <Video className='person-vid' parallax thumbnail={me} thumbnailStyles={{position: 'fixed'}} sources={[homeVid]}/>
   }
 
   triggerTransition(){
@@ -23,8 +24,8 @@ class StarterPageViewUnaware extends React.Component {
   renderCallToAction(){
     return (
       <div className="homepage-left" style={{position: 'relative', bottom: '14vh', height: '50vh'}}>
-        <div className="explore" style={{height: '100%'}}>
-          <Video style={{objectFit: 'contain'}} sources={[logoVid]}/>
+        <div className="explore" style={{height: '100%', position: 'relative', top: '40px'}}>
+          <Video style={{objectFit: 'contain'}} containerStyle={{marginBottom: '50px'}} sources={[logoVid]}/>
           <Button style={{position: 'relative', bottom: '30px'}} text="Start" type="contained" color="primary" onClick={this.triggerTransition}/>
         </div>
       </div>
