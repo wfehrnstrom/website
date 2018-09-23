@@ -1,5 +1,6 @@
 import React from 'react'
 import whiteLogo from '../../../res/vector/white_logo.svg'
+import blackLogo from '../../../res/vector/will_fehrnstrom@1.5x.svg'
 import homeVid from '../../../res/img/me.mp4'
 import logoVid from '../../../res/img/logo.mp4'
 import usaFlag from '../../../res/img/american_flag_small.jpg'
@@ -25,7 +26,7 @@ class StarterPageViewUnaware extends React.Component {
     return (
       <div className="homepage-left" style={{position: 'relative', bottom: '14vh', height: '50vh'}}>
         <div className="explore" style={{height: '100%', position: 'relative', top: '40px'}}>
-          <Video style={{objectFit: 'contain'}} containerStyle={{marginBottom: '50px'}} sources={[logoVid]}/>
+          <Video style={{objectFit: 'contain'}} containerStyle={{marginBottom: '50px'}} sources={[logoVid]} thumbnail={blackLogo} />
           <Button style={{position: 'relative', bottom: '30px'}} text="Start" type="contained" color="primary" onClick={this.triggerTransition}/>
         </div>
       </div>
