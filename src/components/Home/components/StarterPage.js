@@ -14,7 +14,7 @@ import viewAware from '../../../containers/viewAware'
 class StarterPageViewUnaware extends React.Component {
 
   renderVideo(){
-    return <Video className='person-vid' parallax thumbnail={me} thumbnailStyles={{position: 'fixed'}} sources={[homeVid]}/>
+    return <Video className='person-vid' parallax sources={[homeVid]} poster={me}/>
   }
 
   triggerTransition(){
@@ -26,7 +26,7 @@ class StarterPageViewUnaware extends React.Component {
     return (
       <div className="homepage-left" style={{position: 'relative', bottom: '14vh', height: '50vh'}}>
         <div className="explore" style={{height: '100%', position: 'relative', top: '40px'}}>
-          <Video style={{objectFit: 'contain'}} containerStyle={{marginBottom: '50px'}} sources={[logoVid]} thumbnail={blackLogo} />
+          <Video style={{objectFit: 'contain'}} containerStyle={{marginBottom: '50px'}} sources={[logoVid]} poster={blackLogo} />
           <Button style={{position: 'relative', bottom: '30px'}} text="Start" type="contained" color="primary" onClick={this.triggerTransition}/>
         </div>
       </div>

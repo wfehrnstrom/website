@@ -7,9 +7,7 @@ class Video extends React.Component {
     super(props)
     this.state = {
       types: [],
-      loaded: false,
     }
-    this.setStateOnLoad = this.setStateOnLoad.bind(this)
   }
 
   componentDidMount(){
@@ -17,14 +15,6 @@ class Video extends React.Component {
     this.setState({
       types: this.typesFromFiles(this.props.sources)
     })
-    this.loadCheck = setInterval(this.setStateOnLoad, 500)
-  }
-
-  setStateOnLoad(){
-    if(this.videoLoaded()){
-      this.setState({loaded: true})
-      clearInterval(this.loadCheck)
-    }
   }
 
   typesFromFiles(files){
@@ -41,15 +31,6 @@ class Video extends React.Component {
     let type = prefix + filename.substring(filename.lastIndexOf('.') + 1, filename.length)
     return type
   }
-
-  videoLoaded(){
-    let vidEl = document.querySelector('.' + this.props.className)
-    if(vidEl){
-      return vidEl.readyState >= 3
-    }
-    return true
-  }
-
 
   videoStyle(){
     let newStyle = this.applyPropStyles()
@@ -97,12 +78,15 @@ class Video extends React.Component {
 
   render(){
     return (
-      <div style={{width: '100%', ...this.props.containerStyle}}>
-        <video className={this.props.className} muted={this.props.muted ? this.props.muted : true} autoPlay={this.props.autoplay ? this.props.autoplay : true} loop={this.props.loop ? this.props.loop : true} style={this.videoStyle(this.props.parallax)}>
-          {this.renderSources()}
-        </video>
-        {(!this.state.loaded  && this.props.thumbnail) && <img className={this.props.className} style={{zIndex: -1, objectFit: 'cover', ...this.props.thumbnailStyles}} src={this.props.thumbnail} alt='Video Thumbnail'/>}
-      </div>
+      <video className={this.props.className}
+        muted={this.props.muted ? this.props.muted : true}
+        autoPlay={this.props.autoplay ? this.props.autoplay : true}
+        loop={this.props.loop ? this.props.loop : true}
+        style={this.videoStyle(this.props.parallax)}
+        poster={this.props.poster}
+      >
+        {this.renderSources()}
+      </video>
     )
   }
 }
