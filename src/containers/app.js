@@ -69,7 +69,7 @@ class App extends Component {
   }
 
   updateView(){
-    if(this.state.activeView !== this.state.breakpointMap.get(window.innerWidth)){
+    if(this.state.activeView !== this.state.breakpointMap.get(window.innerWidth) && this.state.breakpointMap.get(window.innerWidth) !== undefined){
       if(window.innerWidth > 1500){
         this.setState({activeView: VIEWS["DESKTOP"]})
       }
