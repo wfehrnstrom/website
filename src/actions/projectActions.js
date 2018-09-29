@@ -1,4 +1,8 @@
+export const LOAD_PROJECTS = 'LOAD_PROJECTS'
 export function loadProjects(){
-  // API CODE
-  return null
+
+}
+
+function createProject(){
+
 }

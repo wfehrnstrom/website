@@ -5,6 +5,7 @@ import Grow from '@material-ui/core/Grow'
 import HomeLink from '../../HomeLink'
 import BackLink from '../../BackLink'
 import {STATUS} from '../../../constants'
+import Parser from 'html-react-parser'
 import '../../../styles/DefaultProjectPage.css'
 import github from '../../../res/img/logos/github.png'
 
@@ -27,11 +28,20 @@ class DefaultProjectPage extends React.Component {
     )
   }
 
-  renderDates(){
+  renderStartDate(){
     return (
       <div className='header-link project-dates'>
         <div className='sublabel'>Start</div>
         <div className='label' style={{marginTop: '10px'}}>{this.props.project.createdOn.toDateString()}</div>
+      </div>
+    )
+  }
+
+  renderFinishDate(){
+    return (
+      <div className='header-link project-dates'>
+        <div className='sublabel'>Finish</div>
+        <div className='label' style={{marginTop: '10px'}}>{this.props.project.finishedOn.toDateString()}</div>
       </div>
     )
   }
@@ -86,7 +96,8 @@ class DefaultProjectPage extends React.Component {
     return (
       <div className='project-header-links main-section'>
         {this.props.project.status !== null && this.renderStatus()}
-        {this.props.project.createdOn && this.renderDates()}
+        {this.props.project.createdOn && this.renderStartDate()}
+        {this.props.project.finishedOn && this.renderFinishDate()}
         {this.props.project.urls && this.renderLinks()}
       </div>
     )
@@ -97,7 +108,7 @@ class DefaultProjectPage extends React.Component {
       <div className='project-summary main-section'>
         <div className='superlabel' style={{marginBottom: '10px'}}>Project Summary</div>
         <div className='project-summary-text'>
-          {this.props.project.summary}
+          {Parser(this.props.project.summary)}
         </div>
       </div>
     )

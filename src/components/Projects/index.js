@@ -1,5 +1,5 @@
 import React from 'react'
-import Project from '../../constants/Project'
+import {Project, ProjectFromJson} from '../../constants/Project'
 import {STATUS, PROJECT_TYPES} from '../../constants'
 import {toLinkString} from '../../constants/helpers'
 import {Switch, Route} from 'react-router-dom'
@@ -8,7 +8,7 @@ import ProjectsHome from './components/ProjectsHome'
 
 import uasPhoto from '../../res/img/projects/uas.jpeg'
 import mePhoto from '../../res/img/projects/me.jpeg'
-import profilePhoto from '../../res/img/me_author.png'
+import profilePhoto from '../../res/img/headshots/willfehrnstrom.png'
 
 class Projects extends React.Component {
   constructor(props){
@@ -21,13 +21,13 @@ class Projects extends React.Component {
           null,
           STATUS["COMPLETED"],
           new Date(2016, 2, 14, 24, 0, 0, 0),
-          null,
+          new Date(2017, 4, 7, 24, 0, 0, 0),
           null,
           [uasPhoto],
-          "The idea to build a drone was a direct extension of my experimentation with \
+          "&emsp;The idea to build a drone was a direct extension of my experimentation with \
           microcontrollers (arduino, STM32, Raspberry Pis) around that time.  Plus, as my \
           friend was working for 3DR at the time (when they were still making hardware), I had \
-          easy access to fixer uppers.  I originally intended to refurbish an octocopter with \
+          easy access to fixer uppers.<br/><br/>&emsp;I originally intended to refurbish an octocopter with \
           several blown out motors, but my friend and I were stymied by almost system-wide failures. \
           We decided it would be a better idea to build a quadcopter from the materials we could \
           scrap off of the octocopter, as at least 4 of the motors were still functioning correctly, as \
@@ -45,11 +45,11 @@ class Projects extends React.Component {
           null,
           null,
           [mePhoto],
-          "I began this project while staying on Cold Stream Pond in Maine. I've tried my \
+          "&emsp;I began this project while staying on Cold Stream Pond in Maine. I've tried my \
           hand before at creating websites, but all of the previous attempts were decidedly \
           old school, primarily featuring a stack of HTML/CSS and vanilla JS, as well as a \
           dash of JQuery to animate things around.  Given that web technology has changed a \
-          lot, I decided to give it another go. The website you are on right now is the direct \
+          lot, I decided to give it another go.<br/><br/>&emsp;The website you are on right now is the direct \
           result of that attempt. I used Figma to mock up all my static designs for the website, \
           from my logo to entire pages. I use React.JS as a frontend framework primarily because \
           I like React's design philosophy and it tends to scale quite well, saving me a good \
