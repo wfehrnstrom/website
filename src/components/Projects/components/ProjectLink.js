@@ -182,7 +182,7 @@ class ProjectLink extends React.Component{
   renderWithComponentLink(link = this.props.link){
     return (
       <Link className='project-entry' to={`${this.props.match.url}/${toLinkString(this.props.project.title, '')}}`} onMouseEnter={this.onHover} onMouseLeave={this.onUnhover}>
-        <img className='project-banner-img' src={this.props.imgs[0]} alt={'Project Background'}/>
+        {this.props.imgs && <img className='project-banner-img' src={this.props.imgs[0]} alt={'Project Background'}/>}
         {this.renderTitle()}
         {this.projectHas('authors') && this.renderAuthors()}
         {this.projectHas('createdOn') && this.renderProjectDates()}

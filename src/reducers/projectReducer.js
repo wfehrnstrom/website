@@ -5,7 +5,8 @@ const projectreducer = (state = {
 }, action) => {
   switch(action.type){
     case projectActions.LOAD_PROJECTS:
-      return {projects: action.projects, ...state}
+      let projects = {projects: action.projects}
+      return Object.assign(state, projects)
     default:
       return state
   }

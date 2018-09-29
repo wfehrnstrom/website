@@ -32,7 +32,7 @@ class ProjectList extends React.Component {
         </div>
       )
     }
-    return <div style={{width: '100%', height: '70vh'}}><NotFound/></div>
+    return <NotFound style={{width: '70vw', height: '70vh', marginLeft: '15vw'}}/>
   }
 }
 

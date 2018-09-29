@@ -1,4 +1,4 @@
-import {PROJECT_TYPES} from './index'
+import {PROJECT_TYPES, STATUS} from './index'
 import {loadJSONFile} from './helpers'
 
 function Project(authors, title, repo, status, createdOn, finishedOn, logo, imgs, summary, type=PROJECT_TYPES["CS"], urls=null){
@@ -15,18 +15,25 @@ function Project(authors, title, repo, status, createdOn, finishedOn, logo, imgs
   this.urls = urls
 }
 
-function ProjectsFromJson(authorImages, projectImages, jsonFile){
-  return loadJSONFile(jsonFile, combineJSONAndImages.bind(this, authorImages, projectImages), 'title')
+function ProjectsFromJson(jsonFile){
+  let jsonMapping = loadJSONFile(jsonFile, 'title')
+  jsonMapping.forEach(function(project, key, map){
+    project.createdOn = new Date(project.createdOn)
+    project.finishedOn = project.finishedOn ? new Date(project.finishedOn) : null
+    project.type = PROJECT_TYPES[project.type]
+    project.status = STATUS[project.status]
+  })
+  return jsonMapping
 }
 
-function combineJSONAndImages(authorImages, projectImages, jsonObj){
+function combineProjectAndImages(authorImages, projectImages, project){
   let authors = null
-  if(jsonObj.authors){
-    jsonObj.authors = jsonObj.authors.map(function(author, index){
+  if(project.authors){
+    project.authors = project.authors.map(function(author, index){
       return {name: author.name, img: authorImages[index]}
     })
   }
-  return {imgs: projectImages, ...jsonObj}
+  return Object.assign(project, {imgs: projectImages})
 }
 
-export {Project, ProjectsFromJson}
+export {Project, ProjectsFromJson, combineProjectAndImages}

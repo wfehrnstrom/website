@@ -13,6 +13,7 @@ import profilePhoto from '../../res/img/headshots/willfehrnstrom.png'
 class Projects extends React.Component {
   constructor(props){
     super(props)
+    this.props.loadProjects()
     this.state = {
       projects: [
         new Project(
@@ -68,15 +69,18 @@ class Projects extends React.Component {
   }
 
   renderRoutes(){
-    return this.state.projects.map(function(project, index){
-      return <Route key={`${this.props.match.path}/${toLinkString(project.title, '')}`} path={`${this.props.match.path}/${toLinkString(project.title, '')}}`} render={(props) => (<DefaultProjectPage project={project} {...props}/>)}/>
-    }.bind(this))
+    if(this.props.projects){
+      return this.props.projects.map(function(project, index){
+        return <Route key={`${this.props.match.path}/${toLinkString(project.title, '')}`} path={`${this.props.match.path}/${toLinkString(project.title, '')}}`} render={(props) => (<DefaultProjectPage project={project} {...props}/>)}/>
+      }.bind(this))
+    }
+    return null
   }
 
   render(){
     return (
       <Switch>
-        <Route key={`${this.props.match.path}/`} exact path={`${this.props.match.path}/`} render={(props) => (<ProjectsHome projects={this.state.projects} match={props.match}/>)}/>
+        <Route key={`${this.props.match.path}/`} exact path={`${this.props.match.path}/`} render={(props) => (<ProjectsHome projects={this.props.projects} match={props.match}/>)}/>
         {this.renderRoutes()}
       </Switch>
     )

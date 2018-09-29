@@ -86,7 +86,11 @@ function replaceSpacesInStrWith(str, replacement){
   return str.replace(/ /g, replacement)
 }
 
-export function loadJSONFile(json, functionToRunOnDataCreation = defaultDataCreationFunc, keyAttr = null){
+function defaultDataCreationFunc(jsonObject){
+  return new Object({...jsonObject})
+}
+
+export function loadJSONFile(json, keyAttr = null, functionToRunOnDataCreation = defaultDataCreationFunc){
   let JSONArr = JSON.parse(JSON.stringify(json))
   return populateJSONDataMap(JSONArr, keyAttr, functionToRunOnDataCreation)
 }
@@ -101,11 +105,6 @@ function populateJSONDataMap(jsonArr, keyAttr, functionToRunOnDataCreation){
     dataMap.set(jsonObject[keyAttr], functionToRunOnDataCreation(jsonObject))
   })
   return dataMap
-}
-
-function defaultDataCreationFunc(jsonObject){
-  let obj = new Object({...jsonObject})
-  return obj
 }
 
 const LOAD_PATH = '/images/'
