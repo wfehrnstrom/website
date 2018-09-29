@@ -27,7 +27,7 @@ class StarterPageViewUnaware extends React.Component {
       <div className="homepage-left" style={{position: 'relative', bottom: '14vh', height: '50vh'}}>
         <div className="explore" style={{height: '100%', position: 'relative', top: '40px'}}>
           <Video style={{objectFit: 'contain'}} containerStyle={{marginBottom: '50px'}} sources={[logoVid]} poster={blackLogo} />
-          <Button style={{position: 'relative', bottom: '30px'}} text="Start" type="contained" color="primary" onClick={this.triggerTransition}/>
+          <Button className='begin-button' style={{position: 'relative', bottom: '30px'}} text="Start" type="contained" color="primary" onClick={this.triggerTransition}/>
         </div>
       </div>
     )

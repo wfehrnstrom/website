@@ -1,6 +1,7 @@
 import React from 'react'
 import PageTitle from '../../PageTitle'
 import Fade from '@material-ui/core/Fade'
+import Grow from '@material-ui/core/Grow'
 import HomeLink from '../../HomeLink'
 import BackLink from '../../BackLink'
 import {STATUS} from '../../../constants'
@@ -17,10 +18,12 @@ class DefaultProjectPage extends React.Component {
     let status = this.STATUS_MAPPING.get(this.props.project.status).tag
     let statusColor = this.STATUS_MAPPING.get(this.props.project.status).tagColor
     return (
-      <div className='header-link project-status'>
-        <div className='sublabel'>Status</div>
-        <div className='status label' style={{marginTop: '10px', backgroundColor: statusColor, padding: '5px', borderRadius: '2px'}}>{status}</div>
-      </div>
+        <div className='header-link project-status'>
+          <div className='sublabel'>Status</div>
+          <Grow in timeout={750}>
+            <div className='status label' style={{marginTop: '10px', backgroundColor: statusColor, padding: '5px', borderRadius: '2px'}}>{status}</div>
+          </Grow>
+        </div>
     )
   }
 
@@ -94,21 +97,7 @@ class DefaultProjectPage extends React.Component {
       <div className='project-summary main-section'>
         <div className='superlabel' style={{marginBottom: '10px'}}>Project Summary</div>
         <div className='project-summary-text'>
-          &emsp;I began this project while staying on Cold Stream Pond in Maine. I've tried my
-          hand before at creating websites, but all of the previous attempts were decidedly
-          old school, primarily featuring a stack of HTML/CSS and vanilla JS, as well as a
-          dash of JQuery to animate things around.  Given that web technology has changed a
-          lot, I decided to give it another go.  <br/><br/>&emsp;The website you are on right now is the direct
-          result of that attempt. I used Figma to mock up all my static designs for the website,
-          from my logo to entire pages. I use React.JS as a frontend framework primarily because
-          I like React's design philosophy and it tends to scale quite well, saving me a good
-          amount of work.  One thing I would love to revamp on this website is the way I currently
-          handle CSS. I work with plain old CSS to design everything to my specifications, but it
-          would perhaps be aided by using SCSS instead. I'm also using Redux to store a lot of my
-          application state, and firebase to remotely store some data.  I'm hosting the website through
-          netlify, enabling simple website deployments through the master branch of my git repository.
-          I use Google's Material Design Icons and Material UI to enable many of the icons and transitions
-          throughout this site.
+          {this.props.project.summary}
         </div>
       </div>
     )

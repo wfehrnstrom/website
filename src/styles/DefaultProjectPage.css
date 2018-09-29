@@ -44,7 +44,7 @@
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
-  padding-top: 5px;
+  padding-top: 20px;
 }
 
 .project-links > .project-link {
