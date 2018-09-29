@@ -75,11 +75,11 @@ export function elementGetOffsetFromParent(element, parent){
   return offset
 }
 
-export function linkString(str){
+export function toLinkString(str, replacementStr = ""){
   if(!str){
     return
   }
-  return replaceSpacesInStrWith(str, "%20")
+  return replaceSpacesInStrWith(str, replacementStr).toLowerCase()
 }
 
 function replaceSpacesInStrWith(str, replacement){

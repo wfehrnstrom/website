@@ -1,10 +1,10 @@
 import React from 'react'
-import PageTitle from '../PageTitle'
 import Project from '../../constants/Project'
 import {STATUS, PROJECT_TYPES} from '../../constants'
-import ProjectList from '../ProjectList'
-import Fade from '@material-ui/core/Fade'
-import HomeLink from '../HomeLink'
+import {toLinkString} from '../../constants/helpers'
+import {Switch, Route} from 'react-router-dom'
+import DefaultProjectPage from './components/DefaultProjectPage'
+import ProjectsHome from './components/ProjectsHome'
 
 import uasPhoto from '../../res/img/projects/uas.jpeg'
 import mePhoto from '../../res/img/projects/me.jpeg'
@@ -42,30 +42,19 @@ class Projects extends React.Component {
     }
   }
 
-  renderTitle(){
-    return (
-      <Fade in={true} timeout={400}>
-        <PageTitle text={['projects', 'explore()']}/>
-      </Fade>
-    )
-  }
-
   renderRoutes(){
-    return null
-  }
-
-  renderProjects(){
-    return <ProjectList projects={this.state.projects}/>
+    return this.state.projects.map(function(project, index){
+      return <Route key={`${this.props.match.path}/${toLinkString(project.title, '')}`} path={`${this.props.match.path}/${toLinkString(project.title, '')}}`} render={(props) => (<DefaultProjectPage project={project} {...props}/>)}/>
+    }.bind(this))
   }
 
   render(){
     return (
-      <div className='page-root'>
-        {this.renderTitle()}
-        <HomeLink/>
-        {this.renderProjects()}
+      <Switch>
+        <Route key={`${this.props.match.path}/`} exact path={`${this.props.match.path}/`} render={(props) => (<ProjectsHome projects={this.state.projects} match={props.match}/>)}/>
         {this.renderRoutes()}
-      </div>)
+      </Switch>
+    )
   }
 }
 

@@ -1,28 +1,38 @@
 import React from 'react'
 import {PROJECT_TYPES} from '../../../constants'
+import {Link} from 'react-router-dom'
+import {toLinkString} from '../../../constants/helpers'
 import '../../../styles/Project.css'
 import '../../../styles/AuthorWidget.css'
 import memoize from 'memoize-one'
 
 
-class Project extends React.Component{
+class ProjectLink extends React.Component{
   constructor(props){
     super(props)
     this.state = {
       miniViewIndex: 0,
-      miniViews: this.constructMiniViews(),
+      // miniViews: this.constructMiniViews(),
       focused: false,
     }
     this.onHover = this.onHover.bind(this)
     this.onUnhover = this.onUnhover.bind(this)
   }
 
+  componentWillUnmount(){
+    clearInterval(this.intervalCallback)
+  }
+
+  projectHas(key){
+    return (this.props.project && this.props.project[key] !== undefined && this.props.project[key] !== null)
+  }
+
   constructMiniViews(){
     let callableMiniViews = []
-    if(this.props.createdOn !== null){
+    if(this.projectHas('createdOn')){
       callableMiniViews.push(this.renderProjectDates)
     }
-    if(this.props.author !== null){
+    if(this.projectHas('author')){
       callableMiniViews.push(this.renderAuthors)
     }
     return callableMiniViews
@@ -57,7 +67,7 @@ class Project extends React.Component{
           <div className={`negative-space left-title-widget-dates-${oddOrEven}`}></div>
           <div className={`negative-space right-title-widget-dates-${oddOrEven}`}></div>
           <p style={{margin: 0, marginBlockStart: 0, marginBlockEnd: 0, display: 'inline'}}>
-            <span><strong>from </strong>{this.props.createdOn && this.props.createdOn.toDateString()}<br/></span>
+            <span><strong>from </strong>{this.projectHas('createdOn') && this.props.project.createdOn.toDateString()}<br/></span>
             {this.mapFinishDateToText()}
           </p>
         </div>
@@ -66,10 +76,10 @@ class Project extends React.Component{
   }
 
   mapFinishDateToText(){
-    if(!this.props.finishedOn){
+    if(!this.projectHas('finishedOn')){
       return (<span><strong>to </strong> now</span>)
     }
-    return (<span><strong>to </strong> {this.props.finishedOn.toString()}</span>)
+    return (<span><strong>to </strong> {this.props.project.finishedOn.toString()}</span>)
   }
 
   renderAuthors(){
@@ -82,7 +92,7 @@ class Project extends React.Component{
         <div className={`project-title-widget-authors ${oddOrEven}`}>
           <div className={`negative-space left-title-widget-authors-${oddOrEvenMargin}`}></div>
           <div className={`negative-space right-title-widget-authors-${oddOrEvenMargin}`}></div>
-          {this.renderAuthorImages(this.props.authors)}
+          {this.renderAuthorImages(this.props.project.author)}
         </div>
       </div>
     )
@@ -109,14 +119,14 @@ class Project extends React.Component{
   }
 
   renderCommitCount(){
-    if(this.props.type !== PROJECT_TYPES["CS"]){
+    if(this.props.project.type !== PROJECT_TYPES["CS"]){
       return null
     }
     return null
   }
 
   renderBuildStatus(){
-    if(this.props.type !== PROJECT_TYPES["CS"]){
+    if(this.props.project.type !== PROJECT_TYPES["CS"]){
       return null
     }
     return null
@@ -131,7 +141,7 @@ class Project extends React.Component{
         <div className={`project-short-title ${oddOrEven}`} style={this.state.focused ? {opacity: 1} : {opacity: 0}}>
           <div className={`negative-space left-title-${oddOrEven}`}></div>
           <div className={`negative-space right-title-${oddOrEven}`}></div>
-          <div className='short-title-text'>{this.props.title}</div>
+          <div className='short-title-text'>{this.props.project.title}</div>
         </div>
       </div>
     )
@@ -154,57 +164,53 @@ class Project extends React.Component{
     })(window.innerWidth)
   }
 
-  getContentOffset(){
-    if(this.hasOddIndex()){
-
+  render(){
+    if(!this.projectHas('title')){
+      throw new Error("Project must be given a title!")
+    }
+    if(this.props.link){
+      return this.renderWithComponentLink()
+    }
+    else if(this.props.urls && this.props.urls.length > 0){
+      return this.renderWithURLLink()
     }
     else{
-
+      return this.renderWithoutLink()
     }
   }
 
-  // positionY is percentage from top of container
-  getOddContentOffset(positionY){
-    return `${(this.getMasterOffset() * (1 - positionY))}px`
+  renderWithComponentLink(link = this.props.link){
+    return (
+      <Link className='project-entry' to={`${this.props.match.url}/${toLinkString(this.props.project.title, '')}}`} onMouseEnter={this.onHover} onMouseLeave={this.onUnhover}>
+        <img className='project-banner-img' src={this.props.imgs[0]} alt={'Project Background'}/>
+        {this.renderTitle()}
+        {this.projectHas('author') && this.renderAuthors()}
+        {this.projectHas('createdOn') && this.renderProjectDates()}
+      </Link>
+    )
   }
 
-  getEvenContentOffset(positionY){
-    return `${(this.getMasterOffset() * positionY)}px`
-  }
-
-  getMasterOffset(){
-    // 10% of 75vw
-    return (0.10 * 0.75 * window.innerWidth)
-  }
-
-  render(){
-    if(this.props.urls && this.props.urls.length > 0){
-      return this.renderWithLink()
-    }
-    return this.renderWithoutLink()
-  }
-
-  renderWithLink(){
+  renderWithURLLink(){
     return (
       <a className='project-entry' onMouseEnter={this.onHover} onMouseLeave={this.onUnhover} href={this.props.urls[0]}>
         <img className='project-banner-img' src={this.props.imgs[0]} alt={'Project Background'}/>
         {this.renderTitle()}
-        {this.renderAuthors()}
-        {this.renderProjectDates()}
+        {this.projectHas('author') && this.renderAuthors()}
+        {this.projectHas('createdOn') && this.renderProjectDates()}
       </a>
     )
   }
 
   renderWithoutLink(){
     return (
-      <div className='project-entry' onMouseEnter={this.onHover} onMouseLeave={this.onUnhover}>
+      <div className='project-entry'>
         <img className='project-banner-img' src={this.props.imgs[0]} alt={'Project Background'}/>
         {this.renderTitle()}
-        {this.renderAuthors()}
-        {this.renderProjectDates()}
+        {this.projectHas('author') && this.renderAuthors()}
+        {this.projectHas('createdOn') && this.renderProjectDates()}
       </div>
     )
   }
 }
 
-export default Project
+export default ProjectLink

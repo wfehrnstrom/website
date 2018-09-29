@@ -1,26 +1,38 @@
 import React from 'react'
 import NotFound from '../NotFound'
-import Project from '../Projects/components/Project'
+import ProjectLink from '../Projects/components/ProjectLink'
+import {toLinkString} from '../../constants/helpers'
 import '../../styles/ProjectList.css'
 
 class ProjectList extends React.Component {
   renderList(){
-    if(this.props.projects && this.props.projects.length > 0){
-      return this.props.projects.map(function(project, index){
-        return (
-          <Project key={project.title} imgs={project.imgs} title={project.title} type={project.type} createdOn={project.createdOn} index={index} authors={project.author} urls={project.urls}/>
-        )
-      })
-    }
-    return <div style={{width: '100%', height: '70vh'}}><NotFound/></div>
+    let {match} = this.props
+    return this.props.projects.map(function(project, index){
+      return (
+        <ProjectLink
+          key={toLinkString(project.title, '-')}
+          link={toLinkString(project.title, '-')}
+          imgs={project.imgs}
+          project={project}
+          index={index}
+          urls={project.urls}
+          match={match}
+        />
+      )
+    })
   }
 
   render(){
-    return (
-      <div className='project-list-container'>
-        {this.renderList()}
-      </div>
-    )
+    if(this.props.projects){
+      return (
+        <div>
+          <div className='project-list-container'>
+            {this.renderList()}
+          </div>
+        </div>
+      )
+    }
+    return <div style={{width: '100%', height: '70vh'}}><NotFound/></div>
   }
 }
 
