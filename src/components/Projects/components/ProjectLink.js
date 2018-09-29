@@ -193,7 +193,7 @@ class ProjectLink extends React.Component{
   renderWithURLLink(){
     return (
       <a className='project-entry' onMouseEnter={this.onHover} onMouseLeave={this.onUnhover} href={this.props.urls[0]}>
-        <img className='project-banner-img' src={this.props.imgs[0]} alt={'Project Background'}/>
+        {this.props.imgs && <img className='project-banner-img' src={this.props.imgs[0]} alt={'Project Background'}/>}
         {this.renderTitle()}
         {this.projectHas('authors') && this.renderAuthors()}
         {this.projectHas('createdOn') && this.renderProjectDates()}
@@ -204,7 +204,7 @@ class ProjectLink extends React.Component{
   renderWithoutLink(){
     return (
       <div className='project-entry'>
-        <img className='project-banner-img' src={this.props.imgs[0]} alt={'Project Background'}/>
+        {this.props.imgs && <img className='project-banner-img' src={this.props.imgs[0]} alt={'Project Background'}/>}
         {this.renderTitle()}
         {this.projectHas('authors') && this.renderAuthors()}
         {this.projectHas('createdOn') && this.renderProjectDates()}
