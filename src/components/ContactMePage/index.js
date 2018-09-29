@@ -1,6 +1,6 @@
 import React from 'react'
 import '../../styles/ContactMePage.css'
-import {linkString} from '../../constants/helpers'
+import {toLinkString} from '../../constants/helpers'
 import TextField from '@material-ui/core/TextField'
 import {MuiThemeProvider, createMuiTheme} from '@material-ui/core/styles'
 import Fade from '@material-ui/core/Fade'
@@ -68,8 +68,8 @@ class ContactMePage extends React.Component {
   }
 
   renderSubmit(){
-    let subject = linkString(this.state.title)
-    let body = linkString(this.state.message)
+    let subject = toLinkString(this.state.title)
+    let body = toLinkString(this.state.message)
     return (
       <Fade in={true} timeout={1000}>
         <a href={`mailto:wfehrnstrom@gmail.com?subject=${subject}&body=${body}`} onClick={this.resetFormValues}>

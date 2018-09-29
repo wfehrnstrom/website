@@ -206,7 +206,7 @@
     align-items: flex-start;
   }
 
-  .homepage-right-content > .explore > .primary-button {
+  .homepage-right-content > .explore-wrapper > .explore > .primary-button {
     align-self: flex-start;
   }
 
