@@ -79,7 +79,7 @@ class ProjectLink extends React.Component{
     if(!this.projectHas('finishedOn')){
       return (<span><strong>to </strong> now</span>)
     }
-    return (<span><strong>to </strong> {this.props.project.finishedOn.toString()}</span>)
+    return (<span><strong>to </strong> {this.props.project.finishedOn.toDateString()}</span>)
   }
 
   renderAuthors(){
@@ -92,7 +92,7 @@ class ProjectLink extends React.Component{
         <div className={`project-title-widget-authors ${oddOrEven}`}>
           <div className={`negative-space left-title-widget-authors-${oddOrEvenMargin}`}></div>
           <div className={`negative-space right-title-widget-authors-${oddOrEvenMargin}`}></div>
-          {this.renderAuthorImages(this.props.project.author)}
+          {this.renderAuthorImages(this.props.project.authors)}
         </div>
       </div>
     )
@@ -182,9 +182,9 @@ class ProjectLink extends React.Component{
   renderWithComponentLink(link = this.props.link){
     return (
       <Link className='project-entry' to={`${this.props.match.url}/${toLinkString(this.props.project.title, '')}}`} onMouseEnter={this.onHover} onMouseLeave={this.onUnhover}>
-        <img className='project-banner-img' src={this.props.imgs[0]} alt={'Project Background'}/>
+        {this.props.imgs && <img className='project-banner-img' src={this.props.imgs[0]} alt={'Project Background'}/>}
         {this.renderTitle()}
-        {this.projectHas('author') && this.renderAuthors()}
+        {this.projectHas('authors') && this.renderAuthors()}
         {this.projectHas('createdOn') && this.renderProjectDates()}
       </Link>
     )
@@ -193,9 +193,9 @@ class ProjectLink extends React.Component{
   renderWithURLLink(){
     return (
       <a className='project-entry' onMouseEnter={this.onHover} onMouseLeave={this.onUnhover} href={this.props.urls[0]}>
-        <img className='project-banner-img' src={this.props.imgs[0]} alt={'Project Background'}/>
+        {this.props.imgs && <img className='project-banner-img' src={this.props.imgs[0]} alt={'Project Background'}/>}
         {this.renderTitle()}
-        {this.projectHas('author') && this.renderAuthors()}
+        {this.projectHas('authors') && this.renderAuthors()}
         {this.projectHas('createdOn') && this.renderProjectDates()}
       </a>
     )
@@ -204,9 +204,9 @@ class ProjectLink extends React.Component{
   renderWithoutLink(){
     return (
       <div className='project-entry'>
-        <img className='project-banner-img' src={this.props.imgs[0]} alt={'Project Background'}/>
+        {this.props.imgs && <img className='project-banner-img' src={this.props.imgs[0]} alt={'Project Background'}/>}
         {this.renderTitle()}
-        {this.projectHas('author') && this.renderAuthors()}
+        {this.projectHas('authors') && this.renderAuthors()}
         {this.projectHas('createdOn') && this.renderProjectDates()}
       </div>
     )

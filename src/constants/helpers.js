@@ -86,7 +86,28 @@ function replaceSpacesInStrWith(str, replacement){
   return str.replace(/ /g, replacement)
 }
 
+function defaultDataCreationFunc(jsonObject){
+  return new Object({...jsonObject})
+}
+
+export function loadJSONFile(json, keyAttr = null, functionToRunOnDataCreation = defaultDataCreationFunc){
+  let JSONArr = JSON.parse(JSON.stringify(json))
+  return populateJSONDataMap(JSONArr, keyAttr, functionToRunOnDataCreation)
+}
+
+function populateJSONDataMap(jsonArr, keyAttr, functionToRunOnDataCreation){
+  let dataMap = new Map([])
+  if(!jsonArr || jsonArr.length < 1){
+    return dataMap
+  }
+  keyAttr = (jsonArr[0][keyAttr] ? keyAttr : Object.keys(jsonArr[0])[0])
+  jsonArr.forEach(function(jsonObject){
+    dataMap.set(jsonObject[keyAttr], functionToRunOnDataCreation(jsonObject))
+  })
+  return dataMap
+}
+
 const LOAD_PATH = '/images/'
-export function getImgLoadPath(imagename){
-  return process.env.PUBLIC_URL + LOAD_PATH + imagename
+export function getImgLoadPath(imagename, lookIn = ''){
+  return process.env.PUBLIC_URL + LOAD_PATH + lookIn + imagename
 }
