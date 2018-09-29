@@ -1,14 +1,19 @@
 import React from 'react'
 import wfsmall from '../../res/vector/home.svg'
-import '../../styles/HomeLink.css'
+import '../../styles/ButtonPageLink.css'
 import {Link} from 'react-router-dom'
 import Image from '../Image'
+import Zoom from '@material-ui/core/Zoom'
 
 const HomeLink = (props) => {
   return (
     <Link to='/home'>
-      <div className='home-link'>
-        <Image src={wfsmall} alt={'w.f'} style={{objectFit: 'contain'}}/>
+      <div className = 'button-page-link home-link'>
+        <Zoom in>
+          <div className='circle-button' style={{width: '100%', height: '100%'}}>
+            <Image src={wfsmall} alt={'w.f'} style={{objectFit: 'contain'}}/>
+          </div>
+        </Zoom>
       </div>
     </Link>
   )

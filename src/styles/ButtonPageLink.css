@@ -1,0 +1,38 @@
+.home-link {
+  top: 5vh;
+  right: 5vw;
+}
+
+.back-link {
+  top: 5vh;
+  right: 9.5vw;
+}
+
+@media only screen and (max-width: 499px){
+  .home-link, .back-link {
+    top: 14vh;
+  }
+
+  .back-link {
+    right: 13vw;
+  }
+}
+
+.button-page-link {
+  transition-property: all;
+  transition-duration: 0.2s;
+  transition-timing-function: ease-in-out;
+  width: 1.5rem;
+  height: 1.5rem;
+  position: fixed;
+}
+
+.circle-button {
+  clip-path: circle(50%);
+  background-color: #FF5959;
+  z-index: 10;
+}
+
+.button-page-link:hover {
+  transform: scale(1.2);
+}

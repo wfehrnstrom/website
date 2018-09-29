@@ -2,6 +2,7 @@ import React from 'react'
 import PageTitle from '../../PageTitle'
 import Fade from '@material-ui/core/Fade'
 import HomeLink from '../../HomeLink'
+import BackLink from '../../BackLink'
 import {STATUS} from '../../../constants'
 import '../../../styles/DefaultProjectPage.css'
 import github from '../../../res/img/logos/github.png'
@@ -62,6 +63,7 @@ class DefaultProjectPage extends React.Component {
             <PageTitle className='page-title' text={[this.props.project.title, '']}/>
           </Fade>
           <HomeLink/>
+          <BackLink history={this.props.history}/>
           {this.props.project && this.renderProjectContents()}
         </div>
       </div>
@@ -92,11 +94,11 @@ class DefaultProjectPage extends React.Component {
       <div className='project-summary main-section'>
         <div className='superlabel' style={{marginBottom: '10px'}}>Project Summary</div>
         <div className='project-summary-text'>
-          I began this project while staying on Cold Stream Pond in Maine. I've tried my
+          &emsp;I began this project while staying on Cold Stream Pond in Maine. I've tried my
           hand before at creating websites, but all of the previous attempts were decidedly
           old school, primarily featuring a stack of HTML/CSS and vanilla JS, as well as a
           dash of JQuery to animate things around.  Given that web technology has changed a
-          lot, I decided to give it another go.  The website you are on right now is the direct
+          lot, I decided to give it another go.  <br/><br/>&emsp;The website you are on right now is the direct
           result of that attempt. I used Figma to mock up all my static designs for the website,
           from my logo to entire pages. I use React.JS as a frontend framework primarily because
           I like React's design philosophy and it tends to scale quite well, saving me a good
@@ -105,6 +107,8 @@ class DefaultProjectPage extends React.Component {
           would perhaps be aided by using SCSS instead. I'm also using Redux to store a lot of my
           application state, and firebase to remotely store some data.  I'm hosting the website through
           netlify, enabling simple website deployments through the master branch of my git repository.
+          I use Google's Material Design Icons and Material UI to enable many of the icons and transitions
+          throughout this site.
         </div>
       </div>
     )
