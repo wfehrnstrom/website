@@ -8,7 +8,7 @@ import Zoom from '@material-ui/core/Zoom'
 const HomeLink = (props) => {
   return (
     <Link to='/home'>
-      <div className = 'button-page-link home-link'>
+      <div className = 'button-page-link home-link' style={{zIndex: '10'}}>
         <Zoom in>
           <div className='circle-button' style={{width: '100%', height: '100%'}}>
             <Image src={wfsmall} alt={'w.f'} style={{objectFit: 'contain'}}/>
