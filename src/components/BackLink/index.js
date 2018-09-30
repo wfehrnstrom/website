@@ -1,5 +1,4 @@
 import React from 'react'
-import {Link} from 'react-router-dom'
 import Image from '../Image'
 import '../../styles/ButtonPageLink.css'
 import backArrow from '../../res/vector/back_arrow.svg'

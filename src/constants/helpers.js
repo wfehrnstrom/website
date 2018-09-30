@@ -87,7 +87,7 @@ function replaceSpacesInStrWith(str, replacement){
 }
 
 function defaultDataCreationFunc(jsonObject){
-  return new Object({...jsonObject})
+  return jsonObject
 }
 
 export function loadJSONFile(json, keyAttr = null, functionToRunOnDataCreation = defaultDataCreationFunc){

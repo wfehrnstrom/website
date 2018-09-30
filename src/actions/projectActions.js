@@ -1,4 +1,3 @@
-import me from '../res/img/headshots/willfehrnstrom.png'
 import {ProjectsFromJson, combineProjectAndImages} from '../constants/Project'
 
 export const LOAD_PROJECTS = 'LOAD_PROJECTS'
