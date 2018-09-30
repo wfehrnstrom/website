@@ -27,7 +27,6 @@ function ProjectsFromJson(jsonFile){
 }
 
 function combineProjectAndImages(authorImages, projectImages, project){
-  let authors = null
   if(project.authors){
     project.authors = project.authors.map(function(author, index){
       return {name: author.name, img: authorImages[index]}

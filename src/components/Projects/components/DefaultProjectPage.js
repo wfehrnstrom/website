@@ -12,7 +12,7 @@ import github from '../../../res/img/logos/github.png'
 class DefaultProjectPage extends React.Component {
   constructor(props){
     super(props)
-    this.STATUS_MAPPING = new Map([[STATUS["COMPLETED"], {tag: "COMPLETED", tagColor: "#06C806"}], [STATUS["ACTIVE"], {tag: "ACTIVE", tagColor: "#4BB2FD"}], [STATUS["TERMINATED"], {tag: "TERMINATED", tagColor: "#EF1010"}]])
+    this.STATUS_MAPPING = new Map([[STATUS["COMPLETED"], {tag: "COMPLETED", tagColor: "#06C806"}], [STATUS["ACTIVE"], {tag: "ACTIVE", tagColor: "#4BB2FD"}], [STATUS["TERMINATED"], {tag: "TERMINATED", tagColor: "#ef3737"}]])
   }
 
   renderStatus(){

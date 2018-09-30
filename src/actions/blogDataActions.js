@@ -4,7 +4,7 @@ import {getImgLoadPath, loadJSONFile} from '../constants/helpers'
 
 export const LOAD_BLOGS = 'LOAD_BLOGS'
 export function loadBlogs(){
-  let blogMap = loadJSONFile(json, createBlog, 'title')
+  let blogMap = loadJSONFile(json, 'title', createBlog)
   return {blogs: blogMap, type: LOAD_BLOGS}
 }
 
