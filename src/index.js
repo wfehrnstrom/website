@@ -5,19 +5,12 @@ import { Provider } from 'react-redux'
 import { createStore, combineReducers, applyMiddleware} from 'redux'
 import registerServiceWorker from './registerServiceWorker'
 import thunkMiddleware from 'redux-thunk'
-import firebase from 'firebase'
+// import firebase from 'firebase'
 import appReducers from './reducers'
-import { config } from './firebase'
+// import { config } from './firebase'
 import './styles/index.css'
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
 import { getLocations } from './actions/mapDataActions'
-
-firebase.initializeApp(config)
-
-// Cloud Firestore startup
-// settings prevents ominous built-in timestamps warning
-const settings = {timestampsInSnapshots: true};
-firebase.firestore().settings(settings);
 
 const rootReducer = combineReducers({
   app: appReducers,

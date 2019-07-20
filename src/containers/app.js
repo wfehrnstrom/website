@@ -1,12 +1,38 @@
 import React, { Component } from 'react'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
-import Home from '../components/Home'
-import MediaContainer from '../containers/mediaContainer'
-import ProjectsContainer from '../containers/projectsContainer'
-import BlogContainer from '../containers/BlogContainer'
+// import Home from '../components/Home'
+import Loadable from 'react-loadable'
+// import MediaContainer from '../containers/mediaContainer'
+// import ProjectsContainer from '../containers/projectsContainer'
+// import BlogContainer from '../containers/BlogContainer'
 import {DESKTOP_BREAKPOINT, TABLET_BREAKPOINT, VIEWS} from '../constants'
 import ViewContext from './viewContext'
 // import View from '../constants/View'
+
+const Loader = Loadable.Map({
+  loader: {
+    Home: () => import('../components/Home'),
+    Media: () => import('../containers/mediaContainer'),
+    Projects: () => import('../containers/projectsContainer'),
+    Blog: () => import('../containers/BlogContainer')
+  },
+  loading: () => null,
+  render(loaded, props){
+    return (
+      <ViewContext.Provider value={props.activeView}>
+        <BrowserRouter>
+          <Switch>
+            <Route exact path='/' component={loaded.Home.default}/>
+            <Route path='/home' component={loaded.Home.default}/>
+            <Route path='/media' component={loaded.Media.default}/>
+            <Route path='/blog' component={loaded.Blog.default}/>
+            <Route path='/projects' component={loaded.Projects.default}/>
+          </Switch>
+        </BrowserRouter>
+      </ViewContext.Provider>
+    )
+  }
+})
 
 class App extends Component {
   constructor(props){
@@ -93,19 +119,7 @@ class App extends Component {
   }
 
   render() {
-    return (
-      <ViewContext.Provider value={this.state.activeView}>
-        <BrowserRouter>
-          <Switch>
-            <Route exact path='/' component={Home}/>
-            <Route path='/home' component={Home}/>
-            <Route path='/media' component={MediaContainer}/>
-            <Route path='/blog' component={BlogContainer}/>
-            <Route path='/projects' component={ProjectsContainer}/>
-          </Switch>
-        </BrowserRouter>
-      </ViewContext.Provider>
-    );
+    return <Loader activeView = {this.state.activeView}/>
   }
 }
 

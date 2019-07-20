@@ -1,5 +1,7 @@
 import firebase from 'firebase'
+import {config} from '../firebase'
 import Location from '../constants/Location'
+import workerize from 'workerize'
 import LocationDataNode from '../constants/LocationDataNode'
 import {STORAGE_LOCATION_PREFIX} from '../constants'
 import ImageData from '../constants/ImageData'
@@ -58,53 +60,61 @@ function linkNodes(nodes){
 
 export function getLocations(){
   return (dispatch) => {
-    let firestore = firebase.firestore()
-    let locations = firestore.collection('locations')
-    let locationNodes = []
-    let query = locations.get()
-    query.then(function(querySnap){
-      querySnap.forEach(function(docSnap){
-        let promise = new Promise(function(resolve, reject){
-          let locationObj = new Location(docSnap.data().name, docSnap.data().desc,
-              docSnap.data().yearString, docSnap.data().coords,
-              docSnap.data().position)
-          let imgRef = docSnap.data().imgRef
-          let storage = firebase.storage()
-          let images = docSnap.data().images
-          let imArray = []
-          if(images){
-            images.forEach(function(image){
-              let storageRef = storage.ref(`${STORAGE_LOCATION_PREFIX}/${imgRef}/${image.filename}`)
-              storageRef.getDownloadURL().then(function(url){
-                let imageData = new ImageData(url, image.desc, image.date.toDate())
-                imArray.push(imageData)
-                if(imArray.length === images.length){
-                  imArray.sort(function(a, b){
-                    if(a.date < b.date){
-                      return -1;
-                    }
-                    else if(a.date > b.date){
-                      return 1;
-                    }
-                    return 0;
-                  })
-                  resolve(new LocationDataNode(locationObj, imArray))
-                }
+      if(firebase.apps.length <= 0){
+        firebase.initializeApp(config)
+        // Cloud Firestore startup
+        // settings prevents ominous built-in timestamps warning
+        const settings = {timestampsInSnapshots: true}
+        firebase.firestore().settings(settings)
+      }
+      let firestore = firebase.firestore()
+      let locations = firestore.collection('locations')
+      let locationNodes = []
+      let query = locations.get()
+      query.then(function(querySnap){
+        querySnap.forEach(function(docSnap){
+          let promise = new Promise(function(resolve, reject){
+            let locationObj = new Location(docSnap.data().name, docSnap.data().desc,
+                docSnap.data().yearString, docSnap.data().coords,
+                docSnap.data().position)
+            let imgRef = docSnap.data().imgRef
+            let storage = firebase.storage()
+            let images = docSnap.data().images
+            let imArray = []
+            if(images){
+              images.forEach(function(image){
+                let storageRef = storage.ref(`${STORAGE_LOCATION_PREFIX}/${imgRef}/${image.filename}`)
+                storageRef.getDownloadURL().then(function(url){
+                  let imageData = new ImageData(url, image.desc, image.date.toDate())
+                  imArray.push(imageData)
+                  if(imArray.length === images.length){
+                    imArray.sort(function(a, b){
+                      if(a.date < b.date){
+                        return -1;
+                      }
+                      else if(a.date > b.date){
+                        return 1;
+                      }
+                      return 0;
+                    })
+                    resolve(new LocationDataNode(locationObj, imArray))
+                  }
+                })
               })
-            })
-          }
-          else{
-            resolve(new LocationDataNode(locationObj, imArray))
-          }
-        })
-        promise.then(function(node){
-          locationNodes.push(node)
-          if(locationNodes.length === querySnap.docs.length){
-            linkNodes(locationNodes)
-            dispatch(populateLocations(locationNodes))
-          }
+            }
+            else{
+              resolve(new LocationDataNode(locationObj, imArray))
+            }
+          })
+          promise.then(function(node){
+            locationNodes.push(node)
+            if(locationNodes.length === querySnap.docs.length){
+              linkNodes(locationNodes)
+              dispatch(populateLocations(locationNodes))
+            }
+          })
         })
       })
-    })
+    // }
   }
 }

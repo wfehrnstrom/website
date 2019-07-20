@@ -8,6 +8,7 @@ import mePhoto from '../res/img/projects/me.jpeg'
 import lidarPhoto from '../res/img/projects/lidar.png'
 import memsPhoto from '../res/img/projects/mems.jpg'
 import hoth from '../res/img/projects/HOTH_2018.jpg'
+import rust from '../res/img/projects/rustgzip.png'
 
 const mapStateToProps = (state) => {
   return {
@@ -24,7 +25,9 @@ const mapDispatchToProps = (dispatch) => {
         ['Personal Website', {authors: [me], projectImages: [mePhoto]}],
         ['LIDAR Research', {authors: [me], projectImages: [lidarPhoto]}],
         ['MEMS Research', {authors: [me], projectImages: [memsPhoto]}],
-        ['BruinMap', {authors: [me], projectImages: [hoth]}]])))
+        ['BruinMap', {authors: [me], projectImages: [hoth]}],
+        ['rustgzip', {authors: [me], projectImages: [rust]}]
+      ])))
     }
   }
 }

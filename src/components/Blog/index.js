@@ -279,7 +279,8 @@ class BlogViewUnaware extends React.Component {
           'Filter Posts',
             {
               anchor: 'filterMenuAnchor',
-              items: [<MenuItem key={'by_author'}>By Author</MenuItem>, <MenuItem key={'by_date'}>By Date</MenuItem>]
+              items: [<MenuItem key={'by_author'}>By Author</MenuItem>, <MenuItem key={'by_date'}>By Date</MenuItem>],
+              disabled: true
             },
          )
         }

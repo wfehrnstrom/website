@@ -88,5 +88,23 @@
     "summary": "&emsp;Bruin Map was an example android mobile app that I and some friends hacked together during UCLA Hack on The Hill 2018.  It was a great day.  We started off with zero android development experience, and using android studio, we were able to build the app.  The idea of the app is simple: People want to know what is going on around them as they walk through campus, and further, they want to pass by things that are relevant to them.  So we planned the development of an app that would let a UCLA student do just that, routing them to their classes in an efficient manner, but also giving them notifications when an event of interest was nearby.  On both counts, we used Android's Location API to get the current user location, and then we used Geolocation fences to trigger events that would send messages to the user's phone.  This was implemented in a fairly simple UI.<br/><br/>&emsp;At the end of the day, we won the best mobile app prize.  My fellow hackers were Siddarth Joshi, Baran Yildrim, and Spencer Pugh.  I have marked this project terminated because in a meeting after the hackathon, we determined that the project's scope was too limited, and there were numerous problems from a user engagement standpoint.  All that being said, I still had a good time.",
     "type": "CS",
     "urls": ["https://github.com/wfehrnstrom/HOTH_BruinMap"]
+  },
+  {
+    "authors": [
+      {
+        "name": "Will Fehrnstrom",
+        "img": "willfehrnstrom.png"
+      }
+    ],
+    "title": "rustgzip",
+    "repo": "https://github.com/wfehrnstrom/rustgzip",
+    "status": "ACTIVE",
+    "createdOn": "2019-07-10T09:00:00.000Z",
+    "finishedOn": null,
+    "logo": null,
+    "imgs": null,
+    "summary": "&emsp;After working on an extension to gzip throughout spring quarter of my sophomore year, I grew frustrated with the limitations of C, and having casually learned about Rust earlier, I decided to try out the up and coming systems language for this purpose. Rust turned out to be a good fit for the job particularly because of its attempt to maintain an interface with many C libraries and functions through libc, and also with its ability to interface with other languages through the foreign-function interface that it provides (albeit unsafely). In addition, the object oriented and functional capabilities of Rust prove a potent combination in designing CLI apps. Significant porting progress has been made, with gzip streams supported and all gzip options implemented to some extent. Currently being worked on are PKZIP support, parallel compression, test implementations, and optimization. I particularly enjoy how safe Rust feels in comparison with all other languages I've used. Any and all contributions are welcome.",
+    "type": "CS",
+    "urls": ["https://github.com/wfehrnstrom/rustgzip"]
   }
 ]

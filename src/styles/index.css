@@ -121,6 +121,7 @@ html {
   box-sizing: border-box;
   z-index: -1;
   font-synthesis: none;
+  overflow-x: hidden;
 }
 
 a {
