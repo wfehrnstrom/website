@@ -15,7 +15,6 @@ class Navbar extends React.Component {
     }
     this.orientation = this.orientation.bind(this)
     this.addBackOpacityTransition = this.addBackOpacityTransition.bind(this)
-    this.dotSpring = this.dotSpring.bind(this)
   }
 
   componentWillMount(){
@@ -36,23 +35,12 @@ class Navbar extends React.Component {
 
   componentWillUnmount(){
     window.removeEventListener('resize', this.orientation)
-    document.removeEventListener('transitionend', this.dotSpring)
     document.removeEventListener('transitionend', this.addBackOpacityTransition)
   }
 
   addBackOpacityTransition(e){
     e.target.style.transitionProperty = "opacity";
     document.removeEventListener('transitionend', this.addBackOpacityTransition)
-  }
-
-  dotSpring(e){
-    let target = e.target
-    if(target.className === "navbar-dot"){
-      target.style.transform = "rotate(0deg)"
-
-    }
-    document.removeEventListener('transitionend', this.dotSpring)
-    this.transitionEndHandler = document.addEventListener('transitionend', this.addBackOpacityTransition)
   }
 
   componentDidMount(){
@@ -74,7 +62,7 @@ class Navbar extends React.Component {
 
   orientation(){
     if(this.state.orientation !== COLUMN){
-      if(window.innerWidth < this.state.navbarBreakpoint){
+      if(window.innerWidth <= this.state.navbarBreakpoint){
         this.setOrientation(COLUMN)
       }
     }

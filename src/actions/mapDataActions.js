@@ -1,7 +1,6 @@
 import firebase from 'firebase'
 import {config} from '../firebase'
 import Location from '../constants/Location'
-import workerize from 'workerize'
 import LocationDataNode from '../constants/LocationDataNode'
 import {STORAGE_LOCATION_PREFIX} from '../constants'
 import ImageData from '../constants/ImageData'
@@ -115,6 +114,5 @@ export function getLocations(){
           })
         })
       })
-    // }
   }
 }

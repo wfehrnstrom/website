@@ -381,9 +381,11 @@ class BlogViewUnaware extends React.Component {
   renderIconWithLabel(Icon, label, props){
     return (
       <Tooltip disableFocusListener enterDelay={300} leaveDelay={200} title={label} placement={this.state.menuTooltipPlacement}>
-        <IconButton {...props}>
-          <Icon/>
-        </IconButton>
+        <div>
+          <IconButton {...props}>
+            <Icon/>
+          </IconButton>
+        </div>
       </Tooltip>
     )
   }
