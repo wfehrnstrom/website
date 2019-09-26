@@ -1,20 +1,16 @@
 import React, { Component } from 'react'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
-// import Home from '../components/Home'
 import Loadable from 'react-loadable'
-// import MediaContainer from '../containers/mediaContainer'
-// import ProjectsContainer from '../containers/projectsContainer'
-// import BlogContainer from '../containers/BlogContainer'
 import {DESKTOP_BREAKPOINT, TABLET_BREAKPOINT, VIEWS} from '../constants'
 import ViewContext from './viewContext'
-// import View from '../constants/View'
 
 const Loader = Loadable.Map({
   loader: {
-    Home: () => import('../components/Home'),
+    Home: () => import('../containers/homeContainer'),
     Media: () => import('../containers/mediaContainer'),
     Projects: () => import('../containers/projectsContainer'),
-    Blog: () => import('../containers/BlogContainer')
+    Blog: () => import('../containers/BlogContainer'),
+    Warning: () => import('../containers/warningContainer')
   },
   loading: () => null,
   render(loaded, props){
@@ -22,7 +18,8 @@ const Loader = Loadable.Map({
       <ViewContext.Provider value={props.activeView}>
         <BrowserRouter>
           <Switch>
-            <Route exact path='/' component={loaded.Home.default}/>
+            <Route exact path='/' component={loaded.Warning.default}/>
+            <Route path='/options' component={loaded.Warning.default}/>
             <Route path='/home' component={loaded.Home.default}/>
             <Route path='/media' component={loaded.Media.default}/>
             <Route path='/blog' component={loaded.Blog.default}/>

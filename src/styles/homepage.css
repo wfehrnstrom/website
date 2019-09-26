@@ -73,6 +73,12 @@
   position: absolute;
 }
 
+.settings-button {
+  position: absolute;
+  height: 1rem;
+  width: 1rem;
+}
+
 @media only screen and (min-width: 1001px){
   .homepage-right-content > .explore-wrapper {
     visibility: hidden;
@@ -97,6 +103,11 @@
   .usa-flag {
     top: 90vh;
     left: 20vw;
+  }
+
+  .settings-button {
+    top: 92vh;
+    right: 5vw;
   }
 }
 
@@ -163,6 +174,11 @@
   .usa-flag {
     right: 5vw;
     top: 15vh;
+  }
+
+  .settings-button {
+    right: 5vw;
+    top: 25vh;
   }
 }
 

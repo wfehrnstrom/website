@@ -17,7 +17,7 @@ class HomePage extends React.Component {
   render(){
     return (
       <div className ='page-root'>
-        <StarterPage/>
+        <StarterPage shouldFlash={this.props.shouldFlash}/>
         <div className = 'pages' style={{backgroundColor: '#FFFFFF'}}>
           <Spacer>
             <AboutMePage/>

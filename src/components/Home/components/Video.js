@@ -82,7 +82,7 @@ class Video extends React.Component {
         muted={this.props.muted ? this.props.muted : true}
         autoPlay={this.props.autoplay ? this.props.autoplay : true}
         loop={this.props.loop ? this.props.loop : true}
-        style={this.videoStyle(this.props.parallax)}
+        style={this.videoStyle()}
         poster={this.props.poster}
       >
         {this.renderSources()}
