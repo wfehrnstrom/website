@@ -1,4 +1,6 @@
-import firebase from 'firebase'
+import firebase from 'firebase/app'
+import 'firebase/firestore'
+import 'firebase/storage'
 import {config} from '../firebase'
 import Location from '../constants/Location'
 import LocationDataNode from '../constants/LocationDataNode'
