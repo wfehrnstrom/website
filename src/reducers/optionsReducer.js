@@ -13,7 +13,7 @@ function readFlashingPrefFromCookies(){
   return null;
 }
 
-function hydrateState(){
+export function hydrateState(){
   let flashingPref = readFlashingPrefFromCookies();
   if (flashingPref == null){
     return {flashing: false, set: false};
