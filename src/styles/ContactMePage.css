@@ -1,3 +1,8 @@
+.contact-me {
+  display: flex;
+  flex-direction: row;
+}
+
 .contact-me-title {
   font-size: 3rem;
   font-weight: 900;
@@ -21,9 +26,8 @@
 
 @media only screen and (min-width: 1000px){
   #contact-form {
-    width: 50vw;
-    margin-right: 10vw;
-    margin-bottom: 10vh;
+    width: 100%;
+    margin-left: 15vw;
   }
 
   .contact-content-container {
@@ -40,19 +44,25 @@
 
 @media only screen and (max-width: 999px) and (min-width: 500px){
   #contact-form {
-    width: 60vw;
+    width: 100%;
+    margin-left: 15vw;
+    margin-bottom: 30px;
   }
 
   .contact-content-container {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: flex-start;
-    align-items: flex-start;
+    align-items: center;
   }
 }
 
 @media only screen and (max-width: 499px){
   #contact-form {
     width: 80vw;
+  }
+
+  .contact-me {
+    flex-direction: column;
   }
 }

@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import Loadable from 'react-loadable'
+
 import {DESKTOP_BREAKPOINT, TABLET_BREAKPOINT, VIEWS} from '../constants'
 import {hydrateState} from '../reducers/optionsReducer'
 import ViewContext from './viewContext'
