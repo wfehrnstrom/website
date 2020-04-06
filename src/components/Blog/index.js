@@ -49,6 +49,10 @@ class BlogViewUnaware extends React.Component {
     this.compareByTitle = this.compareByTitle.bind(this)
   }
 
+  componentDidMount(){
+    document.title = "Will's Blog"
+  }
+
   componentWillReceiveProps(nextProps){
     if(nextProps.activeView !== this.props.activeView){
       this.setState({

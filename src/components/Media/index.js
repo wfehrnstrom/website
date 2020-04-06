@@ -7,6 +7,7 @@ import HomeLink from '../HomeLink'
 class Media extends React.Component {
   componentDidMount(){
     this.props.loadMedia()
+    document.title = "Will's Photos"
   }
 
   render(){

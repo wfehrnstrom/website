@@ -14,6 +14,10 @@ class HomePage extends React.Component {
     window.scrollTo(0, 0)
   }
 
+  componentDidMount(){
+    document.title = 'Will Fehrnstrom'
+  }
+
   render(){
     return (
       <div className ='page-root'>

@@ -10,6 +10,10 @@ class Projects extends React.Component {
     this.props.loadProjects()
   }
 
+  componentDidMount(){
+    document.title = "Will's Projects"
+  }
+
   renderRoutes(){
     if(this.props.projects){
       return this.props.projects.map(function(project, index){
